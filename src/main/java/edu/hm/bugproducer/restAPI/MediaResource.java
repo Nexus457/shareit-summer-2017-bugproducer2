@@ -21,7 +21,9 @@ public class MediaResource {
         System.out.println("createBooks" + book.getAuthor());
 
 
-        return null;
+        return Response
+                .ok()
+                .build();
     }
 
 
