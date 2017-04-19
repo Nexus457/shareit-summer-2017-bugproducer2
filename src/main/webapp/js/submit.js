@@ -25,7 +25,7 @@ var submitNewBook = function() {
 			$("input[name=title]").val("");
 			$("input[name=author]").val("");
 			$("input[name=isbn]").val("");
-        	
+
         	errorText.removeClass("visible");
         	errorText.addClass("hidden");
         })
@@ -51,6 +51,42 @@ var listBooks = function() {
 		$("#content").html(output);
 	});// no error handling
 }
+
+
+
+
+/**
+ * Creates a list of all books using a Mustache-template.
+ */
+var updateBook = function() {
+    var json = JSON.stringify({
+        title: $("input[name=title]").val(),
+        author: $("input[name=author]").val(),
+        isbn: $("input[name=isbn]").val()
+    });
+    var errorText = $("#errormessage");
+    $.ajax({
+        url: '/shareit/media/books/',
+        type:'PUT',
+        contentType: 'application/json; charset=UTF-8',
+        data: json
+    })
+        .done(() => {
+        $("input[name=title]").val("");
+        $("input[name=author]").val("");
+        $("input[name=isbn]").val("");
+
+    errorText.removeClass("visible");
+    errorText.addClass("hidden");
+})
+    .fail((error) => {
+        errorText.addClass("visible");
+    errorText.text(error.responseJSON.detail);
+    errorText.removeClass("hidden");
+});
+}
+
+
 
 /**
  * Call backer for "navigational buttons" in left column. Used to set content in main part.
