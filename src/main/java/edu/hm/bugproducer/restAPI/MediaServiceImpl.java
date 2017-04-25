@@ -14,6 +14,7 @@ public class MediaServiceImpl implements MediaService {
 
 
     private static List<Book> books = new ArrayList<>();
+    private static List<Disc> discs = new ArrayList<>();
 
     @Override
     public MediaServiceResult addBook(Book book) {
@@ -34,8 +35,22 @@ public class MediaServiceImpl implements MediaService {
 
     @Override
     public MediaServiceResult addDisc(Disc disc) {
-        return null;
-    }
+        MediaServiceResult result;
+        if(disc == null){
+            result=MSR_BAD_REQUEST;
+        }
+        //ToDo FSK fehlt noch!
+        else if(disc.getBarcode().isEmpty()||disc.getDirector().isEmpty()||disc.getTitle().isEmpty()){
+            result=MSR_NO_CONTENT;
+
+        }else{
+            result=MSR_OK;
+            discs.add(disc);
+
+        }
+        return result;
+        }
+
 
     @Override
     public Medium[] getBooks() {
