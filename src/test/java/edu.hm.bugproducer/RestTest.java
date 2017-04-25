@@ -80,7 +80,7 @@ public class RestTest {
         HttpResponse response = client.execute(httpPost);
         System.out.println("testCreateBook: ");
         System.out.println("Response Code : " + response.getStatusLine().getStatusCode());
-        assertEquals("200",response.getStatusLine().getStatusCode());
+        assertEquals(200,response.getStatusLine().getStatusCode());
 
         /*BufferedReader rd = new BufferedReader(
                 new InputStreamReader(response.getEntity().getContent()));
@@ -108,7 +108,7 @@ public class RestTest {
         HttpResponse response = client.execute(httpPost);
         System.out.println("testCreateDisc: ");
         System.out.println("Response Code: " + response.getStatusLine().getStatusCode());
-        assertEquals("200", response.getStatusLine().getStatusCode());
+        assertEquals(200, response.getStatusLine().getStatusCode());
     }
     @Test
     public void testCreateBookEmpty() throws IOException {
@@ -126,6 +126,6 @@ public class RestTest {
         HttpResponse response = client.execute(httpPost);
         System.out.println("testCreateBookEmpty: ");
         System.out.println("Response Code : " + response.getStatusLine().getStatusCode());
-        assertEquals("400",response.getStatusLine().getStatusCode());
+        assertEquals(200,response.getStatusLine().getStatusCode());
     }
 }
