@@ -36,34 +36,37 @@ public class MediaServiceImpl implements MediaService {
     @Override
     public MediaServiceResult addDisc(Disc disc) {
         MediaServiceResult result;
-        if(disc == null){
-            result=MSR_BAD_REQUEST;
+        if (disc == null) {
+            result = MSR_BAD_REQUEST;
         }
         //ToDo FSK fehlt noch!
-        else if(disc.getBarcode().isEmpty()||disc.getDirector().isEmpty()||disc.getTitle().isEmpty()){
-            result=MSR_NO_CONTENT;
+        else if (disc.getBarcode().isEmpty() || disc.getDirector().isEmpty() || disc.getTitle().isEmpty()) {
+            result = MSR_NO_CONTENT;
 
-        }else{
-            result=MSR_OK;
+        } else {
+            result = MSR_OK;
             discs.add(disc);
 
         }
         return result;
-        }
+    }
 
 
     @Override
-    public Medium[] getBooks() {
-        return new Medium[0];
+    public List<Book> getBooks() {
+        return books;
     }
 
     @Override
-    public Medium[] getDisc() {
-        return new Medium[0];
+    public List<Disc> getDiscs() {
+        return discs;
     }
 
     @Override
     public MediaServiceResult updateBook(Book book) {
+
+
+
         return null;
     }
 
