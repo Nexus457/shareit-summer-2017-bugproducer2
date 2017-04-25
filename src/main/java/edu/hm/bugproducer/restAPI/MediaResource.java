@@ -15,6 +15,7 @@ public class MediaResource {
     // static, weil bei jedem Methodenaufruf ein neues Objekt erstellt wird.
     private static List<Book> books = new ArrayList<>();
     private static int RESPONSE_CODE = 200;
+    private MediaServiceImpl mediaService = new MediaServiceImpl();
 
     public MediaResource() {
     }
@@ -23,9 +24,16 @@ public class MediaResource {
     @Path("/books/")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createBooks(Book book) {
-        System.out.println("createBooks" + book.getAuthor());
-        books.add(book);
-        return null;
+        //System.out.println("createBooks" + book.getAuthor());
+        //ToDo Change Name
+        MediaServiceResult result = mediaService.addBook(book);
+
+        return Response
+                .status(result.getCode())
+                .build();
+
+
+
     }
 
     @GET
