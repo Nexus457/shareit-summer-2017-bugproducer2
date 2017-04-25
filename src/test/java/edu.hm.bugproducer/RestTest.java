@@ -45,7 +45,7 @@ public class RestTest {
         HttpClient client = HttpClientBuilder.create().build();
         HttpGet request = new HttpGet(url);
 
-// add request header
+        // add request header
         request.addHeader("User-Agent", USER_AGENT);
         HttpResponse response = client.execute(request);
 
