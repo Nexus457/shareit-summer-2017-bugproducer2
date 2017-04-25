@@ -126,6 +126,6 @@ public class RestTest {
         HttpResponse response = client.execute(httpPost);
         System.out.println("testCreateBookEmpty: ");
         System.out.println("Response Code : " + response.getStatusLine().getStatusCode());
-        assertEquals(200,response.getStatusLine().getStatusCode());
+        assertEquals(400,response.getStatusLine().getStatusCode());
     }
 }
