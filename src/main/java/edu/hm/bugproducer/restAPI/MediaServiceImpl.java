@@ -4,15 +4,29 @@ import edu.hm.bugproducer.models.Book;
 import edu.hm.bugproducer.models.Disc;
 import edu.hm.bugproducer.models.Medium;
 
-/**
- * Created by Johannes Arzt on 25.04.17.
- */
+import java.util.ArrayList;
+import java.util.List;
+
+import static edu.hm.bugproducer.restAPI.MediaServiceResult.*;
+
 public class MediaServiceImpl implements MediaService {
 
 
+    private static List<Book> books = new ArrayList<>();
+
     @Override
     public MediaServiceResult addBook(Book book) {
-        return null;
+        MediaServiceResult result;
+
+        if (book == null) {
+            result = MSR_NO_CONTENT;
+        } else if (book.getAuthor().isEmpty() || book.getTitle().isEmpty() || book.getIsbn().isEmpty()) {
+            result = MSR_BAD_REQUEST;
+        } else {
+            result = MSR_OK;
+            books.add(book);
+        }
+        return result;
     }
 
     @Override
