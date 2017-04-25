@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.apache.http.HttpHeaders.USER_AGENT;
+import static org.junit.Assert.assertEquals;
 
 public class RestTest {
 
@@ -73,17 +74,13 @@ public class RestTest {
         jsonObject.put("isbn", "123");
 
         HttpClient client = HttpClientBuilder.create().build();
-
         HttpPost httpPost = new HttpPost(url);
-
         httpPost.setEntity(new StringEntity(jsonObject.toString()));
         httpPost.addHeader("content-Type", "application/json");
-
         HttpResponse response = client.execute(httpPost);
-
-
-        System.out.println("Response Code : "
-                + response.getStatusLine().getStatusCode());
+        System.out.println("testCreateBook: ");
+        System.out.println("Response Code : " + response.getStatusLine().getStatusCode());
+        assertEquals("200",response.getStatusLine().getStatusCode());
 
         /*BufferedReader rd = new BufferedReader(
                 new InputStreamReader(response.getEntity().getContent()));
@@ -95,5 +92,40 @@ public class RestTest {
         }*/
 
     }
+    @Test
+    public void testCreateDisc() throws IOException{
+        String url = "http://localhost:8082/shareit/media/discs/";
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("title", "testtitle");
+        jsonObject.put("barcode", "123");
+        jsonObject.put("director", "testname");
+        jsonObject.put("fsk","16");
 
+        HttpClient client = HttpClientBuilder.create().build();
+        HttpPost httpPost = new HttpPost(url);
+        httpPost.setEntity(new StringEntity(jsonObject.toString()));
+        httpPost.addHeader("content-Type", "application/json");
+        HttpResponse response = client.execute(httpPost);
+        System.out.println("testCreateDisc: ");
+        System.out.println("Response Code: " + response.getStatusLine().getStatusCode());
+        assertEquals("200", response.getStatusLine().getStatusCode());
+    }
+    @Test
+    public void testCreateBookEmpty() throws IOException {
+        String url = "http://localhost:8082/shareit/media/books/";
+
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("title", "");
+        jsonObject.put("author", "");
+        jsonObject.put("isbn", "");
+
+        HttpClient client = HttpClientBuilder.create().build();
+        HttpPost httpPost = new HttpPost(url);
+        httpPost.setEntity(new StringEntity(jsonObject.toString()));
+        httpPost.addHeader("content-Type", "application/json");
+        HttpResponse response = client.execute(httpPost);
+        System.out.println("testCreateBookEmpty: ");
+        System.out.println("Response Code : " + response.getStatusLine().getStatusCode());
+        assertEquals("400",response.getStatusLine().getStatusCode());
+    }
 }
