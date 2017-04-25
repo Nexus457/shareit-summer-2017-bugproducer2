@@ -1,5 +1,6 @@
 package edu.hm.bugproducer.restAPI;
 
+import edu.hm.bugproducer.Utils.Isbn;
 import edu.hm.bugproducer.models.Book;
 import edu.hm.bugproducer.models.Disc;
 import edu.hm.bugproducer.models.Medium;
@@ -16,17 +17,19 @@ public class MediaServiceImpl implements MediaService {
 
     @Override
     public MediaServiceResult addBook(Book book) {
-        MediaServiceResult result;
+        MediaServiceResult mediaServiceResult;
 
         if (book == null) {
-            result = MSR_NO_CONTENT;
+            mediaServiceResult = MSR_NO_CONTENT;
         } else if (book.getAuthor().isEmpty() || book.getTitle().isEmpty() || book.getIsbn().isEmpty()) {
-            result = MSR_BAD_REQUEST;
+            mediaServiceResult = MSR_BAD_REQUEST;
+        } else if (Isbn.isValid(book.getIsbn())) {
+            mediaServiceResult = MSR_BAD_REQUEST;
         } else {
-            result = MSR_OK;
+            mediaServiceResult = MSR_OK;
             books.add(book);
         }
-        return result;
+        return mediaServiceResult;
     }
 
     @Override
