@@ -30,10 +30,10 @@ public class MediaResource {
         //ToDo Change Name
         MediaServiceResult result = mediaService.addBook(book);
 
+
         return Response
                 .status(result.getCode())
                 .build();
-
 
 
     }
@@ -43,9 +43,10 @@ public class MediaResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getBooks() {
         System.out.println("getBooks");
+        List<Book> bookList = mediaService.getBooks();
         return Response
                 .status(200)
-                .entity(books)
+                .entity(bookList)
                 .build();
     }
 
@@ -55,7 +56,7 @@ public class MediaResource {
     public Response updateBook(Book book) {
         System.out.println("updateBook: " + book.getIsbn());
 
-        boolean changed = false;
+        /*boolean changed = false;
 
         Iterator<Book> iter = books.iterator();
 
@@ -72,10 +73,12 @@ public class MediaResource {
             books.add(book);
         } else {
             RESPONSE_CODE = 400;
-        }
+        }*/
 
+        MediaServiceResult result = mediaService.updateBook(book);
+        System.err.println("RESULT" + result.getCode());
         return Response
-                .status(RESPONSE_CODE)
+                .status(result.getCode())
                 .build();
     }
     @POST

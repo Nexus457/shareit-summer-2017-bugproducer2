@@ -67,14 +67,56 @@ public class MediaServiceImpl implements MediaService {
 
     @Override
     public MediaServiceResult updateBook(Book book) {
+        MediaServiceResult mediaServiceResult = MSR_INTERNAL_SERVER_ERROR;
 
+        if (book == null) {
+            mediaServiceResult = MSR_BAD_REQUEST;
+        }
 
+        if (book.getTitle().isEmpty() || book.getAuthor().isEmpty()) {
+            mediaServiceResult = MSR_NO_CONTENT;
+        } else {
+            for (Book b : getBooks()) {
+                if (!book.getIsbn().equals(b.getIsbn())) {
+                    // isbn not found
+                    mediaServiceResult = MSR_BAD_REQUEST;
+                } else {
+                    // replace object
+                    books.remove(b);
+                    books.add(book);
+                    mediaServiceResult = MSR_OK;
+                }
+            }
+        }
 
-        return null;
+        return mediaServiceResult;
     }
 
     @Override
     public MediaServiceResult updateDisc(Disc disc) {
-        return null;
+        MediaServiceResult mediaServiceResult = MSR_INTERNAL_SERVER_ERROR;
+
+        if (disc == null) {
+            mediaServiceResult = MSR_BAD_REQUEST;
+        }
+
+        // ToDO add fsk check
+        if (disc.getTitle().isEmpty() || disc.getDirector().isEmpty()) {
+            mediaServiceResult = MSR_NO_CONTENT;
+        } else {
+            for (Disc d : getDiscs()) {
+                if (!disc.getBarcode().equals(d.getBarcode())) {
+                    // barcode not found
+                    mediaServiceResult = MSR_BAD_REQUEST;
+                } else {
+                    // replace object
+                    discs.remove(d);
+                    discs.add(disc);
+                    mediaServiceResult = MSR_OK;
+                }
+            }
+        }
+
+        return mediaServiceResult;
     }
 }
