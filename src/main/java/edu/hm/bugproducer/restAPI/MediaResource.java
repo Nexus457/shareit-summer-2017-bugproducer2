@@ -2,6 +2,7 @@
 package edu.hm.bugproducer.restAPI;
 
 import edu.hm.bugproducer.models.Book;
+import edu.hm.bugproducer.models.Disc;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -77,4 +78,19 @@ public class MediaResource {
                 .status(RESPONSE_CODE)
                 .build();
     }
+    @POST
+    @Path("/discs/")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response createDiscs(Disc disc) {
+        //System.out.println("createBooks" + book.getAuthor());
+        //ToDo Change Name
+        MediaServiceResult result = mediaService.addDisc(disc);
+        return Response
+                .status(result.getCode())
+                .build();
+
+
+
+    }
+
 }
