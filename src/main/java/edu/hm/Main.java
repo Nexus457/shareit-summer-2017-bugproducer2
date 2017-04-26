@@ -1,5 +1,6 @@
 package edu.hm;
 
+import org.apache.commons.validator.routines.checkdigit.EAN13CheckDigit;
 import org.eclipse.jetty.server.*;
 import org.eclipse.jetty.webapp.*;
 

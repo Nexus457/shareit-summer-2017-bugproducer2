@@ -3,7 +3,7 @@ package edu.hm.bugproducer.restAPI;
 import edu.hm.bugproducer.Utils.Isbn;
 import edu.hm.bugproducer.models.Book;
 import edu.hm.bugproducer.models.Disc;
-import edu.hm.bugproducer.models.Medium;
+import org.apache.commons.validator.routines.checkdigit.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +37,9 @@ public class MediaServiceImpl implements MediaService {
     public MediaServiceResult addDisc(Disc disc) {
         MediaServiceResult result;
         if (disc == null) {
+            result = MSR_BAD_REQUEST;
+        }
+        else if (!EAN13CheckDigit.EAN13_CHECK_DIGIT.isValid(disc.getBarcode())){
             result = MSR_BAD_REQUEST;
         }
         //ToDo FSK fehlt noch!
