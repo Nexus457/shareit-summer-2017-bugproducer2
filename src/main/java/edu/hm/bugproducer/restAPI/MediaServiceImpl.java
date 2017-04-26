@@ -18,7 +18,7 @@ public class MediaServiceImpl implements MediaService {
 
     @Override
     public MediaServiceResult addBook(Book book) {
-        MediaServiceResult mediaServiceResult;
+        MediaServiceResult mediaServiceResult = MSR_INTERNAL_SERVER_ERROR;
 
         if (book == null) {
             mediaServiceResult = MSR_NO_CONTENT;
@@ -27,31 +27,45 @@ public class MediaServiceImpl implements MediaService {
         } else if (!Isbn.isValid(book.getIsbn())) {
             mediaServiceResult = MSR_BAD_REQUEST;
         } else {
-            mediaServiceResult = MSR_OK;
-            books.add(book);
+            for (Book b : books) {
+                if (b.getIsbn().equals(book.getIsbn())) {
+                    mediaServiceResult = MSR_BAD_REQUEST;
+                } else {
+                    mediaServiceResult = MSR_OK;
+                    books.add(book);
+                }
+            }
         }
+
         return mediaServiceResult;
     }
 
     @Override
     public MediaServiceResult addDisc(Disc disc) {
-        MediaServiceResult result;
+        MediaServiceResult mediaServiceResult = MSR_INTERNAL_SERVER_ERROR;
+
         if (disc == null) {
-            result = MSR_BAD_REQUEST;
-        }
-        else if (!EAN13CheckDigit.EAN13_CHECK_DIGIT.isValid(disc.getBarcode())){
-            result = MSR_BAD_REQUEST;
+            mediaServiceResult = MSR_BAD_REQUEST;
+        } else if (!EAN13CheckDigit.EAN13_CHECK_DIGIT.isValid(disc.getBarcode())) {
+            mediaServiceResult = MSR_BAD_REQUEST;
         }
         //ToDo FSK fehlt noch!
         else if (disc.getBarcode().isEmpty() || disc.getDirector().isEmpty() || disc.getTitle().isEmpty()) {
-            result = MSR_NO_CONTENT;
-
+            mediaServiceResult = MSR_NO_CONTENT;
         } else {
-            result = MSR_OK;
-            discs.add(disc);
+            for (Disc c : discs) {
+                if (c.getBarcode().equals(disc.getBarcode())) {
+                    mediaServiceResult = MSR_BAD_REQUEST;
+                } else {
+                    mediaServiceResult = MSR_OK;
+                    discs.add(disc);
+                }
+            }
 
         }
-        return result;
+
+
+        return mediaServiceResult;
     }
 
 
