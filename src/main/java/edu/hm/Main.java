@@ -26,6 +26,7 @@ public class Main {
         jetty.setHandler(new WebAppContext(WEBAPP_DIR, APP_URL));
         jetty.start();
         System.out.println("Jetty listening on port " + PORT);
+        System.out.println(EAN13CheckDigit.EAN13_CHECK_DIGIT.isValid("9783815820865"));
         jetty.join();
     }
 
