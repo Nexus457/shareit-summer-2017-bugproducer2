@@ -24,7 +24,7 @@ public class MediaServiceImpl implements MediaService {
             mediaServiceResult = MSR_NO_CONTENT;
         } else if (book.getAuthor().isEmpty() || book.getTitle().isEmpty() || book.getIsbn().isEmpty()) {
             mediaServiceResult = MSR_BAD_REQUEST;
-        } else if (Isbn.isValid(book.getIsbn())) {
+        } else if (!Isbn.isValid(book.getIsbn())) {
             mediaServiceResult = MSR_BAD_REQUEST;
         } else {
             mediaServiceResult = MSR_OK;
