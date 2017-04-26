@@ -21,7 +21,7 @@ public class JettyStarter{
      *
      * @throws Exception might throw for several reasons.
      */
-    public static void startJetty() throws Exception {
+    public  void startJetty() throws Exception {
         jetty = new Server(PORT);
         jetty.setHandler(new WebAppContext(WEBAPP_DIR, APP_URL));
         jetty.start();
@@ -29,7 +29,7 @@ public class JettyStarter{
         //jetty.join();
     }
 
-    public static void stopJetty() throws Exception {
+    public void stopJetty() throws Exception {
         jetty.stop();
     }
 

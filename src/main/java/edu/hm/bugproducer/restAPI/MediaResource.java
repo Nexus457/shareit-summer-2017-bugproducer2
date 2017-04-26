@@ -56,25 +56,6 @@ public class MediaResource {
     public Response updateBook(Book book) {
         System.out.println("updateBook: " + book.getIsbn());
 
-        /*boolean changed = false;
-
-        Iterator<Book> iter = books.iterator();
-
-        while (iter.hasNext()) {
-            Book book1 = iter.next();
-
-            if (book1.getIsbn().equals(book.getIsbn())) {
-                iter.remove();
-                changed = true;
-            }
-        }
-
-        if (changed) {
-            books.add(book);
-        } else {
-            RESPONSE_CODE = 400;
-        }*/
-
         MediaServiceResult result = mediaService.updateBook(book);
         System.err.println("RESULT" + result.getCode());
         return Response

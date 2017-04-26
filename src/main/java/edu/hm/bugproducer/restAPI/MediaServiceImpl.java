@@ -7,6 +7,7 @@ import org.apache.commons.validator.routines.checkdigit.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
 import static edu.hm.bugproducer.restAPI.MediaServiceResult.*;
 
@@ -27,12 +28,20 @@ public class MediaServiceImpl implements MediaService {
         } else if (!Isbn.isValid(book.getIsbn())) {
             mediaServiceResult = MSR_BAD_REQUEST;
         } else {
-            for (Book b : books) {
-                if (b.getIsbn().equals(book.getIsbn())) {
-                    mediaServiceResult = MSR_BAD_REQUEST;
-                } else {
-                    mediaServiceResult = MSR_OK;
-                    books.add(book);
+            if (books.isEmpty()) {
+                mediaServiceResult = MSR_OK;
+                books.add(book);
+            } else {
+
+                ListIterator<Book> lir = books.listIterator();
+
+                while (lir.hasNext()) {
+                    if (lir.next().getIsbn().equals(book.getIsbn())) {
+                        mediaServiceResult = MSR_BAD_REQUEST;
+                    } else {
+                        lir.add(book);
+                        mediaServiceResult = MSR_OK;
+                    }
                 }
             }
         }
@@ -46,19 +55,29 @@ public class MediaServiceImpl implements MediaService {
 
         if (disc == null) {
             mediaServiceResult = MSR_BAD_REQUEST;
+            System.err.println("NULL");
         } else if (!EAN13CheckDigit.EAN13_CHECK_DIGIT.isValid(disc.getBarcode())) {
+            System.err.println("BARCODE");
             mediaServiceResult = MSR_BAD_REQUEST;
         }
         //ToDo FSK fehlt noch!
         else if (disc.getBarcode().isEmpty() || disc.getDirector().isEmpty() || disc.getTitle().isEmpty()) {
             mediaServiceResult = MSR_NO_CONTENT;
         } else {
-            for (Disc c : discs) {
-                if (c.getBarcode().equals(disc.getBarcode())) {
-                    mediaServiceResult = MSR_BAD_REQUEST;
-                } else {
-                    mediaServiceResult = MSR_OK;
-                    discs.add(disc);
+            if (discs.isEmpty()) {
+                mediaServiceResult = MSR_OK;
+                discs.add(disc);
+            } else {
+
+                ListIterator<Disc> lir = discs.listIterator();
+
+                while (lir.hasNext()) {
+                    if (lir.next().getBarcode().equals(disc.getBarcode())) {
+                        mediaServiceResult = MSR_BAD_REQUEST;
+                    } else {
+                        lir.add(disc);
+                        mediaServiceResult = MSR_OK;
+                    }
                 }
             }
 
