@@ -47,8 +47,13 @@ public class RestTest {
 
     @Before
     public void openConnection() throws Exception {
+
+        MediaServiceImpl.books.clear();
+        MediaServiceImpl.discs.clear();
+
         jettyStarter = new JettyStarter();
         jettyStarter.startJetty();
+
     }
 
     @After
@@ -80,8 +85,6 @@ public class RestTest {
 
     @Test
     public void testCreateBook() throws IOException {
-
-
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("title", TITLE);
         jsonObject.put("author", NAME);
@@ -95,24 +98,14 @@ public class RestTest {
         System.out.println("testCreateBook: ");
         System.out.println("Response Code : " + response.getStatusLine().getStatusCode());
         assertEquals(200, response.getStatusLine().getStatusCode());
-
-        /*BufferedReader rd = new BufferedReader(
-                new InputStreamReader(response.getEntity().getContent()));
-
-        StringBuffer result = new StringBuffer();
-        String line = "";
-        while ((line = rd.readLine()) != null) {
-            result.append(line);
-        }*/
-
     }
 
     @Test
     public void testCreateDisc() throws IOException {
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("title", TITLE);
-        jsonObject.put("barcode", EAN);
         jsonObject.put("director", NAME);
+        jsonObject.put("barcode", EAN);
+        jsonObject.put("title", TITLE);
         jsonObject.put("fsk", "16");
 
         HttpClient client = HttpClientBuilder.create().build();

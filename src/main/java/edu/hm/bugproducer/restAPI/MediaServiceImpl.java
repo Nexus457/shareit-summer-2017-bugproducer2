@@ -14,8 +14,8 @@ import static edu.hm.bugproducer.restAPI.MediaServiceResult.*;
 public class MediaServiceImpl implements MediaService {
 
 
-    private static List<Book> books = new ArrayList<>();
-    private static List<Disc> discs = new ArrayList<>();
+    public static List<Book> books = new ArrayList<>();
+    public static List<Disc> discs = new ArrayList<>();
 
     @Override
     public MediaServiceResult addBook(Book book) {

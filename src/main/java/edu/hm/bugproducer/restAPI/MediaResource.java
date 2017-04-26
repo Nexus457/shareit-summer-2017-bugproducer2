@@ -23,6 +23,18 @@ public class MediaResource {
     }
 
     @POST
+    @Path("/discs/")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response createDiscs(Disc disc) {
+        //System.out.println("createBooks" + book.getAuthor());
+        //ToDo Change Name
+        MediaServiceResult result = mediaService.addDisc(disc);
+        return Response
+                .status(result.getCode())
+                .build();
+    }
+
+    @POST
     @Path("/books/")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createBooks(Book book) {
@@ -30,12 +42,9 @@ public class MediaResource {
         //ToDo Change Name
         MediaServiceResult result = mediaService.addBook(book);
 
-
         return Response
                 .status(result.getCode())
                 .build();
-
-
     }
 
     @GET
@@ -49,7 +58,6 @@ public class MediaResource {
                 .entity(bookList)
                 .build();
     }
-
     @PUT
     @Path("/books/")
     @Produces(MediaType.APPLICATION_JSON)
@@ -61,20 +69,6 @@ public class MediaResource {
         return Response
                 .status(result.getCode())
                 .build();
-    }
-    @POST
-    @Path("/discs/")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response createDiscs(Disc disc) {
-        //System.out.println("createBooks" + book.getAuthor());
-        //ToDo Change Name
-        MediaServiceResult result = mediaService.addDisc(disc);
-        return Response
-                .status(result.getCode())
-                .build();
-
-
-
     }
 
 }

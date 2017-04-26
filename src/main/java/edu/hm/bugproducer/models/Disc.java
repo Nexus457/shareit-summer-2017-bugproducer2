@@ -4,13 +4,17 @@ public class Disc extends Medium{
 
     private String barcode;
     private String director;
-    private int fsk;
+    private String fsk;
 
-    public Disc(String barcode, String director, int fsk, String title) {
+    public Disc(String director, String barcode, String title, String fsk) {
         super(title);
         this.barcode = barcode;
         this.director = director;
         this.fsk = fsk;
+    }
+
+    public Disc() {
+        super("");
     }
 
     public String getBarcode() {
@@ -21,7 +25,7 @@ public class Disc extends Medium{
         return director;
     }
 
-    public int getFsk() {
+    public String getFsk() {
         return fsk;
     }
 
