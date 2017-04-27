@@ -8,15 +8,14 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 @Path("/media")
 public class MediaResource {
-
+    private static int RESPONSECODE = 200;
     // static, weil bei jedem Methodenaufruf ein neues Objekt erstellt wird.
     private static List<Book> books = new ArrayList<>();
-    private static int RESPONSE_CODE = 200;
+
     private MediaServiceImpl mediaService = new MediaServiceImpl();
 
     public MediaResource() {
@@ -54,7 +53,7 @@ public class MediaResource {
         System.out.println("getBooks");
         List<Book> bookList = mediaService.getBooks();
         return Response
-                .status(200)
+                .status(RESPONSECODE)
                 .entity(bookList)
                 .build();
     }

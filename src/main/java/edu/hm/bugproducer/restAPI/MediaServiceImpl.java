@@ -54,7 +54,7 @@ public class MediaServiceImpl implements MediaService {
         MediaServiceResult mediaServiceResult = MSR_INTERNAL_SERVER_ERROR;
 
         if (disc == null) {
-            mediaServiceResult = MSR_BAD_REQUEST;
+            mediaServiceResult = MSR_NO_CONTENT;
             System.err.println("NULL");
         } else if (!EAN13CheckDigit.EAN13_CHECK_DIGIT.isValid(disc.getBarcode())) {
             System.err.println("BARCODE");
