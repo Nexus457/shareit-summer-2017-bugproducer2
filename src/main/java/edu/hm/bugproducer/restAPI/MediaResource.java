@@ -9,6 +9,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 @Path("/media")
 public class MediaResource {
@@ -60,14 +61,14 @@ public class MediaResource {
 
     @GET
     @Path("/books/")
-    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getBook(Book book) {
+    public Response getBook(String isbn) {
         System.out.println("getBook");
-        Book resultBook = mediaService.getBook(book);
+        Book resultBook = mediaService.getBook(isbn);
         return Response
                 .status(RESPONSECODE)
-                .entity(resultBook)
+                //todo einkommentiern wenn es wieder geht nur zu testzwecken auskommentiert
+                //.entity(resultBook)
                 .build();
     }
 
