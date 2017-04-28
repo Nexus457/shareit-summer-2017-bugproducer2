@@ -17,9 +17,9 @@ public interface MediaService {
 
     List<Book> getBooks();
 
-    Book getBook(Book book);
+    Book getBook(String isbn);
 
-    Disc getDisc(Disc disc);
+    Disc getDisc(String barcode);
 
     List<Disc> getDiscs();
 
