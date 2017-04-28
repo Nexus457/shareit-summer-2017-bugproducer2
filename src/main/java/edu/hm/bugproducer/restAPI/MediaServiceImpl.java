@@ -94,10 +94,10 @@ public class MediaServiceImpl implements MediaService {
     }
 
     @Override
-    public Book getBook(Book book) {
+    public Book getBook(String isbn) {
         Book resultBook = null;
         for (Book b : books) {
-            if (b.getIsbn().equals(book.getIsbn())) {
+            if (b.getIsbn().equals(isbn)) {
                 resultBook = b;
             } else {
                 resultBook = null;
@@ -107,11 +107,11 @@ public class MediaServiceImpl implements MediaService {
     }
 
     @Override
-    public Disc getDisc(Disc discBarcode) {
+    public Disc getDisc(String barcode) {
         Disc resultDisc = null;
         for (Disc d : discs) {
 
-            if (d.getBarcode().equals(discBarcode.getBarcode())) {
+            if (d.getBarcode().equals(barcode)) {
                 resultDisc = d;
             } else {
                 resultDisc = null;
