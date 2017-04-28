@@ -260,7 +260,7 @@ public class RestTest {
         HttpPost httpPost = new HttpPost(URL_BOOKS);
         httpPost.setEntity(new StringEntity(jsonObject.toString()));
         httpPost.addHeader("content-Type", "application/json");
-        HttpResponse response = client.execute(httpPost);
+        client.execute(httpPost);
 
 
 
@@ -272,7 +272,42 @@ public class RestTest {
 
         JSONObject wantedBook = new JSONObject(EntityUtils.toString(response2.getEntity()));
 
-        assertEquals(jsonObject,wantedBook);
+
+        assertEquals(jsonObject.toString(),wantedBook.toString());
+
+
+    }
+
+    @Test
+    public void testGetDisc() throws IOException {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("title", TITLE);
+        jsonObject.put("barcode", EAN);
+        jsonObject.put("director", NAME);
+        jsonObject.put("fsk", 16);
+
+        HttpClient client = HttpClientBuilder.create().build();
+        HttpPost httpPost = new HttpPost(URL_DISCS);
+        httpPost.setEntity(new StringEntity(jsonObject.toString()));
+        httpPost.addHeader("content-Type", "application/json");
+        client.execute(httpPost);
+
+
+
+        HttpGet request = new HttpGet(URL_DISCS+EAN);
+
+        // add request header
+        request.addHeader("User-Agent", USER_AGENT);
+        HttpResponse response2 = client.execute(request);
+
+        if(response2.getStatusLine().getStatusCode()==200) {
+
+            JSONObject wantedDisc = new JSONObject(EntityUtils.toString(response2.getEntity()));
+            assertEquals(jsonObject.toString(),wantedDisc.toString());
+        }
+
+
+
 
 
     }

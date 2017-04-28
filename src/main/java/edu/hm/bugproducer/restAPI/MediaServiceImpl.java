@@ -52,6 +52,7 @@ public class MediaServiceImpl implements MediaService {
     @Override
     public MediaServiceResult addDisc(Disc disc) {
         MediaServiceResult mediaServiceResult = MSR_INTERNAL_SERVER_ERROR;
+        System.out.println(disc.getFsk());
 
         if (disc == null) {
             mediaServiceResult = MSR_NO_CONTENT;
@@ -61,7 +62,8 @@ public class MediaServiceImpl implements MediaService {
             mediaServiceResult = MSR_BAD_REQUEST;
         }
         //ToDo FSK fehlt noch!
-        else if (disc.getBarcode().isEmpty() || disc.getDirector().isEmpty() || disc.getTitle().isEmpty()) {
+
+        else if (disc.getBarcode().isEmpty() || disc.getDirector().isEmpty() || disc.getTitle().isEmpty()||disc.getFsk()<0) {
             mediaServiceResult = MSR_NO_CONTENT;
         } else {
             if (discs.isEmpty()) {
