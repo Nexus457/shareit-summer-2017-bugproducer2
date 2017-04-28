@@ -2,24 +2,29 @@ package edu.hm.bugproducer.restAPI;
 
 import edu.hm.bugproducer.models.Book;
 import edu.hm.bugproducer.models.Disc;
-import edu.hm.bugproducer.models.Medium;
 
 import java.util.List;
 
 /**
  * Created by Johannes Arzt on 25.04.17.
  */
+
 public interface MediaService {
-    public MediaServiceResult addBook(Book book);
 
-    public MediaServiceResult addDisc(Disc disc);
+    MediaServiceResult addBook(Book book);
 
-    public List<Book> getBooks();
+    MediaServiceResult addDisc(Disc disc);
 
-    public List<Disc> getDiscs();
+    List<Book> getBooks();
 
-    public MediaServiceResult updateBook(Book book);
+    Book getBook(Book book);
 
-    public MediaServiceResult updateDisc(Disc disc);
+    Disc getDisc(Disc disc);
+
+    List<Disc> getDiscs();
+
+    MediaServiceResult updateBook(Book book);
+
+    MediaServiceResult updateDisc(Disc disc);
 
 }
