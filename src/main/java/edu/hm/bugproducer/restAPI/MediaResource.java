@@ -12,7 +12,7 @@ import java.util.List;
 
 @Path("/media")
 public class MediaResource {
-    private static int RESPONSECODE = 200;
+    private static final int RESPONSECODE = 200;
     // static, weil bei jedem Methodenaufruf ein neues Objekt erstellt wird.
     private static List<Book> books = new ArrayList<>();
 
@@ -57,6 +57,20 @@ public class MediaResource {
                 .entity(bookList)
                 .build();
     }
+
+    @GET
+    @Path("/books/")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getBook(Book book) {
+        System.out.println("getBook");
+        Book resultBook = mediaService.getBook(book);
+        return Response
+                .status(RESPONSECODE)
+                .entity(resultBook)
+                .build();
+    }
+
     @PUT
     @Path("/books/")
     @Produces(MediaType.APPLICATION_JSON)
