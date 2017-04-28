@@ -94,6 +94,33 @@ public class MediaServiceImpl implements MediaService {
     }
 
     @Override
+    public Book getBook(Book book) {
+        Book resultBook = null;
+        for (Book b : books) {
+            if (b.getIsbn().equals(book.getIsbn())) {
+                resultBook = b;
+            } else {
+                resultBook = null;
+            }
+        }
+        return resultBook;
+    }
+
+    @Override
+    public Disc getDisc(Disc discBarcode) {
+        Disc resultDisc = null;
+        for (Disc d : discs) {
+
+            if (d.getBarcode().equals(discBarcode.getBarcode())) {
+                resultDisc = d;
+            } else {
+                resultDisc = null;
+            }
+        }
+        return resultDisc;
+    }
+
+    @Override
     public List<Disc> getDiscs() {
         return discs;
     }
