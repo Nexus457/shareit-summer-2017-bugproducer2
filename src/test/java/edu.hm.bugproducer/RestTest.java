@@ -13,6 +13,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.json.JSONObject;
@@ -246,6 +247,34 @@ public class RestTest {
         System.out.println("Response Code : " + response1.getStatusLine().getStatusCode());
 
         assertEquals(400, response1.getStatusLine().getStatusCode());
+    }
+
+    @Test
+    public void testGetBook() throws IOException {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("title", TITLE);
+        jsonObject.put("author", NAME);
+        jsonObject.put("isbn", ISBN_ALT);
+
+        HttpClient client = HttpClientBuilder.create().build();
+        HttpPost httpPost = new HttpPost(URL_BOOKS);
+        httpPost.setEntity(new StringEntity(jsonObject.toString()));
+        httpPost.addHeader("content-Type", "application/json");
+        HttpResponse response = client.execute(httpPost);
+
+
+
+        HttpGet request = new HttpGet(URL_BOOKS+ISBN_ALT);
+
+        // add request header
+        request.addHeader("User-Agent", USER_AGENT);
+        HttpResponse response2 = client.execute(request);
+
+        JSONObject wantedBook = new JSONObject(EntityUtils.toString(response2.getEntity()));
+
+        assertEquals(jsonObject,wantedBook);
+
+
     }
 
 }

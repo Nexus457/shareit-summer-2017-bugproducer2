@@ -60,15 +60,15 @@ public class MediaResource {
     }
 
     @GET
-    @Path("/books/")
+    @Path("/books/{isbn}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getBook(String isbn) {
+    public Response getBook(@PathParam("isbn") String isbn) {
         System.out.println("getBook");
         Book resultBook = mediaService.getBook(isbn);
+        System.out.println(isbn);
         return Response
                 .status(RESPONSECODE)
-                //todo einkommentiern wenn es wieder geht nur zu testzwecken auskommentiert
-                //.entity(resultBook)
+                .entity(resultBook)
                 .build();
     }
 
