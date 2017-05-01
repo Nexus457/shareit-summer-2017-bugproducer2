@@ -1,8 +1,9 @@
 
-package edu.hm.bugproducer.restAPI;
+package edu.hm.bugproducer.restAPI.media;
 
 import edu.hm.bugproducer.models.Book;
 import edu.hm.bugproducer.models.Disc;
+import edu.hm.bugproducer.restAPI.MediaServiceResult;
 import javafx.util.Pair;
 
 import javax.ws.rs.*;
@@ -10,7 +11,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
 
 @Path("/media")
 public class MediaResource {
