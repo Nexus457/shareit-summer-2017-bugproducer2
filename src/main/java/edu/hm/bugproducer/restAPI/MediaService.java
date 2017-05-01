@@ -20,7 +20,7 @@ public interface MediaService {
 
     Pair<MediaServiceResult, Book> getBook(String isbn);
 
-    Disc getDisc(String barcode);
+    Pair<MediaServiceResult, Disc> getDisc(String barcode);
 
     List<Disc> getDiscs();
 

@@ -78,14 +78,13 @@ public class MediaResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getDisc(@PathParam("barcode") String barcode) {
         System.out.println("getBook");
-        Disc resultDisc = mediaService.getDisc(barcode);
+        Pair<MediaServiceResult, Disc> myResult = mediaService.getDisc(barcode);
         System.out.println(barcode);
         return Response
-                .status(RESPONSECODE)
-                .entity(resultDisc)
+                .status(myResult.getKey().getCode())
+                .entity(myResult.getValue())
                 .build();
     }
-
 
     @PUT
     @Path("/books/")

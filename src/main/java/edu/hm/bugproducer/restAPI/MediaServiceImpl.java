@@ -64,7 +64,7 @@ public class MediaServiceImpl implements MediaService {
         }
         //ToDo FSK fehlt noch!
 
-        else if (disc.getBarcode().isEmpty() || disc.getDirector().isEmpty() || disc.getTitle().isEmpty()||disc.getFsk()<0) {
+        else if (disc.getBarcode().isEmpty() || disc.getDirector().isEmpty() || disc.getTitle().isEmpty() || disc.getFsk() < 0) {
             mediaServiceResult = MSR_NO_CONTENT;
         } else {
             if (discs.isEmpty()) {
@@ -98,7 +98,7 @@ public class MediaServiceImpl implements MediaService {
 
     @Override
     public Pair<MediaServiceResult, Book> getBook(String isbn) {
-        Pair<MediaServiceResult,Book> myResult = null;
+        Pair<MediaServiceResult, Book> myResult = null;
 
         for (Book b : books) {
             if (b.getIsbn().equals(isbn)) {
@@ -111,17 +111,17 @@ public class MediaServiceImpl implements MediaService {
     }
 
     @Override
-    public Disc getDisc(String barcode) {
-        Disc resultDisc = null;
-        for (Disc d : discs) {
+    public Pair<MediaServiceResult, Disc> getDisc(String barcode) {
+        Pair<MediaServiceResult, Disc> myResult = null;
 
+        for (Disc d : discs) {
             if (d.getBarcode().equals(barcode)) {
-                resultDisc = d;
+                myResult = new Pair<>(MSR_OK, d);
             } else {
-                resultDisc = null;
+                myResult = new Pair<>(MSR_NOT_FOUND, null);
             }
         }
-        return resultDisc;
+        return myResult;
     }
 
     @Override
