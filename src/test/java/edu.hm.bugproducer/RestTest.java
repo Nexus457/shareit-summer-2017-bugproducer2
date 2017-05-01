@@ -263,7 +263,7 @@ public class RestTest {
         client.execute(httpPost);
 
 
-        HttpGet request = new HttpGet(URL_BOOKS + ISBN_ALT + 1);
+        HttpGet request = new HttpGet(URL_BOOKS + ISBN_ALT);
 
         // add request header
         request.addHeader("User-Agent", USER_AGENT);
@@ -272,6 +272,32 @@ public class RestTest {
         JSONObject wantedBook = new JSONObject(EntityUtils.toString(response2.getEntity()));
 
         assertEquals(jsonObject.toString(), wantedBook.toString());
+
+
+    }
+
+    public void testGetNonExistentBook() throws IOException {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("title", TITLE);
+        jsonObject.put("author", NAME);
+        jsonObject.put("isbn", ISBN_ALT);
+
+        HttpClient client = HttpClientBuilder.create().build();
+        HttpPost httpPost = new HttpPost(URL_BOOKS);
+        httpPost.setEntity(new StringEntity(jsonObject.toString()));
+        httpPost.addHeader("content-Type", "application/json");
+        client.execute(httpPost);
+
+
+        HttpGet request = new HttpGet(URL_BOOKS + ISBN_ALT+1);
+
+        // add request header
+        request.addHeader("User-Agent", USER_AGENT);
+        HttpResponse response2 = client.execute(request);
+
+
+
+        assertEquals(404,response2.getStatusLine().getStatusCode() );
 
 
     }
@@ -305,5 +331,35 @@ public class RestTest {
 
 
     }
+
+
+    @Test
+    public void testGetNonExistentDisc() throws IOException {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("title", TITLE);
+        jsonObject.put("barcode", EAN);
+        jsonObject.put("director", NAME);
+        jsonObject.put("fsk", 16);
+
+        HttpClient client = HttpClientBuilder.create().build();
+        HttpPost httpPost = new HttpPost(URL_DISCS);
+        httpPost.setEntity(new StringEntity(jsonObject.toString()));
+        httpPost.addHeader("content-Type", "application/json");
+        client.execute(httpPost);
+
+
+        HttpGet request = new HttpGet(URL_DISCS + EAN+1);
+
+        // add request header
+        request.addHeader("User-Agent", USER_AGENT);
+        HttpResponse response2 = client.execute(request);
+
+
+        assertEquals(404, response2.getStatusLine().getStatusCode());
+
+
+
+    }
+
 
 }
