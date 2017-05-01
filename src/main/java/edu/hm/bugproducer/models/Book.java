@@ -1,6 +1,6 @@
 package edu.hm.bugproducer.models;
 
-public class Book extends Medium{
+public class Book extends Medium {
 
     private String author;
     private String isbn;
@@ -21,6 +21,14 @@ public class Book extends Medium{
 
     public String getIsbn() {
         return isbn;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
     }
 
     @Override

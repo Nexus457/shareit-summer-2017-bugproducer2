@@ -87,16 +87,28 @@ public class MediaResource {
     }
 
     @PUT
-    @Path("/books/")
+    @Path("/books/{isbn}")
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateBook(Book book) {
-        System.out.println("updateBook: " + book.getIsbn());
-
-        MediaServiceResult result = mediaService.updateBook(book);
+    public Response updateBook(@PathParam("isbn") String isbn, Book book) {
+        System.out.println("updateBook: " + isbn);
+        System.out.println("Title: " + book.getTitle() + "Author: " + book.getAuthor() + " ISBN: " + book.getIsbn());
+        MediaServiceResult result = mediaService.updateBook(isbn, book);
         System.err.println("RESULT" + result.getCode());
         return Response
                 .status(result.getCode())
                 .build();
     }
 
+    @PUT
+    @Path("/discs/{barcode}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateBook(@PathParam("barcode") String barcode, Disc disc) {
+        MediaServiceResult result = mediaService.updateDisc(barcode, disc);
+        System.err.println("RESULT" + result.getCode());
+        return Response
+                .status(result.getCode())
+                .build();
+    }
 }

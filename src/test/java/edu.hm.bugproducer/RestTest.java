@@ -6,6 +6,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
@@ -278,15 +279,14 @@ public class RestTest {
         client.execute(httpPost);
 
 
-        HttpGet request = new HttpGet(URL_BOOKS + ISBN_ALT+1);
+        HttpGet request = new HttpGet(URL_BOOKS + ISBN_ALT + 1);
 
         // add request header
         request.addHeader("User-Agent", USER_AGENT);
         HttpResponse response2 = client.execute(request);
 
 
-
-        assertEquals(404,response2.getStatusLine().getStatusCode() );
+        assertEquals(404, response2.getStatusLine().getStatusCode());
 
 
     }
@@ -337,7 +337,7 @@ public class RestTest {
         client.execute(httpPost);
 
 
-        HttpGet request = new HttpGet(URL_DISCS + EAN+1);
+        HttpGet request = new HttpGet(URL_DISCS + EAN + 1);
 
         // add request header
         request.addHeader("User-Agent", USER_AGENT);
@@ -347,7 +347,34 @@ public class RestTest {
         assertEquals(404, response2.getStatusLine().getStatusCode());
 
 
+    }
 
+    @Test
+    public void testUpdateBook() throws IOException {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("title", TITLE);
+        jsonObject.put("author", NAME);
+        jsonObject.put("isbn", ISBN_ALT);
+
+        HttpClient client = HttpClientBuilder.create().build();
+
+        HttpPost httpPost = new HttpPost(URL_BOOKS);
+        httpPost.setEntity(new StringEntity(jsonObject.toString()));
+        httpPost.addHeader("content-Type", "application/json");
+        HttpResponse response = client.execute(httpPost);
+
+        JSONObject jsonObject2 = new JSONObject();
+        jsonObject2.put("title", TITLE_ALT);
+//        jsonObject2.put("author", NAME);
+//        jsonObject2.put("isbn", ISBN_ALT);
+
+        HttpPut httpPut = new HttpPut(URL_BOOKS + ISBN_ALT);
+        httpPut.setEntity(new StringEntity(jsonObject2.toString()));
+        httpPut.addHeader("content-Type", "application/json");
+        HttpResponse response2 =  client.execute(httpPut);
+
+        System.out.println("Response Code : " + response.getStatusLine().getStatusCode());
+        assertEquals(200, response.getStatusLine().getStatusCode());
     }
 
 

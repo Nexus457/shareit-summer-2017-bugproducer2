@@ -29,6 +29,18 @@ public class Disc extends Medium{
         return fsk;
     }
 
+    public void setBarcode(String barcode) {
+        this.barcode = barcode;
+    }
+
+    public void setDirector(String director) {
+        this.director = director;
+    }
+
+    public void setFsk(int fsk) {
+        this.fsk = fsk;
+    }
+
     @Override
     public String toString() {
         return super.toString();

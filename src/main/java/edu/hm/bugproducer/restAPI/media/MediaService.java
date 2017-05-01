@@ -25,8 +25,8 @@ public interface MediaService {
 
     List<Disc> getDiscs();
 
-    MediaServiceResult updateBook(Book book);
+    MediaServiceResult updateBook(String isbn, Book book);
 
-    MediaServiceResult updateDisc(Disc disc);
+    MediaServiceResult updateDisc(String barcode, Disc disc);
 
 }

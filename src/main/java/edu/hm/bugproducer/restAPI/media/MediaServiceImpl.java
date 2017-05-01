@@ -8,8 +8,11 @@ import javafx.util.Pair;
 import org.apache.commons.validator.routines.checkdigit.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import static edu.hm.bugproducer.restAPI.MediaServiceResult.*;
 
@@ -131,55 +134,76 @@ public class MediaServiceImpl implements MediaService {
     }
 
     @Override
-    public MediaServiceResult updateBook(Book book) {
+    public MediaServiceResult updateBook(String isbn, Book newBook) {
         MediaServiceResult mediaServiceResult = MSR_INTERNAL_SERVER_ERROR;
 
-        if (book == null) {
-            mediaServiceResult = MSR_BAD_REQUEST;
-        }
+        List<Book> oneBook = getBooks().stream().filter(b ->
+                b.getIsbn().equals(isbn)
+        ).collect(Collectors.toList());
 
-        if (book.getTitle().isEmpty() || book.getAuthor().isEmpty()) {
-            mediaServiceResult = MSR_NO_CONTENT;
-        } else {
-            for (Book b : getBooks()) {
-                if (!book.getIsbn().equals(b.getIsbn())) {
-                    // isbn not found
-                    mediaServiceResult = MSR_BAD_REQUEST;
-                } else {
-                    // replace object
-                    books.remove(b);
-                    books.add(book);
-                    mediaServiceResult = MSR_OK;
+        if (!oneBook.isEmpty()) {
+
+            if (newBook.getAuthor() != null) {
+                for (Book b : oneBook) {
+                    b.setAuthor(newBook.getAuthor());
                 }
+                mediaServiceResult = MSR_OK;
             }
+            if (newBook.getTitle() != null) {
+                for (Book b : oneBook) {
+                    b.setTitle(newBook.getTitle());
+                }
+                mediaServiceResult = MSR_OK;
+            }
+            if (newBook.getIsbn() != null) {
+                for (Book b : oneBook) {
+                    b.setIsbn(newBook.getIsbn());
+                }
+                mediaServiceResult = MSR_OK;
+            }
+        } else {
+            mediaServiceResult = MSR_BAD_REQUEST;
         }
 
         return mediaServiceResult;
     }
 
     @Override
-    public MediaServiceResult updateDisc(Disc disc) {
+    public MediaServiceResult updateDisc(String barcode, Disc newDisc) {
         MediaServiceResult mediaServiceResult = MSR_INTERNAL_SERVER_ERROR;
 
-        if (disc == null) {
-            mediaServiceResult = MSR_BAD_REQUEST;
-        }
+        List<Disc> oneDisc = getDiscs().stream().filter(d ->
+                d.getBarcode().equals(barcode)
+        ).collect(Collectors.toList());
 
-        // ToDO add fsk check
-        if (disc.getTitle().isEmpty() || disc.getDirector().isEmpty()) {
-            mediaServiceResult = MSR_NO_CONTENT;
-        } else {
-            for (Disc d : getDiscs()) {
-                if (!disc.getBarcode().equals(d.getBarcode())) {
-                    // barcode not found
-                    mediaServiceResult = MSR_BAD_REQUEST;
-                } else {
-                    // replace object
-                    discs.remove(d);
-                    discs.add(disc);
-                    mediaServiceResult = MSR_OK;
+        if (!oneDisc.isEmpty()) {
+
+            if (newDisc.getDirector() != null) {
+                for (Disc d : oneDisc) {
+                    d.setDirector(newDisc.getDirector());
                 }
+                mediaServiceResult = MSR_OK;
             }
+            if (newDisc.getFsk() == 0) {
+                for (Disc d : oneDisc) {
+                    d.setFsk(newDisc.getFsk());
+                }
+                mediaServiceResult = MSR_OK;
+            }
+            if (newDisc.getBarcode() != null) {
+                for (Disc d : oneDisc) {
+                    d.setBarcode(newDisc.getBarcode());
+                }
+                mediaServiceResult = MSR_OK;
+            }
+            if (newDisc.getTitle() != null) {
+                for (Disc d : oneDisc) {
+                    d.setTitle(newDisc.getTitle());
+                }
+                mediaServiceResult = MSR_OK;
+            }
+        } else {
+            mediaServiceResult = MSR_BAD_REQUEST;
         }
 
         return mediaServiceResult;
