@@ -263,8 +263,7 @@ public class RestTest {
         client.execute(httpPost);
 
 
-
-        HttpGet request = new HttpGet(URL_BOOKS+ISBN_ALT);
+        HttpGet request = new HttpGet(URL_BOOKS + ISBN_ALT + 1);
 
         // add request header
         request.addHeader("User-Agent", USER_AGENT);
@@ -272,8 +271,7 @@ public class RestTest {
 
         JSONObject wantedBook = new JSONObject(EntityUtils.toString(response2.getEntity()));
 
-
-        assertEquals(jsonObject.toString(),wantedBook.toString());
+        assertEquals(jsonObject.toString(), wantedBook.toString());
 
 
     }
@@ -293,21 +291,17 @@ public class RestTest {
         client.execute(httpPost);
 
 
-
-        HttpGet request = new HttpGet(URL_DISCS+EAN);
+        HttpGet request = new HttpGet(URL_DISCS + EAN);
 
         // add request header
         request.addHeader("User-Agent", USER_AGENT);
         HttpResponse response2 = client.execute(request);
 
-        if(response2.getStatusLine().getStatusCode()==200) {
+        if (response2.getStatusLine().getStatusCode() == 200) {
 
             JSONObject wantedDisc = new JSONObject(EntityUtils.toString(response2.getEntity()));
-            assertEquals(jsonObject.toString(),wantedDisc.toString());
+            assertEquals(jsonObject.toString(), wantedDisc.toString());
         }
-
-
-
 
 
     }

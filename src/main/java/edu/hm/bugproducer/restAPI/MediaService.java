@@ -2,6 +2,7 @@ package edu.hm.bugproducer.restAPI;
 
 import edu.hm.bugproducer.models.Book;
 import edu.hm.bugproducer.models.Disc;
+import javafx.util.Pair;
 
 import java.util.List;
 
@@ -17,7 +18,7 @@ public interface MediaService {
 
     List<Book> getBooks();
 
-    Book getBook(String isbn);
+    Pair<MediaServiceResult, Book> getBook(String isbn);
 
     Disc getDisc(String barcode);
 

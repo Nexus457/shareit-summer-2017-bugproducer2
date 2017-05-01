@@ -3,6 +3,7 @@ package edu.hm.bugproducer.restAPI;
 
 import edu.hm.bugproducer.models.Book;
 import edu.hm.bugproducer.models.Disc;
+import javafx.util.Pair;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -64,11 +65,11 @@ public class MediaResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getBook(@PathParam("isbn") String isbn) {
         System.out.println("getBook");
-        Book resultBook = mediaService.getBook(isbn);
+        Pair<MediaServiceResult, Book> myResult = mediaService.getBook(isbn);
         System.out.println(isbn);
         return Response
-                .status(RESPONSECODE)
-                .entity(resultBook)
+                .status(myResult.getKey().getCode())
+                .entity(myResult.getValue())
                 .build();
     }
 

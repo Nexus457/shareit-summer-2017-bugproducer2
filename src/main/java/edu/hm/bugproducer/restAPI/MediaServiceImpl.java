@@ -3,6 +3,7 @@ package edu.hm.bugproducer.restAPI;
 import edu.hm.bugproducer.Utils.Isbn;
 import edu.hm.bugproducer.models.Book;
 import edu.hm.bugproducer.models.Disc;
+import javafx.util.Pair;
 import org.apache.commons.validator.routines.checkdigit.*;
 
 import java.util.ArrayList;
@@ -96,16 +97,17 @@ public class MediaServiceImpl implements MediaService {
     }
 
     @Override
-    public Book getBook(String isbn) {
-        Book resultBook = null;
+    public Pair<MediaServiceResult, Book> getBook(String isbn) {
+        Pair<MediaServiceResult,Book> myResult = null;
+
         for (Book b : books) {
             if (b.getIsbn().equals(isbn)) {
-                resultBook = b;
+                myResult = new Pair<>(MSR_OK, b);
             } else {
-                resultBook = null;
+                myResult = new Pair<>(MSR_NOT_FOUND, null);
             }
         }
-        return resultBook;
+        return myResult;
     }
 
     @Override
