@@ -161,7 +161,7 @@ public class MediaServiceImpl implements MediaService {
 
         return mediaServiceResult;
     }
-    //todo Was passiert bei ungültigem Barcode
+
     @Override
     public MediaServiceResult updateDisc(String barcode, Disc newDisc) {
         MediaServiceResult mediaServiceResult = MSR_INTERNAL_SERVER_ERROR;
@@ -185,7 +185,7 @@ public class MediaServiceImpl implements MediaService {
                 mediaServiceResult = MSR_OK;
             }
             if (newDisc.getBarcode() != null) {
-                if (!EAN13CheckDigit.EAN13_CHECK_DIGIT.isValid(newDisc.getBarcode())) {
+                if (!EAN13CheckDigit.EAN13_CHECK_DIGIT.isValid(barcode)) {
                     mediaServiceResult = MSR_BAD_REQUEST;
                 } else {
                     for (Disc d : oneDisc) {
