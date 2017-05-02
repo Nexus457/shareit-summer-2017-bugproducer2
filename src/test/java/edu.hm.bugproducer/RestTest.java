@@ -63,15 +63,6 @@ public class RestTest {
 
         System.out.println("Response Code : "
                 + response.getStatusLine().getStatusCode());
-
-        /*BufferedReader rd = new BufferedReader(
-                new InputStreamReader(response.getEntity().getContent()));
-
-        StringBuffer result = new StringBuffer();
-        String line = "";
-        while ((line = rd.readLine()) != null) {
-            result.append(line);
-        }*/
     }
 
     @Test
@@ -86,7 +77,6 @@ public class RestTest {
         httpPost.setEntity(new StringEntity(jsonObject.toString()));
         httpPost.addHeader("content-Type", "application/json");
         HttpResponse response = client.execute(httpPost);
-        System.out.println("testCreateBook: ");
         System.out.println("Response Code : " + response.getStatusLine().getStatusCode());
         assertEquals(200, response.getStatusLine().getStatusCode());
     }
@@ -104,7 +94,6 @@ public class RestTest {
         httpPost.setEntity(new StringEntity(jsonObject.toString()));
         httpPost.addHeader("content-Type", "application/json");
         HttpResponse response = client.execute(httpPost);
-        System.out.println("testCreateDisc: ");
         System.out.println("Response Code: " + response.getStatusLine().getStatusCode());
         assertEquals(200, response.getStatusLine().getStatusCode());
     }
@@ -121,7 +110,6 @@ public class RestTest {
         httpPost.setEntity(new StringEntity(jsonObject.toString()));
         httpPost.addHeader("content-Type", "application/json");
         HttpResponse response = client.execute(httpPost);
-        System.out.println("testCreateBookEmpty: ");
         System.out.println("Response Code : " + response.getStatusLine().getStatusCode());
         assertEquals(400, response.getStatusLine().getStatusCode());
     }
@@ -139,7 +127,6 @@ public class RestTest {
         httpPost.setEntity(new StringEntity(jsonObject.toString()));
         httpPost.addHeader("content-Type", "application/json");
         HttpResponse response = client.execute(httpPost);
-        System.out.println("testCreateDiscEmpty: ");
         System.out.println("Response Code : " + response.getStatusLine().getStatusCode());
         assertEquals(400, response.getStatusLine().getStatusCode());
     }
@@ -161,14 +148,12 @@ public class RestTest {
         httpPost.setEntity(new StringEntity(jsonObject.toString()));
         httpPost.addHeader("content-Type", "application/json");
         HttpResponse response = client.execute(httpPost);
-        System.out.println("testeCreateBookDuplicate: ");
         System.out.println("Response Code : " + response.getStatusLine().getStatusCode());
 
         HttpPost httpPost1 = new HttpPost(URL_BOOKS);
         httpPost1.setEntity(new StringEntity(jsonObject1.toString()));
         httpPost1.addHeader("content-Type", "application/json");
         HttpResponse response1 = client.execute(httpPost1);
-        System.out.println("testCreateBookDuplicate: ");
         System.out.println("Response Code 1: " + response1.getStatusLine().getStatusCode());
 
         assertEquals(400, response1.getStatusLine().getStatusCode());
@@ -191,14 +176,12 @@ public class RestTest {
         httpPost.setEntity(new StringEntity(jsonObject.toString()));
         httpPost.addHeader("content-Type", "application/json");
         HttpResponse response = client.execute(httpPost);
-        System.out.println("testeCreateBookDuplicate: ");
         System.out.println("Response Code : " + response.getStatusLine().getStatusCode());
 
         HttpPost httpPost1 = new HttpPost(URL_BOOKS);
         httpPost1.setEntity(new StringEntity(jsonObject1.toString()));
         httpPost1.addHeader("content-Type", "application/json");
         HttpResponse response1 = client.execute(httpPost1);
-        System.out.println("testCreateBookDuplicate: ");
         System.out.println("Response Code 1: " + response1.getStatusLine().getStatusCode());
 
         assertEquals(200, response1.getStatusLine().getStatusCode());
@@ -225,7 +208,6 @@ public class RestTest {
         httpPost.setEntity(new StringEntity(jsonObject.toString()));
         httpPost.addHeader("content-Type", "application/json");
         HttpResponse response = client.execute(httpPost);
-        System.out.println("testCreateDiscEmpty: ");
         System.out.println("Response Code : " + response.getStatusLine().getStatusCode());
 
 
@@ -252,20 +234,16 @@ public class RestTest {
         httpPost.addHeader("content-Type", "application/json");
         client.execute(httpPost);
 
-
         HttpGet request = new HttpGet(URL_BOOKS + ISBN_ALT);
 
         // add request header
         request.addHeader("User-Agent", USER_AGENT);
         HttpResponse response2 = client.execute(request);
-
         JSONObject wantedBook = new JSONObject(EntityUtils.toString(response2.getEntity()));
-
         assertEquals(jsonObject.toString(), wantedBook.toString());
-
-
     }
 
+    @Test
     public void testGetNonExistentBook() throws IOException {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("title", TITLE);
@@ -284,8 +262,6 @@ public class RestTest {
         // add request header
         request.addHeader("User-Agent", USER_AGENT);
         HttpResponse response2 = client.execute(request);
-
-
         assertEquals(404, response2.getStatusLine().getStatusCode());
 
 
@@ -317,8 +293,6 @@ public class RestTest {
             JSONObject wantedDisc = new JSONObject(EntityUtils.toString(response2.getEntity()));
             assertEquals(jsonObject.toString(), wantedDisc.toString());
         }
-
-
     }
 
 
@@ -336,17 +310,12 @@ public class RestTest {
         httpPost.addHeader("content-Type", "application/json");
         client.execute(httpPost);
 
-
         HttpGet request = new HttpGet(URL_DISCS + EAN + 1);
 
         // add request header
         request.addHeader("User-Agent", USER_AGENT);
         HttpResponse response2 = client.execute(request);
-
-
         assertEquals(404, response2.getStatusLine().getStatusCode());
-
-
     }
 
     @Test
@@ -357,26 +326,24 @@ public class RestTest {
         jsonObject.put("isbn", ISBN_ALT);
 
         HttpClient client = HttpClientBuilder.create().build();
-
         HttpPost httpPost = new HttpPost(URL_BOOKS);
         httpPost.setEntity(new StringEntity(jsonObject.toString()));
         httpPost.addHeader("content-Type", "application/json");
         HttpResponse response = client.execute(httpPost);
+        assertEquals(200, response.getStatusLine().getStatusCode());
 
         JSONObject jsonObject2 = new JSONObject();
         jsonObject2.put("title", TITLE_ALT);
-//        jsonObject2.put("author", NAME);
-//        jsonObject2.put("isbn", ISBN_ALT);
 
         HttpPut httpPut = new HttpPut(URL_BOOKS + ISBN_ALT);
         httpPut.setEntity(new StringEntity(jsonObject2.toString()));
         httpPut.addHeader("content-Type", "application/json");
-        HttpResponse response2 =  client.execute(httpPut);
-
-        System.out.println("Response Code : " + response.getStatusLine().getStatusCode());
-        assertEquals(200, response.getStatusLine().getStatusCode());
+        HttpResponse response2 = client.execute(httpPut);
+        System.out.println("Response Code : " + response2.getStatusLine().getStatusCode());
+        assertEquals(200, response2.getStatusLine().getStatusCode());
     }
 
+    @Test
     public void testUpdateNonExistentBook() throws IOException {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("title", TITLE);
@@ -384,23 +351,21 @@ public class RestTest {
         jsonObject.put("isbn", ISBN_ALT);
 
         HttpClient client = HttpClientBuilder.create().build();
-
         HttpPost httpPost = new HttpPost(URL_BOOKS);
         httpPost.setEntity(new StringEntity(jsonObject.toString()));
         httpPost.addHeader("content-Type", "application/json");
         HttpResponse response = client.execute(httpPost);
+        assertEquals(200, response.getStatusLine().getStatusCode());
 
         JSONObject jsonObject2 = new JSONObject();
         jsonObject2.put("title", TITLE_ALT);
 
-
         HttpPut httpPut = new HttpPut(URL_BOOKS + ISBN);
         httpPut.setEntity(new StringEntity(jsonObject2.toString()));
         httpPut.addHeader("content-Type", "application/json");
-        HttpResponse response2 =  client.execute(httpPut);
-
-        System.out.println("Response Code : " + response.getStatusLine().getStatusCode());
-        assertEquals(404, response.getStatusLine().getStatusCode());
+        HttpResponse response2 = client.execute(httpPut);
+        System.out.println("Response Code : " + response2.getStatusLine().getStatusCode());
+        assertEquals(400, response2.getStatusLine().getStatusCode());
     }
 
     @Test
@@ -412,25 +377,25 @@ public class RestTest {
         jsonObject.put("fsk", 16);
 
         HttpClient client = HttpClientBuilder.create().build();
-
         HttpPost httpPost = new HttpPost(URL_DISCS);
         httpPost.setEntity(new StringEntity(jsonObject.toString()));
         httpPost.addHeader("content-Type", "application/json");
         HttpResponse response = client.execute(httpPost);
+        assertEquals(200, response.getStatusLine().getStatusCode());
 
         JSONObject jsonObject2 = new JSONObject();
         jsonObject2.put("title", TITLE_ALT);
         jsonObject2.put("fsk", 12);
 
-
         HttpPut httpPut = new HttpPut(URL_DISCS + EAN);
         httpPut.setEntity(new StringEntity(jsonObject2.toString()));
         httpPut.addHeader("content-Type", "application/json");
-        HttpResponse response2 =  client.execute(httpPut);
+        HttpResponse response2 = client.execute(httpPut);
 
-        System.out.println("Response Code : " + response.getStatusLine().getStatusCode());
-        assertEquals(200, response.getStatusLine().getStatusCode());
+        System.out.println("Response Code : " + response2.getStatusLine().getStatusCode());
+        assertEquals(200, response2.getStatusLine().getStatusCode());
     }
+
     @Test
     public void testUpdateNonExistingDisc() throws IOException {
         JSONObject jsonObject = new JSONObject();
@@ -440,23 +405,22 @@ public class RestTest {
         jsonObject.put("fsk", 0);
 
         HttpClient client = HttpClientBuilder.create().build();
-
         HttpPost httpPost = new HttpPost(URL_DISCS);
         httpPost.setEntity(new StringEntity(jsonObject.toString()));
         httpPost.addHeader("content-Type", "application/json");
         HttpResponse response = client.execute(httpPost);
+        assertEquals(200, response.getStatusLine().getStatusCode());
 
         JSONObject jsonObject2 = new JSONObject();
         jsonObject2.put("title", TITLE);
         jsonObject2.put("fsk", 12);
 
-
         HttpPut httpPut = new HttpPut(URL_DISCS + EAN);
         httpPut.setEntity(new StringEntity(jsonObject2.toString()));
         httpPut.addHeader("content-Type", "application/json");
-        HttpResponse response2 =  client.execute(httpPut);
+        HttpResponse response2 = client.execute(httpPut);
 
-        System.out.println("Response Code : " + response.getStatusLine().getStatusCode());
+        System.out.println("Response Code : " + response2.getStatusLine().getStatusCode());
         assertEquals(400, response2.getStatusLine().getStatusCode());
     }
 
