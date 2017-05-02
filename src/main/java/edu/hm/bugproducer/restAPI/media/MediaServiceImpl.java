@@ -178,7 +178,7 @@ public class MediaServiceImpl implements MediaService {
                 }
                 mediaServiceResult = MSR_OK;
             }
-            if (newDisc.getFsk() == 0) {
+            if (newDisc.getFsk() != 0) {
                 for (Disc d : oneDisc) {
                     d.setFsk(newDisc.getFsk());
                 }
@@ -194,7 +194,7 @@ public class MediaServiceImpl implements MediaService {
                     mediaServiceResult = MSR_OK;
                 }
             }
-            if (newDisc.getTitle() != null) {
+             if (!newDisc.getTitle().isEmpty()) {
                 for (Disc d : oneDisc) {
                     d.setTitle(newDisc.getTitle());
                 }

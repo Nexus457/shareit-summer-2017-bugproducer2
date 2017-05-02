@@ -104,7 +104,7 @@ public class MediaResource {
     @Path("/discs/{barcode}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateBook(@PathParam("barcode") String barcode, Disc disc) {
+    public Response updateDisc(@PathParam("barcode") String barcode, Disc disc) {
         MediaServiceResult result = mediaService.updateDisc(barcode, disc);
         System.err.println("RESULT" + result.getCode());
         return Response
