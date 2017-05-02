@@ -365,8 +365,6 @@ public class RestTest {
 
         JSONObject jsonObject2 = new JSONObject();
         jsonObject2.put("title", TITLE_ALT);
-//        jsonObject2.put("author", NAME);
-//        jsonObject2.put("isbn", ISBN_ALT);
 
         HttpPut httpPut = new HttpPut(URL_BOOKS + ISBN_ALT);
         httpPut.setEntity(new StringEntity(jsonObject2.toString()));
@@ -377,5 +375,61 @@ public class RestTest {
         assertEquals(200, response.getStatusLine().getStatusCode());
     }
 
+    @Test
+    public void testUpdateDisc() throws IOException {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("title", TITLE);
+        jsonObject.put("director", NAME);
+        jsonObject.put("barcode", EAN);
+        jsonObject.put("fsk", 16);
+
+        HttpClient client = HttpClientBuilder.create().build();
+
+        HttpPost httpPost = new HttpPost(URL_DISCS);
+        httpPost.setEntity(new StringEntity(jsonObject.toString()));
+        httpPost.addHeader("content-Type", "application/json");
+        HttpResponse response = client.execute(httpPost);
+
+        JSONObject jsonObject2 = new JSONObject();
+        jsonObject2.put("title", TITLE_ALT);
+        jsonObject2.put("fsk", 12);
+
+
+        HttpPut httpPut = new HttpPut(URL_DISCS + EAN);
+        httpPut.setEntity(new StringEntity(jsonObject2.toString()));
+        httpPut.addHeader("content-Type", "application/json");
+        HttpResponse response2 =  client.execute(httpPut);
+
+        System.out.println("Response Code : " + response.getStatusLine().getStatusCode());
+        assertEquals(200, response.getStatusLine().getStatusCode());
+    }
+    @Test
+    public void testUpdateNonExistingDisc() throws IOException {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("title", TITLE_ALT);
+        jsonObject.put("director", NAME_ALT);
+        jsonObject.put("barcode", EAN_ALT);
+        jsonObject.put("fsk", 0);
+
+        HttpClient client = HttpClientBuilder.create().build();
+
+        HttpPost httpPost = new HttpPost(URL_DISCS);
+        httpPost.setEntity(new StringEntity(jsonObject.toString()));
+        httpPost.addHeader("content-Type", "application/json");
+        HttpResponse response = client.execute(httpPost);
+
+        JSONObject jsonObject2 = new JSONObject();
+        jsonObject2.put("title", TITLE);
+        jsonObject2.put("fsk", 12);
+
+
+        HttpPut httpPut = new HttpPut(URL_DISCS + EAN);
+        httpPut.setEntity(new StringEntity(jsonObject2.toString()));
+        httpPut.addHeader("content-Type", "application/json");
+        HttpResponse response2 =  client.execute(httpPut);
+
+        System.out.println("Response Code : " + response.getStatusLine().getStatusCode());
+        assertEquals(400, response2.getStatusLine().getStatusCode());
+    }
 
 }
