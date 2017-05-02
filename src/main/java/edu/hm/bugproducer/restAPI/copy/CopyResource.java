@@ -1,8 +1,7 @@
 
 package edu.hm.bugproducer.restAPI.copy;
 
-import edu.hm.bugproducer.models.Book;
-import edu.hm.bugproducer.models.Disc;
+import edu.hm.bugproducer.models.*;
 import edu.hm.bugproducer.restAPI.MediaServiceResult;
 
 import javax.ws.rs.*;
@@ -16,20 +15,17 @@ public class CopyResource {
     private static final int RESPONSECODE = 200;
     private static List<Book> books = new ArrayList<>();
 
-    private CopyServiceImpl mediaService = new CopyServiceImpl();
+    private CopyServiceImpl copyService = new CopyServiceImpl();
 
     public CopyResource() {
     }
-/*
+
     @POST
-    @Path("/discs/")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createDiscs(Disc disc) {
-        //System.out.println("createBooks" + book.getAuthor());
-        //ToDo Change Name
-        MediaServiceResult result = mediaService.addDisc(disc);
+    public Response createCopy(Medium medium, User user) {
+        MediaServiceResult result = copyService.addCopy(medium, user);
         return Response
                 .status(result.getCode())
                 .build();
-    }*/
+    }
 }

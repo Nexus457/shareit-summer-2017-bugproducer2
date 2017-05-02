@@ -2,9 +2,9 @@ package edu.hm.bugproducer.models;
 
 public class Copy {
     private Medium medium;
-    private String owner;
+    private User owner;
 
-    public Copy(Medium medium, String owner) {
+    public Copy(Medium medium, User owner) {
         this.medium = medium;
         this.owner = owner;
     }
@@ -13,7 +13,7 @@ public class Copy {
         return medium;
     }
 
-    public String getOwner() {
+    public User getOwner() {
         return owner;
     }
 }
