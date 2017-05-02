@@ -8,16 +8,13 @@ import javafx.util.Pair;
 import org.apache.commons.validator.routines.checkdigit.*;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import static edu.hm.bugproducer.restAPI.MediaServiceResult.*;
 
 public class MediaServiceImpl implements MediaService {
-
 
     public static List<Book> books = new ArrayList<>();
     public static List<Disc> discs = new ArrayList<>();
@@ -61,14 +58,9 @@ public class MediaServiceImpl implements MediaService {
 
         if (disc == null) {
             mediaServiceResult = MSR_NO_CONTENT;
-            System.err.println("NULL");
         } else if (!EAN13CheckDigit.EAN13_CHECK_DIGIT.isValid(disc.getBarcode())) {
-            System.err.println("BARCODE");
             mediaServiceResult = MSR_BAD_REQUEST;
-        }
-        //ToDo FSK fehlt noch!
-
-        else if (disc.getBarcode().isEmpty() || disc.getDirector().isEmpty() || disc.getTitle().isEmpty() || disc.getFsk() < 0) {
+        } else if (disc.getBarcode().isEmpty() || disc.getDirector().isEmpty() || disc.getTitle().isEmpty() || disc.getFsk() < 0) {
             mediaServiceResult = MSR_NO_CONTENT;
         } else {
             if (discs.isEmpty()) {
@@ -89,8 +81,6 @@ public class MediaServiceImpl implements MediaService {
             }
 
         }
-
-
         return mediaServiceResult;
     }
 
@@ -143,7 +133,6 @@ public class MediaServiceImpl implements MediaService {
         ).collect(Collectors.toList());
 
         if (!oneBook.isEmpty()) {
-
             if (newBook.getAuthor() != null) {
                 for (Book b : oneBook) {
                     b.setAuthor(newBook.getAuthor());
@@ -157,10 +146,14 @@ public class MediaServiceImpl implements MediaService {
                 mediaServiceResult = MSR_OK;
             }
             if (newBook.getIsbn() != null) {
-                for (Book b : oneBook) {
-                    b.setIsbn(newBook.getIsbn());
+                if (!Isbn.isValid(newBook.getIsbn())) {
+                    mediaServiceResult = MSR_BAD_REQUEST;
+                } else {
+                    for (Book b : oneBook) {
+                        b.setIsbn(newBook.getIsbn());
+                    }
+                    mediaServiceResult = MSR_OK;
                 }
-                mediaServiceResult = MSR_OK;
             }
         } else {
             mediaServiceResult = MSR_BAD_REQUEST;
@@ -192,10 +185,14 @@ public class MediaServiceImpl implements MediaService {
                 mediaServiceResult = MSR_OK;
             }
             if (newDisc.getBarcode() != null) {
-                for (Disc d : oneDisc) {
-                    d.setBarcode(newDisc.getBarcode());
+                if (!EAN13CheckDigit.EAN13_CHECK_DIGIT.isValid(newDisc.getBarcode())) {
+                    mediaServiceResult = MSR_BAD_REQUEST;
+                } else {
+                    for (Disc d : oneDisc) {
+                        d.setBarcode(newDisc.getBarcode());
+                    }
+                    mediaServiceResult = MSR_OK;
                 }
-                mediaServiceResult = MSR_OK;
             }
             if (newDisc.getTitle() != null) {
                 for (Disc d : oneDisc) {
