@@ -133,6 +133,7 @@ public class MediaServiceImpl implements MediaService {
         return discs;
     }
 
+    //todo Was passiert bei ungültiger ISBN
     @Override
     public MediaServiceResult updateBook(String isbn, Book newBook) {
         MediaServiceResult mediaServiceResult = MSR_INTERNAL_SERVER_ERROR;
@@ -167,7 +168,7 @@ public class MediaServiceImpl implements MediaService {
 
         return mediaServiceResult;
     }
-
+    //todo Was passiert bei ungültigem Barcode
     @Override
     public MediaServiceResult updateDisc(String barcode, Disc newDisc) {
         MediaServiceResult mediaServiceResult = MSR_INTERNAL_SERVER_ERROR;
