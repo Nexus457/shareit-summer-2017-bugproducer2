@@ -20,12 +20,12 @@ public class CopyResource {
     public CopyResource() {
     }
 
-    @POST
+    /*@POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createCopy(Medium medium, User user) {
         MediaServiceResult result = copyService.addCopy(medium, user);
         return Response
                 .status(result.getCode())
                 .build();
-    }
+    }*/
 }
