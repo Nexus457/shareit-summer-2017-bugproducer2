@@ -185,7 +185,7 @@ public class MediaServiceImpl implements MediaService {
                 mediaServiceResult = MSR_OK;
             }
             if (newDisc.getBarcode() != null) {
-                if (!EAN13CheckDigit.EAN13_CHECK_DIGIT.isValid(barcode)) {
+                if (!EAN13CheckDigit.EAN13_CHECK_DIGIT.isValid(newDisc.getBarcode())) {
                     mediaServiceResult = MSR_BAD_REQUEST;
                 } else {
                     for (Disc d : oneDisc) {

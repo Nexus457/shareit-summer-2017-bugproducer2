@@ -430,6 +430,58 @@ public class RestTest {
     }
 
     @Test
+    public void testUpdateBookWrongISBN() throws IOException {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("title", TITLE);
+        jsonObject.put("author", NAME);
+        jsonObject.put("isbn", ISBN);
+
+        HttpClient client = HttpClientBuilder.create().build();
+        HttpPost httpPost = new HttpPost(URL_BOOKS);
+        httpPost.setEntity(new StringEntity(jsonObject.toString()));
+        httpPost.addHeader("content-Type", "application/json");
+        HttpResponse response = client.execute(httpPost);
+        assertEquals(200, response.getStatusLine().getStatusCode());
+
+        JSONObject jsonObject2 = new JSONObject();
+        jsonObject2.put("isbn", "123");
+
+        HttpPut httpPut = new HttpPut(URL_BOOKS + ISBN);
+        httpPut.setEntity(new StringEntity(jsonObject2.toString()));
+        httpPut.addHeader("content-Type", "application/json");
+        HttpResponse response2 = client.execute(httpPut);
+        System.out.println("Response Code : " + response2.getStatusLine().getStatusCode());
+        assertEquals(400, response2.getStatusLine().getStatusCode());
+    }
+
+    @Test
+    public void testUpdateDiscWrongEAN() throws IOException {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("title", TITLE);
+        jsonObject.put("director", NAME);
+        jsonObject.put("barcode", EAN);
+        jsonObject.put("fsk", 16);
+
+        HttpClient client = HttpClientBuilder.create().build();
+        HttpPost httpPost = new HttpPost(URL_DISCS);
+        httpPost.setEntity(new StringEntity(jsonObject.toString()));
+        httpPost.addHeader("content-Type", "application/json");
+        HttpResponse response = client.execute(httpPost);
+        assertEquals(200, response.getStatusLine().getStatusCode());
+
+        JSONObject jsonObject2 = new JSONObject();
+        jsonObject2.put("barcode", "12345");
+
+        HttpPut httpPut = new HttpPut(URL_DISCS + EAN);
+        httpPut.setEntity(new StringEntity(jsonObject2.toString()));
+        httpPut.addHeader("content-Type", "application/json");
+        HttpResponse response2 = client.execute(httpPut);
+
+        System.out.println("Response Code : " + response2.getStatusLine().getStatusCode());
+        assertEquals(400, response2.getStatusLine().getStatusCode());
+    }
+
+    @Test
     public void testCreateCopy() throws IOException {
         List<NameValuePair> nameValuePairs;
 
