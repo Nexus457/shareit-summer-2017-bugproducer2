@@ -3,12 +3,15 @@ package edu.hm.bugproducer;
 import edu.hm.JettyStarter;
 import edu.hm.bugproducer.restAPI.media.MediaServiceImpl;
 import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 import org.junit.After;
@@ -16,6 +19,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.List;
 
 import static org.apache.http.HttpHeaders.USER_AGENT;
 import static org.junit.Assert.assertEquals;
@@ -427,6 +431,8 @@ public class RestTest {
 
     @Test
     public void testCreateCopy() throws IOException {
+        List<NameValuePair> nameValuePairs;
+
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("title", TITLE);
         jsonObject.put("author", NAME);
@@ -435,9 +441,17 @@ public class RestTest {
         JSONObject jsonObject2 = new JSONObject();
         jsonObject2.put("userName", USER_NAME);
 
+
+        //nameValuePairs.add(jsonObject2);
+
+
+
         HttpClient client = HttpClientBuilder.create().build();
         HttpPost httpPost = new HttpPost(URL_BOOKS);
         httpPost.setEntity(new StringEntity(jsonObject.toString()));
+
+        //httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
         httpPost.addHeader("content-Type", "application/json");
         HttpResponse response = client.execute(httpPost);
         System.out.println("Response Code : " + response.getStatusLine().getStatusCode());
