@@ -22,6 +22,7 @@ import static org.junit.Assert.assertEquals;
 
 public class RestTest {
 
+    private static final String USER_NAME = "JOh";
     private static final String NAME = "TestName1";
     private static final String NAME_ALT = "TestName2";
     private static final String TITLE = "TestTitle1";
@@ -474,6 +475,25 @@ public class RestTest {
 
         System.out.println("Response Code : " + response2.getStatusLine().getStatusCode());
         assertEquals(400, response2.getStatusLine().getStatusCode());
+    }
+
+    @Test
+    public void testCreateCopy() throws IOException {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("title", TITLE);
+        jsonObject.put("author", NAME);
+        jsonObject.put("isbn", ISBN_ALT);
+
+        JSONObject jsonObject2 = new JSONObject();
+        jsonObject2.put("userName", USER_NAME);
+
+        HttpClient client = HttpClientBuilder.create().build();
+        HttpPost httpPost = new HttpPost(URL_BOOKS);
+        httpPost.setEntity(new StringEntity(jsonObject.toString()));
+        httpPost.addHeader("content-Type", "application/json");
+        HttpResponse response = client.execute(httpPost);
+        System.out.println("Response Code : " + response.getStatusLine().getStatusCode());
+        assertEquals(200, response.getStatusLine().getStatusCode());
     }
 
 }
