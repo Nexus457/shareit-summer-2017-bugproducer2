@@ -4,6 +4,10 @@ public class Copy {
     private Medium medium;
     private User owner;
 
+
+    public Copy() {
+    }
+
     public Copy(Medium medium, User owner) {
         this.medium = medium;
         this.owner = owner;

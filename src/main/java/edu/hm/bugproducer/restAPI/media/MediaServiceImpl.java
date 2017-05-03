@@ -131,7 +131,7 @@ public class MediaServiceImpl implements MediaService {
         List<Book> oneBook = getBooks().stream().filter(b ->
                 b.getIsbn().equals(isbn)
         ).collect(Collectors.toList());
-        boolean validIsbn=true;
+        boolean validIsbn = true;
         if (!oneBook.isEmpty()) {
             if (newBook.getIsbn() != null) {
                  validIsbn = Isbn.isValid(newBook.getIsbn());

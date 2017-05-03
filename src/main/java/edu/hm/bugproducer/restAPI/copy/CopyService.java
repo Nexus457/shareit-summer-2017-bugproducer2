@@ -12,9 +12,9 @@ import java.util.List;
 
 public interface CopyService {
 
-    MediaServiceResult addCopy(Medium medium, User user);
+    MediaServiceResult addCopy(Book book, String user);
+    MediaServiceResult addCopy(Disc disc, String user);
 
     Pair<MediaServiceResult, Copy> getCopy(String identifier);
-
     List<Copy> getCopies();
 }

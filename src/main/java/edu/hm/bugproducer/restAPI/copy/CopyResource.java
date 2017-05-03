@@ -20,12 +20,27 @@ public class CopyResource {
     public CopyResource() {
     }
 
+
+
+    @POST
+    @Path("/{user}/")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response createCopy(@PathParam("user") String user, Disc disc) {
+        //MediaServiceResult result = copyService.addCopy(disc, user);
+     System.out.print("Create Copy!!!");
+        return  null;
+       /* return Response
+                .status(result.getCode())
+                .build();*/
+    }
+
+   /* @Path("/discs/")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createCopy(@QueryParam("user") User user, Medium medium) {
-        MediaServiceResult result = copyService.addCopy(medium, user);
+    public Response createCopy(@QueryParam("user") String user, Book book) {
+        MediaServiceResult result = copyService.addCopy(book, user);
         return Response
                 .status(result.getCode())
                 .build();
-    }
+    }*/
 }

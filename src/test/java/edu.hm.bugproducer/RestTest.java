@@ -38,6 +38,8 @@ public class RestTest {
     private static final String EAN_ALT = "9783827317100";
     private static final String URL_BOOKS = "http://localhost:8082/shareit/media/books/";
     private static final String URL_DISCS = "http://localhost:8082/shareit/media/discs/";
+    private static final String URL_COPYS_BOOKS = "http://localhost:8082/shareit/copy/hans";
+    private static final String URL_COPYS_DISCS = "http://localhost:8082/shareit/copy/discs/";
 
     private JettyStarter jettyStarter;
 
@@ -490,8 +492,8 @@ public class RestTest {
         jsonObject.put("author", NAME);
         jsonObject.put("isbn", ISBN_ALT);
 
-        JSONObject jsonObject2 = new JSONObject();
-        jsonObject2.put("userName", USER_NAME);
+        /*JSONObject jsonObject2 = new JSONObject();
+        jsonObject2.put("userName", USER_NAME);*/
 
 
         //nameValuePairs.add(jsonObject2);
@@ -499,8 +501,10 @@ public class RestTest {
 
 
         HttpClient client = HttpClientBuilder.create().build();
-        HttpPost httpPost = new HttpPost(URL_BOOKS);
+        HttpPost httpPost = new HttpPost(URL_COPYS_BOOKS);
         httpPost.setEntity(new StringEntity(jsonObject.toString()));
+        //httpPost.setEntity(new StringEntity(jsonObject2.toString()));
+
 
         //httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
