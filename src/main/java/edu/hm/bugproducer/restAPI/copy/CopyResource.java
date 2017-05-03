@@ -5,8 +5,10 @@ import edu.hm.bugproducer.models.*;
 import edu.hm.bugproducer.restAPI.MediaServiceResult;
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,13 +23,16 @@ public class CopyResource {
     }
 
 
-
     @POST
-    @Path("/{user}/")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response createCopy(@PathParam("user") String user, Book book) {
-        MediaServiceResult result = copyService.addCopy(book,user);
-     System.out.print("Create Copy!!!");
+    @Path("/books/")
+    public Response createCopy(@FormParam("user") String user,
+                               @FormParam("code") String code,
+                               @FormParam("lfnr") int lfnr) {
+
+        System.out.println("user: " + user + " ISBN: " + code + " LFNR: " + lfnr);
+
+        MediaServiceResult result = copyService.addCopy(user, code, lfnr);
+        System.out.print("Create Copy!!!");
 
         return Response
                 .status(result.getCode())

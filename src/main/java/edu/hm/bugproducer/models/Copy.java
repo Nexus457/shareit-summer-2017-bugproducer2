@@ -2,22 +2,26 @@ package edu.hm.bugproducer.models;
 
 public class Copy {
     private Medium medium;
-    private User owner;
-
+    private User user;
+    private int lfnr;
 
     public Copy() {
     }
 
-    public Copy(Medium medium, User owner) {
+    public Copy(Medium medium, User user) {
         this.medium = medium;
-        this.owner = owner;
+        this.user = user;
+    }
+
+    public int getLfnr() {
+        return lfnr;
     }
 
     public Medium getMedium() {
         return medium;
     }
 
-    public User getOwner() {
-        return owner;
+    public User getUser() {
+        return user;
     }
 }

@@ -19,6 +19,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.apache.http.HttpHeaders.USER_AGENT;
@@ -38,7 +39,7 @@ public class RestTest {
     private static final String EAN_ALT = "9783827317100";
     private static final String URL_BOOKS = "http://localhost:8082/shareit/media/books/";
     private static final String URL_DISCS = "http://localhost:8082/shareit/media/discs/";
-    private static final String URL_COPYS_BOOKS = "http://localhost:8082/shareit/copy/hans";
+    private static final String URL_COPYS_BOOKS = "http://localhost:8082/shareit/copy/books";
     private static final String URL_COPYS_DISCS = "http://localhost:8082/shareit/copy/discs/";
 
     private JettyStarter jettyStarter;
@@ -485,35 +486,29 @@ public class RestTest {
 
     @Test
     public void testCreateCopy() throws IOException {
-        List<NameValuePair> nameValuePairs;
+        List<NameValuePair> nameValuePairs = new ArrayList<>();
 
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("title", TITLE);
-        jsonObject.put("author", NAME);
-        jsonObject.put("isbn", ISBN_ALT);
-
-        /*JSONObject jsonObject2 = new JSONObject();
-        jsonObject2.put("userName", USER_NAME);*/
+        JSONObject book = new JSONObject();
+        book.put("title", TITLE);
+        book.put("author", NAME);
+        book.put("isbn", ISBN);
 
 
-        //nameValuePairs.add(jsonObject2);
-
-
-
+        nameValuePairs.add(new BasicNameValuePair("user", "Joh"));
+        nameValuePairs.add(new BasicNameValuePair("code", ISBN));
+        nameValuePairs.add(new BasicNameValuePair("lfnr", "1"));
 
 
         HttpClient client = HttpClientBuilder.create().build();
         HttpPost addBook = new HttpPost(URL_BOOKS);
         HttpPost addCopyBook = new HttpPost(URL_COPYS_BOOKS);
-        addBook.setEntity(new StringEntity(jsonObject.toString()));
-        addCopyBook.setEntity(new StringEntity(jsonObject.toString()));
-        //httpPost.setEntity(new StringEntity(jsonObject2.toString()));
+        addBook.setEntity(new StringEntity(book.toString()));
 
 
-        //httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+        addCopyBook.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
         addBook.addHeader("content-Type", "application/json");
-        addCopyBook.addHeader("content-Type", "application/json");
+        addCopyBook.addHeader("content-Type", "application/x-www-form-urlencoded");
         client.execute(addBook);
         HttpResponse response = client.execute(addCopyBook);
         System.out.println("Response Code : " + response.getStatusLine().getStatusCode());
