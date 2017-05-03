@@ -34,6 +34,7 @@ public class CopyServiceImpl implements CopyService {
                         if (user1.getUserName().equals(username)) {
                             copies.add(new Copy(d, user1));
                             mediaServiceResult = MSR_OK;
+                            System.out.println("#noduplicate");
                         } else {
                             User user2 = new User(username);
                             users.add(user2);
