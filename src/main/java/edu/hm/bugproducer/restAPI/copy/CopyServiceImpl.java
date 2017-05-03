@@ -22,6 +22,8 @@ public class CopyServiceImpl implements CopyService {
         MediaServiceResult mediaServiceResult = MSR_INTERNAL_SERVER_ERROR;
 
 
+        System.out.println("Test");
+
         ListIterator<Book> lir = books.listIterator();
 
         while (lir.hasNext()) {
@@ -36,7 +38,7 @@ public class CopyServiceImpl implements CopyService {
         return mediaServiceResult;
     }
 
-    @Override
+  /*  @Override
     public MediaServiceResult addCopy(Disc disc, String user) {
         MediaServiceResult mediaServiceResult = MSR_INTERNAL_SERVER_ERROR;
 
@@ -53,7 +55,7 @@ public class CopyServiceImpl implements CopyService {
                 }
             }
         return mediaServiceResult;
-        }
+        }*/
 
     @Override
     public Pair<MediaServiceResult, Copy> getCopy(String identifier) {

@@ -25,13 +25,13 @@ public class CopyResource {
     @POST
     @Path("/{user}/")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createCopy(@PathParam("user") String user, Disc disc) {
-        //MediaServiceResult result = copyService.addCopy(disc, user);
+    public Response createCopy(@PathParam("user") String user, Book book) {
+        MediaServiceResult result = copyService.addCopy(book,user);
      System.out.print("Create Copy!!!");
-        return  null;
-       /* return Response
+
+        return Response
                 .status(result.getCode())
-                .build();*/
+                .build();
     }
 
    /* @Path("/discs/")

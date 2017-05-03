@@ -500,16 +500,22 @@ public class RestTest {
 
 
 
+
+
         HttpClient client = HttpClientBuilder.create().build();
-        HttpPost httpPost = new HttpPost(URL_COPYS_BOOKS);
-        httpPost.setEntity(new StringEntity(jsonObject.toString()));
+        HttpPost addBook = new HttpPost(URL_BOOKS);
+        HttpPost addCopyBook = new HttpPost(URL_COPYS_BOOKS);
+        addBook.setEntity(new StringEntity(jsonObject.toString()));
+        addCopyBook.setEntity(new StringEntity(jsonObject.toString()));
         //httpPost.setEntity(new StringEntity(jsonObject2.toString()));
 
 
         //httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
-        httpPost.addHeader("content-Type", "application/json");
-        HttpResponse response = client.execute(httpPost);
+        addBook.addHeader("content-Type", "application/json");
+        addCopyBook.addHeader("content-Type", "application/json");
+        client.execute(addBook);
+        HttpResponse response = client.execute(addCopyBook);
         System.out.println("Response Code : " + response.getStatusLine().getStatusCode());
         assertEquals(200, response.getStatusLine().getStatusCode());
     }
