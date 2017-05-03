@@ -38,7 +38,8 @@ public class CopyServiceImpl implements CopyService {
         return mediaServiceResult;
     }
 
-  /*  @Override
+
+    @Override
     public MediaServiceResult addCopy(Disc disc, String user) {
         MediaServiceResult mediaServiceResult = MSR_INTERNAL_SERVER_ERROR;
 
@@ -55,7 +56,7 @@ public class CopyServiceImpl implements CopyService {
                 }
             }
         return mediaServiceResult;
-        }*/
+        }
 
     @Override
     public Pair<MediaServiceResult, Copy> getCopy(String identifier) {
