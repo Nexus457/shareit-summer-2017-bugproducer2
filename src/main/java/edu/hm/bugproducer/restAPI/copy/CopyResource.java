@@ -17,21 +17,23 @@ public class CopyResource {
     private static final int RESPONSECODE = 200;
     private static List<Book> books = new ArrayList<>();
 
+
     private CopyServiceImpl copyService = new CopyServiceImpl();
 
     public CopyResource() {
+
     }
 
 
     @POST
     @Path("/books/")
     public Response createCopy(@FormParam("user") String user,
-                               @FormParam("code") String code,
-                               @FormParam("lfnr") int lfnr) {
+                               @FormParam("code") String code)
+                               {
 
-        System.out.println("user: " + user + " ISBN: " + code + " LFNR: " + lfnr);
+        System.out.println("user: " + user + " ISBN: " + code);
 
-        MediaServiceResult result = copyService.addCopy(user, code, lfnr);
+        MediaServiceResult result = copyService.addCopy(user, code);
         System.out.print("Create Copy!!!");
 
         return Response

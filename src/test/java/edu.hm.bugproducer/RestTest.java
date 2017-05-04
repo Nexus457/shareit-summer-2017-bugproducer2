@@ -496,7 +496,7 @@ public class RestTest {
 
         nameValuePairs.add(new BasicNameValuePair("user", "Joh"));
         nameValuePairs.add(new BasicNameValuePair("code", ISBN));
-        nameValuePairs.add(new BasicNameValuePair("lfnr", "1"));
+        //nameValuePairs.add(new BasicNameValuePair("lfnr", "1"));
 
 
         HttpClient client = HttpClientBuilder.create().build();
