@@ -552,7 +552,7 @@ public class RestTest {
         // add request header
         request.addHeader("User-Agent", USER_AGENT);
         HttpResponse response2 = client.execute(request);
-
+        System.out.println(EntityUtils.toString(response2.getEntity()));
         assertEquals(200, response2.getStatusLine().getStatusCode());
 
     }

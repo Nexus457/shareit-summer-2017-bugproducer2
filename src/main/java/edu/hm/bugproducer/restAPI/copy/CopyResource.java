@@ -27,7 +27,7 @@ public class CopyResource {
 
 
     @GET
-    //@Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response getCopies() {
         System.out.println("getCopies!!");
 
