@@ -19,7 +19,8 @@ public class CopyServiceImpl implements CopyService {
 
     public static List<Copy> copies = new ArrayList<>();
     public static List<User> users = new ArrayList<>();
-    private int lfnr=0;
+    private int booklfnr=0;
+    private int disclfnr=0;
 
     public CopyServiceImpl() {
 
@@ -35,17 +36,25 @@ public class CopyServiceImpl implements CopyService {
             for (Disc d : MediaServiceImpl.discs) {
                 if (d.getBarcode().equals(code)) {
 
+                    if (users.isEmpty()) {
+                        User user2 = new User(username);
+                        users.add(user2);
+                        copies.add(new Copy(d, user2, disclfnr));
+                        disclfnr++;
+                        mediaServiceResult = MSR_OK;
+                    }
+
                     for (User user1 : users) {
                         if (user1.getUserName().equals(username)) {
-                            copies.add(new Copy(d, user1,lfnr));
-                            lfnr++;
+                            copies.add(new Copy(d, user1, disclfnr));
+                            disclfnr++;
                             mediaServiceResult = MSR_OK;
                             System.out.println("#noduplicate");
                         } else {
                             User user2 = new User(username);
                             users.add(user2);
-                            copies.add(new Copy(d, user2,lfnr));
-                            lfnr++;
+                            copies.add(new Copy(d, user2, disclfnr));
+                            disclfnr++;
                             mediaServiceResult = MSR_OK;
                         }
                     }
@@ -60,20 +69,20 @@ public class CopyServiceImpl implements CopyService {
                     if (users.isEmpty()) {
                         User user2 = new User(username);
                         users.add(user2);
-                        copies.add(new Copy(b, user2, lfnr));
-                        lfnr++;
+                        copies.add(new Copy(b, user2, booklfnr));
+                        booklfnr++;
                         mediaServiceResult = MSR_OK;
                     } else {
                         for (User user1 : users) {
                             if (user1.getUserName().equals(username)) {
-                                copies.add(new Copy(b, user1, lfnr));
-                                lfnr++;
+                                copies.add(new Copy(b, user1, booklfnr));
+                                booklfnr++;
                                 mediaServiceResult = MSR_OK;
                             } else {
                                 User user2 = new User(username);
                                 users.add(user2);
-                                copies.add(new Copy(b, user2, lfnr));
-                                lfnr++;
+                                copies.add(new Copy(b, user2, booklfnr));
+                                booklfnr++;
                                 mediaServiceResult = MSR_OK;
                             }
                         }

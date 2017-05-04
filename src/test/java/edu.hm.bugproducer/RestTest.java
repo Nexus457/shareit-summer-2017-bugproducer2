@@ -494,11 +494,9 @@ public class RestTest {
         book.put("author", NAME);
         book.put("isbn", ISBN);
 
-
         nameValuePairs.add(new BasicNameValuePair("user", "Joh"));
         nameValuePairs.add(new BasicNameValuePair("code", ISBN));
         //nameValuePairs.add(new BasicNameValuePair("lfnr", "1"));
-
 
         HttpClient client = HttpClientBuilder.create().build();
         HttpPost addBook = new HttpPost(URL_BOOKS);
@@ -529,7 +527,6 @@ public class RestTest {
 
         nameValuePairs.add(new BasicNameValuePair("user", "Joh"));
         nameValuePairs.add(new BasicNameValuePair("code", ISBN));
-        //nameValuePairs.add(new BasicNameValuePair("lfnr", "1"));
 
 
         HttpClient client = HttpClientBuilder.create().build();
@@ -548,14 +545,14 @@ public class RestTest {
 
         HttpGet request = new HttpGet(URL_COPYS);
 
-        //HttpClient client = HttpClientBuilder.create().build();
-        // add request header
         request.addHeader("User-Agent", USER_AGENT);
         HttpResponse response2 = client.execute(request);
         System.out.println(EntityUtils.toString(response2.getEntity()));
         assertEquals(200, response2.getStatusLine().getStatusCode());
 
     }
+
+
 
 
 }
