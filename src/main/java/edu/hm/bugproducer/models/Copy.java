@@ -8,10 +8,10 @@ public class Copy {
     public Copy() {
     }
 
-    public Copy(Medium medium, User user,int lfnr) {
+    public Copy(Medium medium, User user, int lfnr) {
         this.medium = medium;
         this.user = user;
-        this.lfnr=lfnr;
+        this.lfnr = lfnr;
     }
 
     public int getLfnr() {

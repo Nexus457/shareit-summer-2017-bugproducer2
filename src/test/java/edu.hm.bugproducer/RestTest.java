@@ -41,6 +41,7 @@ public class RestTest {
     private static final String URL_DISCS = "http://localhost:8082/shareit/media/discs/";
     private static final String URL_COPYS_BOOKS = "http://localhost:8082/shareit/copy/books";
     private static final String URL_COPYS_DISCS = "http://localhost:8082/shareit/copy/discs/";
+    private static final String URL_COPYS =  "http://localhost:8082/shareit/copy/";
 
     private JettyStarter jettyStarter;
 
@@ -514,5 +515,47 @@ public class RestTest {
         System.out.println("Response Code : " + response.getStatusLine().getStatusCode());
         assertEquals(200, response.getStatusLine().getStatusCode());
     }
+
+
+    @Test
+    public void testGetCopies() throws IOException {
+        List<NameValuePair> nameValuePairs = new ArrayList<>();
+
+        JSONObject book = new JSONObject();
+        book.put("title", TITLE);
+        book.put("author", NAME);
+        book.put("isbn", ISBN);
+
+
+        nameValuePairs.add(new BasicNameValuePair("user", "Joh"));
+        nameValuePairs.add(new BasicNameValuePair("code", ISBN));
+        //nameValuePairs.add(new BasicNameValuePair("lfnr", "1"));
+
+
+        HttpClient client = HttpClientBuilder.create().build();
+        HttpPost addBook = new HttpPost(URL_BOOKS);
+        HttpPost addCopyBook = new HttpPost(URL_COPYS_BOOKS);
+        addBook.setEntity(new StringEntity(book.toString()));
+
+
+        addCopyBook.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+        addBook.addHeader("content-Type", "application/json");
+        addCopyBook.addHeader("content-Type", "application/x-www-form-urlencoded");
+        client.execute(addBook);
+        client.execute(addCopyBook);
+
+
+        HttpGet request = new HttpGet(URL_COPYS);
+
+        //HttpClient client = HttpClientBuilder.create().build();
+        // add request header
+        request.addHeader("User-Agent", USER_AGENT);
+        HttpResponse response2 = client.execute(request);
+
+        assertEquals(200, response2.getStatusLine().getStatusCode());
+
+    }
+
 
 }

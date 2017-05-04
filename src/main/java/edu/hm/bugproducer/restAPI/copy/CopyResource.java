@@ -12,6 +12,7 @@ import javax.ws.rs.core.UriInfo;
 import java.util.ArrayList;
 import java.util.List;
 
+
 @Path("/copy")
 public class CopyResource {
     private static final int RESPONSECODE = 200;
@@ -24,6 +25,19 @@ public class CopyResource {
 
     }
 
+
+    @GET
+    //@Produces(MediaType.APPLICATION_JSON)
+    public Response getCopies() {
+        System.out.println("getCopies!!");
+
+        List<Copy> copyList = copyService.getCopies();
+        return Response
+                .status(RESPONSECODE)
+                .entity(copyList)
+                .build();
+
+    }
 
     @POST
     @Path("/books/")
@@ -40,6 +54,9 @@ public class CopyResource {
                 .status(result.getCode())
                 .build();
     }
+
+
+
 
    /* @Path("/discs/")
     @POST

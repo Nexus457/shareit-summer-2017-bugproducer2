@@ -60,19 +60,19 @@ public class CopyServiceImpl implements CopyService {
                     if (users.isEmpty()) {
                         User user2 = new User(username);
                         users.add(user2);
-                        copies.add(new Copy(b, user2,lfnr));
+                        copies.add(new Copy(b, user2, lfnr));
                         lfnr++;
                         mediaServiceResult = MSR_OK;
                     } else {
                         for (User user1 : users) {
                             if (user1.getUserName().equals(username)) {
-                                copies.add(new Copy(b, user1,lfnr));
+                                copies.add(new Copy(b, user1, lfnr));
                                 lfnr++;
                                 mediaServiceResult = MSR_OK;
                             } else {
                                 User user2 = new User(username);
                                 users.add(user2);
-                                copies.add(new Copy(b, user2,lfnr));
+                                copies.add(new Copy(b, user2, lfnr));
                                 lfnr++;
                                 mediaServiceResult = MSR_OK;
                             }
@@ -98,7 +98,7 @@ public class CopyServiceImpl implements CopyService {
 
     @Override
     public List<Copy> getCopies() {
-        return null;
+       return copies;
     }
 
     @Override
