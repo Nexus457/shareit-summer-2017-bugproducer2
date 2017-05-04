@@ -100,4 +100,9 @@ public class CopyServiceImpl implements CopyService {
     public List<Copy> getCopies() {
         return null;
     }
+
+    @Override
+    public MediaServiceResult updateCopy(String user, String code) {
+        return null;
+    }
 }

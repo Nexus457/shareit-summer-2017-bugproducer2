@@ -2,6 +2,7 @@ package edu.hm.bugproducer.restAPI.copy;
 
 import edu.hm.bugproducer.models.*;
 import edu.hm.bugproducer.restAPI.MediaServiceResult;
+import edu.hm.bugproducer.restAPI.media.MediaService;
 import javafx.util.Pair;
 
 import java.util.List;
@@ -13,8 +14,9 @@ import java.util.List;
 public interface CopyService {
 
     MediaServiceResult addCopy(String user, String code);
-
-
     Pair<MediaServiceResult, Copy> getCopy(String identifier);
     List<Copy> getCopies();
+    MediaServiceResult updateCopy(String user, String code);
+
+
 }
