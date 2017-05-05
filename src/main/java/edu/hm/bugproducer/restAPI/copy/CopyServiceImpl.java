@@ -23,7 +23,6 @@ public class CopyServiceImpl implements CopyService {
     private int disclfnr=0;
 
     public CopyServiceImpl() {
-
     }
 
     @Override
@@ -94,7 +93,6 @@ public class CopyServiceImpl implements CopyService {
         } else {
             mediaServiceResult = MSR_NO_CONTENT;
         }
-
         return mediaServiceResult;
     }
 

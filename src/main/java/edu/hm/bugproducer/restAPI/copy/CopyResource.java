@@ -3,6 +3,7 @@ package edu.hm.bugproducer.restAPI.copy;
 
 import edu.hm.bugproducer.models.*;
 import edu.hm.bugproducer.restAPI.MediaServiceResult;
+import javafx.util.Pair;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
@@ -54,6 +55,24 @@ public class CopyResource {
                 .status(result.getCode())
                 .build();
     }
+
+    @GET
+    @Path("/books/") //todo change Path because => [FATAL] A HTTP GET method,
+    // public javax.ws.rs.core.Response edu.hm.bugproducer.restAPI.copy.CopyResource.getCopy
+    // (java.lang.String), should not consume any form parameter.
+    @Produces(MediaType.APPLICATION_JSON)
+        public Response getCopy() {
+        System.out.println("getCopy!!");
+
+        /*Pair<MediaServiceResult, Copy> myResult = copyService.getCopy(code);
+                return Response
+                .status(myResult.getKey().getCode())
+                .entity(myResult.getValue())
+                .build();*/
+      return null;
+
+    }
+
 
 
 
