@@ -525,6 +525,8 @@ public class RestTest {
         book.put("isbn", ISBN);
 
 
+
+
         nameValuePairs.add(new BasicNameValuePair("user", "Joh"));
         nameValuePairs.add(new BasicNameValuePair("code", ISBN));
 
@@ -540,6 +542,9 @@ public class RestTest {
         addBook.addHeader("content-Type", "application/json");
         addCopyBook.addHeader("content-Type", "application/x-www-form-urlencoded");
         client.execute(addBook);
+        client.execute(addCopyBook);
+        client.execute(addCopyBook);
+        client.execute(addCopyBook);
         client.execute(addCopyBook);
 
 
