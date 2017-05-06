@@ -14,7 +14,7 @@ import java.util.List;
 public interface CopyService {
 
     MediaServiceResult addCopy(String user, String code);
-    Pair<MediaServiceResult, Copy> getCopy(String identifier);
+    Pair<MediaServiceResult, Copy> getCopy(String identifier, int lfnr);
     List<Copy> getCopies();
     MediaServiceResult updateCopy(String user, String code);
 

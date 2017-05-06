@@ -39,9 +39,11 @@ public class RestTest {
     private static final String EAN_ALT = "9783827317100";
     private static final String URL_BOOKS = "http://localhost:8082/shareit/media/books/";
     private static final String URL_DISCS = "http://localhost:8082/shareit/media/discs/";
-    private static final String URL_COPYS_BOOKS = "http://localhost:8082/shareit/copy/books";
-    private static final String URL_COPYS_DISCS = "http://localhost:8082/shareit/copy/discs/";
-    private static final String URL_COPYS =  "http://localhost:8082/shareit/copy/";
+    private static final String URL_COPIES_BOOKS = "http://localhost:8082/shareit/copy/books";
+    private static final String URL_COPIES_DISCS = "http://localhost:8082/shareit/copy/discs/";
+    private static final String URL_COPIES =  "http://localhost:8082/shareit/copy/";
+    private static final String URL_BOOK_COPY_ONE =  URL_COPIES_BOOKS+"/"+ISBN+"/"+1;
+    
 
     private JettyStarter jettyStarter;
 
@@ -500,7 +502,7 @@ public class RestTest {
 
         HttpClient client = HttpClientBuilder.create().build();
         HttpPost addBook = new HttpPost(URL_BOOKS);
-        HttpPost addCopyBook = new HttpPost(URL_COPYS_BOOKS);
+        HttpPost addCopyBook = new HttpPost(URL_COPIES_BOOKS);
         addBook.setEntity(new StringEntity(book.toString()));
 
 
@@ -543,8 +545,8 @@ public class RestTest {
         HttpPost addFirstBook = new HttpPost(URL_BOOKS);
         HttpPost addSecondBook = new HttpPost(URL_BOOKS);
 
-        HttpPost addFirstCopyBook = new HttpPost(URL_COPYS_BOOKS);
-        HttpPost addSecondCopyBook = new HttpPost(URL_COPYS_BOOKS);
+        HttpPost addFirstCopyBook = new HttpPost(URL_COPIES_BOOKS);
+        HttpPost addSecondCopyBook = new HttpPost(URL_COPIES_BOOKS);
 
         addFirstBook.setEntity(new StringEntity(book.toString()));
         addSecondBook.setEntity(new StringEntity(book2.toString()));
@@ -582,7 +584,7 @@ public class RestTest {
 
 
 
-        HttpGet request = new HttpGet(URL_COPYS);
+        HttpGet request = new HttpGet(URL_COPIES);
         //request.addHeader("User-Agent", USER_AGENT);
         HttpResponse response2 = client.execute(request);
         System.out.println("Ergebniss:");
@@ -591,7 +593,78 @@ public class RestTest {
 
     }
 
+    @Test
+    public void testGetCopy() throws IOException {
+        List<NameValuePair> nameValuePairs = new ArrayList<>();
+        List<NameValuePair> nameValuePairs2 = new ArrayList<>();
+
+        JSONObject book = new JSONObject();
+        book.put("title", TITLE);
+        book.put("author", NAME);
+        book.put("isbn", ISBN);
+
+        JSONObject book2 = new JSONObject();
+        book2.put("title", TITLE);
+        book2.put("author", NAME);
+        book2.put("isbn", ISBN_ALT);
 
 
+        nameValuePairs.add(new BasicNameValuePair("user", "Joh"));
+        nameValuePairs.add(new BasicNameValuePair("code", ISBN));
+
+        nameValuePairs2.add(new BasicNameValuePair("user", "Joh"));
+        nameValuePairs2.add(new BasicNameValuePair("code", ISBN_ALT));
+
+
+        HttpClient client = HttpClientBuilder.create().build();
+        HttpClient client2 = HttpClientBuilder.create().build();
+        HttpPost addFirstBook = new HttpPost(URL_BOOKS);
+        HttpPost addSecondBook = new HttpPost(URL_BOOKS);
+
+        HttpPost addFirstCopyBook = new HttpPost(URL_COPIES_BOOKS);
+        HttpPost addSecondCopyBook = new HttpPost(URL_COPIES_BOOKS);
+
+        addFirstBook.setEntity(new StringEntity(book.toString()));
+        addSecondBook.setEntity(new StringEntity(book2.toString()));
+
+        addFirstCopyBook.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+        addSecondCopyBook.setEntity(new UrlEncodedFormEntity(nameValuePairs2));
+
+        addFirstBook.addHeader("content-Type", "application/json");
+        addSecondBook.addHeader("content-Type", "application/json");
+
+        addFirstCopyBook.addHeader("content-Type", "application/x-www-form-urlencoded");
+        addSecondCopyBook.addHeader("content-Type", "application/x-www-form-urlencoded");
+
+        HttpResponse response = client.execute(addFirstBook);
+        assertEquals(200, response.getStatusLine().getStatusCode());
+
+        response = client.execute(addSecondBook);
+        assertEquals(200, response.getStatusLine().getStatusCode());
+
+        response = client.execute(addFirstCopyBook);
+        assertEquals(200, response.getStatusLine().getStatusCode());
+
+        response = client.execute(addFirstCopyBook);
+        assertEquals(200, response.getStatusLine().getStatusCode());
+
+        response = client.execute(addFirstCopyBook);
+        assertEquals(200, response.getStatusLine().getStatusCode());
+
+        response = client.execute(addSecondCopyBook);
+        assertEquals(200, response.getStatusLine().getStatusCode());
+
+        response = client.execute(addSecondCopyBook);
+        assertEquals(200, response.getStatusLine().getStatusCode());
+
+        HttpGet request = new HttpGet(URL_BOOK_COPY_ONE);
+        //request.addHeader("User-Agent", USER_AGENT);
+        HttpResponse response2 = client.execute(request);
+        System.out.println("Ergebniss:");
+        System.out.println(EntityUtils.toString(response2.getEntity()));
+        assertEquals(200, response2.getStatusLine().getStatusCode());
+
+    }
 
 }

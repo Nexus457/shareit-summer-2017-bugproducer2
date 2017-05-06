@@ -27,9 +27,9 @@ public class CopyServiceImpl implements CopyService {
 
     @Override
     public MediaServiceResult addCopy(String username, String code) {
-        boolean noUserFound=false;
+        boolean noUserFound = false;
 
-       // MediaServiceResult mediaServiceResult = MSR_INTERNAL_SERVER_ERROR;
+        // MediaServiceResult mediaServiceResult = MSR_INTERNAL_SERVER_ERROR;
 
         if (EAN13CheckDigit.EAN13_CHECK_DIGIT.isValid(code)) {
 
@@ -39,16 +39,16 @@ public class CopyServiceImpl implements CopyService {
                     List<Disc> copyList = copies
                             .stream()
                             .map(disc -> {
-                        if (disc.getMedium() instanceof Disc) {
-                            return (Disc) disc.getMedium();
-                        } else {
-                            return null;
-                        }
-                    })
+                                if (disc.getMedium() instanceof Disc) {
+                                    return (Disc) disc.getMedium();
+                                } else {
+                                    return null;
+                                }
+                            })
                             .filter(Objects::nonNull)
                             .filter(disc -> disc.getBarcode().equals(code))
                             .collect(Collectors.toList());
-                    disclfnr=copyList.size()+1;
+                    disclfnr = copyList.size() + 1;
 
                     if (users.isEmpty()) {
                         return addUserAndAddDiscCopy(username, d);
@@ -58,10 +58,10 @@ public class CopyServiceImpl implements CopyService {
                         if (user1.getUserName().equals(username)) {
                             return addDiscCopy(d, user1);
                         } else {
-                            noUserFound=true;
+                            noUserFound = true;
                         }
                     }
-                    if(noUserFound){
+                    if (noUserFound) {
                         return addUserAndAddDiscCopy(username, d);
                     }
                 } else {
@@ -106,7 +106,7 @@ public class CopyServiceImpl implements CopyService {
                         .filter(Objects::nonNull)
                         .filter(book -> book.getIsbn().equals(code))
                         .collect(Collectors.toList());
-                booklfnr=copyList.size()+1;
+                booklfnr = copyList.size() + 1;
 
                 if (users.isEmpty()) {
                     return createUserAndAddBookCopy(username, b);
@@ -115,14 +115,15 @@ public class CopyServiceImpl implements CopyService {
                         if (user1.getUserName().equals(username)) {
                             return addCopy(b, user1);
                         } else {
-                       noUserFound=true;
+                            noUserFound = true;
                         }
-                    }if(noUserFound) {
+                    }
+                    if (noUserFound) {
                         return createUserAndAddBookCopy(username, b);
                     }
                 }
             } else {
-                if(counter == books.size()) return MSR_BAD_REQUEST;
+                if (counter == books.size()) return MSR_BAD_REQUEST;
             }
             counter++;
         }
@@ -143,7 +144,7 @@ public class CopyServiceImpl implements CopyService {
 
 
     @Override
-    public Pair<MediaServiceResult, Copy> getCopy(String identifier) {
+    public Pair<MediaServiceResult, Copy> getCopy(String identifier , int lfnr) {
         return null;
     }
 

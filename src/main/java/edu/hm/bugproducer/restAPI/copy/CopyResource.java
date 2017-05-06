@@ -43,8 +43,7 @@ public class CopyResource {
     @POST
     @Path("/books/")
     public Response createCopy(@FormParam("user") String user,
-                               @FormParam("code") String code)
-                               {
+                               @FormParam("code") String code) {
 
         System.out.println("user: " + user + " ISBN: " + code);
 
@@ -57,19 +56,21 @@ public class CopyResource {
     }
 
     @GET
-    @Path("/books/") //todo change Path because => [FATAL] A HTTP GET method,
+    @Path("/books/{code}/{lfnr}") //todo change Path because => [FATAL] A HTTP GET method,
     // public javax.ws.rs.core.Response edu.hm.bugproducer.restAPI.copy.CopyResource.getCopy
     // (java.lang.String), should not consume any form parameter.
     @Produces(MediaType.APPLICATION_JSON)
-        public Response getCopy() {
+    public Response getCopy(@PathParam("code") String isbn, @PathParam("lfnr") int lfnr) {
         System.out.println("getCopy!!");
+        System.out.println(isbn);
+        System.out.print(lfnr);
 
-        /*Pair<MediaServiceResult, Copy> myResult = copyService.getCopy(code);
+        Pair<MediaServiceResult, Copy> myResult = copyService.getCopy(isbn, lfnr);
                 return Response
                 .status(myResult.getKey().getCode())
                 .entity(myResult.getValue())
-                .build();*/
-      return null;
+                .build();
+
 
     }
 
