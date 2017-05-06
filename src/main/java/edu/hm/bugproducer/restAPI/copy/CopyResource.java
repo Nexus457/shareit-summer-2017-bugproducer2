@@ -3,6 +3,7 @@ package edu.hm.bugproducer.restAPI.copy;
 
 import edu.hm.bugproducer.models.*;
 import edu.hm.bugproducer.restAPI.MediaServiceResult;
+import edu.hm.bugproducer.restAPI.media.MediaService;
 import javafx.util.Pair;
 
 import javax.ws.rs.*;
@@ -96,6 +97,20 @@ public class CopyResource {
                 .status(myResult.getKey().getCode())
                 .entity(myResult.getValue())
                 .build();
+    }
+
+    @PUT
+    @Path("/books/{code}/{lfnr}")
+    public Response getCopyBook(@FormParam("user") String user, @PathParam("code") String isbn, @PathParam("lfnr") int lfnr) {
+
+       MediaService copyService.
+
+        return Response
+                .status(myResult.getKey().getCode())
+                .entity(myResult.getValue())
+                .build();
+
+    return  null;
     }
 
 
