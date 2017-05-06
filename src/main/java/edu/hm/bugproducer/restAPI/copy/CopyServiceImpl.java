@@ -144,8 +144,49 @@ public class CopyServiceImpl implements CopyService {
 
 
     @Override
-    public Pair<MediaServiceResult, Copy> getCopy(String identifier , int lfnr) {
-        return null;
+    public Pair<MediaServiceResult, Copy> getCopy(String identifier, int lfnr) {
+        if (EAN13CheckDigit.EAN13_CHECK_DIGIT.isValid(identifier)) {
+            List<Copy> resultList = copies
+                    .stream()
+                    .map(copy -> {
+                        if (copy.getMedium() instanceof Disc) {
+                            Disc disc = (Disc) copy.getMedium();
+                            if (disc.getBarcode().equals(identifier) && copy.getLfnr() == lfnr) {
+                                return copy;
+                            }
+
+                        }
+                        return null;
+                    }).filter(Objects::nonNull).collect(Collectors.toList());
+
+            if (resultList.size() != 1) {
+                return new Pair<>(MSR_BAD_REQUEST, null);
+            } else {
+                return new Pair<>(MSR_OK, resultList.get(0));
+            }
+
+        } else if (Isbn.isValid(identifier)) {
+            List<Copy> resultList = copies
+                    .stream()
+                    .map(copy -> {
+                        if (copy.getMedium() instanceof Book) {
+                            Book book = (Book) copy.getMedium();
+                            if (book.getIsbn().equals(identifier) && copy.getLfnr() == lfnr) {
+                                return copy;
+                            }
+                        }
+                        return null;
+                    }).filter(Objects::nonNull).collect(Collectors.toList());
+
+            if (resultList.size() != 1) {
+                return new Pair<>(MSR_BAD_REQUEST, null);
+            } else {
+                return new Pair<>(MSR_OK, resultList.get(0));
+            }
+        }
+        return new Pair<>(MSR_INTERNAL_SERVER_ERROR, null);
+
+
     }
 
     @Override
