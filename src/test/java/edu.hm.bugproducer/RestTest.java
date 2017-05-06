@@ -518,35 +518,74 @@ public class RestTest {
     @Test
     public void testGetCopies() throws IOException {
         List<NameValuePair> nameValuePairs = new ArrayList<>();
+        List<NameValuePair> nameValuePairs2 = new ArrayList<>();
 
         JSONObject book = new JSONObject();
         book.put("title", TITLE);
         book.put("author", NAME);
         book.put("isbn", ISBN);
 
+        JSONObject book2 = new JSONObject();
+        book2.put("title", TITLE);
+        book2.put("author", NAME);
+        book2.put("isbn", ISBN_ALT);
+
 
         nameValuePairs.add(new BasicNameValuePair("user", "Joh"));
         nameValuePairs.add(new BasicNameValuePair("code", ISBN));
 
+        nameValuePairs2.add(new BasicNameValuePair("user", "Joh"));
+        nameValuePairs2.add(new BasicNameValuePair("code", ISBN_ALT));
+
 
         HttpClient client = HttpClientBuilder.create().build();
-        HttpPost addBook = new HttpPost(URL_BOOKS);
-        HttpPost addCopyBook = new HttpPost(URL_COPYS_BOOKS);
-        addBook.setEntity(new StringEntity(book.toString()));
+        HttpClient client2 = HttpClientBuilder.create().build();
+        HttpPost addFirstBook = new HttpPost(URL_BOOKS);
+        HttpPost addSecondBook = new HttpPost(URL_BOOKS);
 
+        HttpPost addFirstCopyBook = new HttpPost(URL_COPYS_BOOKS);
+        HttpPost addSecondCopyBook = new HttpPost(URL_COPYS_BOOKS);
 
-        addCopyBook.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+        addFirstBook.setEntity(new StringEntity(book.toString()));
+        addSecondBook.setEntity(new StringEntity(book2.toString()));
 
-        addBook.addHeader("content-Type", "application/json");
-        addCopyBook.addHeader("content-Type", "application/x-www-form-urlencoded");
-        client.execute(addBook);
-        client.execute(addCopyBook);
+        addFirstCopyBook.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+        addSecondCopyBook.setEntity(new UrlEncodedFormEntity(nameValuePairs2));
+
+        addFirstBook.addHeader("content-Type", "application/json");
+        addSecondBook.addHeader("content-Type", "application/json");
+
+        addFirstCopyBook.addHeader("content-Type", "application/x-www-form-urlencoded");
+        addSecondCopyBook.addHeader("content-Type", "application/x-www-form-urlencoded");
+
+        HttpResponse response = client.execute(addFirstBook);
+        assertEquals(200, response.getStatusLine().getStatusCode());
+
+        response = client.execute(addSecondBook);
+        assertEquals(200, response.getStatusLine().getStatusCode());
+
+        response = client.execute(addFirstCopyBook);
+        assertEquals(200, response.getStatusLine().getStatusCode());
+
+        response = client.execute(addFirstCopyBook);
+        assertEquals(200, response.getStatusLine().getStatusCode());
+
+        response = client.execute(addFirstCopyBook);
+        assertEquals(200, response.getStatusLine().getStatusCode());
+
+         response = client.execute(addSecondCopyBook);
+        assertEquals(200, response.getStatusLine().getStatusCode());
+
+         response = client.execute(addSecondCopyBook);
+        assertEquals(200, response.getStatusLine().getStatusCode());
+
 
 
         HttpGet request = new HttpGet(URL_COPYS);
-
-        request.addHeader("User-Agent", USER_AGENT);
+        //request.addHeader("User-Agent", USER_AGENT);
         HttpResponse response2 = client.execute(request);
+        System.out.println("Ergebniss:");
         System.out.println(EntityUtils.toString(response2.getEntity()));
         assertEquals(200, response2.getStatusLine().getStatusCode());
 

@@ -23,7 +23,10 @@ public class MediaServiceImpl implements MediaService {
     public MediaServiceResult addBook(Book book) {
         MediaServiceResult mediaServiceResult = MSR_INTERNAL_SERVER_ERROR;
 
+        System.out.println("Ich füge ein Wunderbares Buch hinzu !!!!");
+
         if (book == null) {
+            //todo Author und ISBN auf Null prüfen!!! DAS gleiche brauchen wir auch bei der Disc
             mediaServiceResult = MSR_NO_CONTENT;
         } else if (book.getAuthor().isEmpty() || book.getTitle().isEmpty() || book.getIsbn().isEmpty()) {
             mediaServiceResult = MSR_BAD_REQUEST;
