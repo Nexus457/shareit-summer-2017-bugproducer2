@@ -16,7 +16,7 @@ public interface CopyService {
     MediaServiceResult addCopy(String user, String code);
     Pair<MediaServiceResult, Copy> getCopy(String identifier, int lfnr);
     List<Copy> getCopies();
-    MediaServiceResult updateCopy(String user, String code);
+    MediaServiceResult updateCopy(String user, String code, int lfnr);
 
 
 }

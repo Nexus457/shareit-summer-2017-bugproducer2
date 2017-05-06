@@ -195,7 +195,9 @@ public class CopyServiceImpl implements CopyService {
     }
 
     @Override
-    public MediaServiceResult updateCopy(String user, String code) {
+    public MediaServiceResult updateCopy(String user, String code, int lfnr) {
         return null;
     }
+
+
 }

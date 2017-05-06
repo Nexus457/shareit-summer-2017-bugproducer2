@@ -56,12 +56,9 @@ public class CopyResource {
     }
 
     @GET
-    @Path("/books/{code}/{lfnr}") //todo change Path because => [FATAL] A HTTP GET method,
-    // public javax.ws.rs.core.Response edu.hm.bugproducer.restAPI.copy.CopyResource.getCopy
-    // (java.lang.String), should not consume any form parameter.
+    @Path("/books/{code}/{lfnr}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getCopy(@PathParam("code") String isbn, @PathParam("lfnr") int lfnr) {
-        System.out.println("getCopy!!");
+    public Response getCopyBook(@PathParam("code") String isbn, @PathParam("lfnr") int lfnr) {
         System.out.println(isbn);
         System.out.print(lfnr);
 
@@ -70,21 +67,26 @@ public class CopyResource {
                 .status(myResult.getKey().getCode())
                 .entity(myResult.getValue())
                 .build();
+    }
 
+    @GET
+    @Path("/discs/{code}/{lfnr}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getCopyDisc(@PathParam("code") String isbn, @PathParam("lfnr") int lfnr) {
+        System.out.println(isbn);
+        System.out.print(lfnr);
 
+        Pair<MediaServiceResult, Copy> myResult = copyService.getCopy(isbn, lfnr);
+        return Response
+                .status(myResult.getKey().getCode())
+                .entity(myResult.getValue())
+                .build();
     }
 
 
 
 
 
-   /* @Path("/discs/")
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response createCopy(@QueryParam("user") String user, Book book) {
-        MediaServiceResult result = copyService.addCopy(book, user);
-        return Response
-                .status(result.getCode())
-                .build();
-    }*/
+
+
 }
