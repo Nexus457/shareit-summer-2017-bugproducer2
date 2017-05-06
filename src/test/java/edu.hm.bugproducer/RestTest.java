@@ -28,7 +28,7 @@ import static org.junit.Assert.assertEquals;
 @SuppressWarnings("Duplicates")
 public class RestTest {
 
-    private static final String USER_NAME = "JOh";
+    private static final String USER_NAME = "Joh";
     private static final String NAME = "TestName1";
     private static final String NAME_ALT = "TestName2";
     private static final String TITLE = "TestTitle1";
@@ -978,4 +978,93 @@ public class RestTest {
 
 
     }
+    @Test
+    public void testGetBooks() throws IOException {
+        JSONObject book = new JSONObject();
+        book.put("title", TITLE);
+        book.put("author", NAME);
+        book.put("isbn", ISBN);
+
+        JSONObject book2 = new JSONObject();
+        book2.put("title", TITLE);
+        book2.put("author", NAME);
+        book2.put("isbn", ISBN_ALT);
+
+        HttpClient client = HttpClientBuilder.create().build();
+        HttpPost addFirstBook = new HttpPost(URL_BOOKS);
+        HttpPost addSecondBook = new HttpPost(URL_BOOKS);
+
+        addFirstBook.setEntity(new StringEntity(book.toString()));
+        addSecondBook.setEntity(new StringEntity(book2.toString()));
+
+        addFirstBook.addHeader("content-Type", "application/json");
+        addSecondBook.addHeader("content-Type", "application/json");
+
+        HttpResponse response = client.execute(addFirstBook);
+        assertEquals(200, response.getStatusLine().getStatusCode());
+
+        response = client.execute(addSecondBook);
+        assertEquals(200, response.getStatusLine().getStatusCode());
+
+        HttpGet request = new HttpGet(URL_BOOKS);
+        HttpResponse response2 = client.execute(request);
+        System.out.println("Ergebnis:");
+        System.out.println(EntityUtils.toString(response2.getEntity()));
+        assertEquals(200, response2.getStatusLine().getStatusCode());
+    }
+    @Test
+    public void testGetBooksEmpty() throws IOException {
+        HttpClient client = HttpClientBuilder.create().build();
+        HttpGet request = new HttpGet(URL_BOOKS);
+        HttpResponse response2 = client.execute(request);
+        System.out.println("Ergebnis:");
+        System.out.println(EntityUtils.toString(response2.getEntity()));
+        assertEquals(200, response2.getStatusLine().getStatusCode());
+    }
+    @Test
+    public void testGetDiscs() throws IOException {
+        JSONObject disc = new JSONObject();
+        disc.put("title", TITLE);
+        disc.put("barcode", EAN);
+        disc.put("director", NAME);
+        disc.put("fsk", 16);
+
+        JSONObject disc2 = new JSONObject();
+        disc2.put("title", TITLE_ALT);
+        disc2.put("barcode", EAN_ALT);
+        disc2.put("director", NAME_ALT);
+        disc2.put("fsk", 18);
+
+        HttpClient client = HttpClientBuilder.create().build();
+        HttpPost addFirstDisc = new HttpPost(URL_DISCS);
+        HttpPost addSecondDisc = new HttpPost(URL_DISCS);
+
+        addFirstDisc.setEntity(new StringEntity(disc.toString()));
+        addSecondDisc.setEntity(new StringEntity(disc2.toString()));
+
+        addFirstDisc.addHeader("content-Type", "application/json");
+        addSecondDisc.addHeader("content-Type", "application/json");
+
+        HttpResponse response = client.execute(addFirstDisc);
+        assertEquals(200, response.getStatusLine().getStatusCode());
+
+        response = client.execute(addSecondDisc);
+        assertEquals(200, response.getStatusLine().getStatusCode());
+
+        HttpGet request = new HttpGet(URL_DISCS);
+        HttpResponse response2 = client.execute(request);
+        System.out.println("Ergebnis:");
+        System.out.println(EntityUtils.toString(response2.getEntity()));
+        assertEquals(200, response2.getStatusLine().getStatusCode());
+    }
+    @Test
+    public void testGetDiscsEmpty() throws IOException {
+        HttpClient client = HttpClientBuilder.create().build();
+        HttpGet request = new HttpGet(URL_DISCS);
+        HttpResponse response2 = client.execute(request);
+        System.out.println("Ergebnis:");
+        System.out.println(EntityUtils.toString(response2.getEntity()));
+        assertEquals(200, response2.getStatusLine().getStatusCode());
+    }
+
 }
