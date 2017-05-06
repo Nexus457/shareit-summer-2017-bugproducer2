@@ -347,6 +347,8 @@ public class RestTest {
 
         JSONObject jsonObject2 = new JSONObject();
         jsonObject2.put("title", TITLE_ALT);
+        jsonObject2.put("author", NAME_ALT);
+        jsonObject2.put("isbn", ISBN_ALT);
 
         HttpPut httpPut = new HttpPut(URL_BOOKS + ISBN_ALT);
         httpPut.setEntity(new StringEntity(jsonObject2.toString()));
@@ -398,6 +400,8 @@ public class RestTest {
 
         JSONObject jsonObject2 = new JSONObject();
         jsonObject2.put("title", TITLE_ALT);
+        jsonObject2.put("director", NAME_ALT);
+        jsonObject2.put("barcode", EAN_ALT);
         jsonObject2.put("fsk", 12);
 
         HttpPut httpPut = new HttpPut(URL_DISCS + EAN);
@@ -837,6 +841,8 @@ public class RestTest {
         System.out.println("Ergebnis:");
         System.out.println(EntityUtils.toString(response2.getEntity()));
         assertEquals(200, response2.getStatusLine().getStatusCode());
+
+        // PLEASE DELETE ME
 
     }
 }
