@@ -103,14 +103,24 @@ public class CopyResource {
     @Path("/books/{code}/{lfnr}")
     public Response getCopyBook(@FormParam("user") String user, @PathParam("code") String isbn, @PathParam("lfnr") int lfnr) {
 
-       MediaService copyService.
+        MediaServiceResult result = copyService.updateCopy(user,isbn,lfnr);
 
         return Response
-                .status(myResult.getKey().getCode())
-                .entity(myResult.getValue())
+                .status(result.getCode())
                 .build();
 
-    return  null;
+    }
+
+    @PUT
+    @Path("/discs/{code}/{lfnr}")
+    public Response getCopyDisc(@FormParam("user") String user, @PathParam("code") String isbn, @PathParam("lfnr") int lfnr) {
+
+        MediaServiceResult result = copyService.updateCopy(user,isbn,lfnr);
+
+        return Response
+                .status(result.getCode())
+                .build();
+
     }
 
 
