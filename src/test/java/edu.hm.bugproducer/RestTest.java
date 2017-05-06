@@ -40,7 +40,7 @@ public class RestTest {
     private static final String URL_BOOKS = "http://localhost:8082/shareit/media/books/";
     private static final String URL_DISCS = "http://localhost:8082/shareit/media/discs/";
     private static final String URL_COPIES_BOOKS = "http://localhost:8082/shareit/copy/books";
-    private static final String URL_COPIES_DISCS = "http://localhost:8082/shareit/copy/discs/";
+    private static final String URL_COPIES_DISCS = "http://localhost:8082/shareit/copy/discs";
     private static final String URL_COPIES =  "http://localhost:8082/shareit/copy/";
     private static final String URL_BOOK_COPY_ONE =  URL_COPIES_BOOKS+"/"+ISBN+"/"+1;
     
@@ -488,7 +488,7 @@ public class RestTest {
     }
 
     @Test
-    public void testCreateCopy() throws IOException {
+    public void testCreateCopyBook() throws IOException {
         List<NameValuePair> nameValuePairs = new ArrayList<>();
 
         JSONObject book = new JSONObject();
@@ -512,6 +512,35 @@ public class RestTest {
         addCopyBook.addHeader("content-Type", "application/x-www-form-urlencoded");
         client.execute(addBook);
         HttpResponse response = client.execute(addCopyBook);
+        System.out.println("Response Code : " + response.getStatusLine().getStatusCode());
+        assertEquals(200, response.getStatusLine().getStatusCode());
+    }
+
+    @Test
+    public void testCreateCopyDisc() throws IOException {
+        List<NameValuePair> nameValuePairs = new ArrayList<>();
+
+        JSONObject disc = new JSONObject();
+        disc.put("title", TITLE);
+        disc.put("director", NAME);
+        disc.put("barcode", EAN);
+        disc.put("fsk", 16);
+
+        nameValuePairs.add(new BasicNameValuePair("user", "Joh"));
+        nameValuePairs.add(new BasicNameValuePair("code", EAN));
+        //nameValuePairs.add(new BasicNameValuePair("lfnr", "1"));
+
+        HttpClient client = HttpClientBuilder.create().build();
+        HttpPost addDisc = new HttpPost(URL_DISCS);
+        HttpPost addCopyDisc = new HttpPost(URL_COPIES_DISCS);
+        addDisc.setEntity(new StringEntity(disc.toString()));
+
+        addCopyDisc.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+        addDisc.addHeader("content-Type", "application/json");
+        addCopyDisc.addHeader("content-Type", "application/x-www-form-urlencoded");
+        client.execute(addDisc);
+        HttpResponse response = client.execute(addCopyDisc);
         System.out.println("Response Code : " + response.getStatusLine().getStatusCode());
         assertEquals(200, response.getStatusLine().getStatusCode());
     }
