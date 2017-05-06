@@ -308,7 +308,6 @@ public class RestTest {
         }
     }
 
-
     @Test
     public void testGetNonExistentDisc() throws IOException {
         JSONObject jsonObject = new JSONObject();
@@ -565,7 +564,6 @@ public class RestTest {
         book2.put("author", NAME);
         book2.put("isbn", ISBN_ALT);
 
-
         nameValuePairs.add(new BasicNameValuePair("user", "Joh"));
         nameValuePairs.add(new BasicNameValuePair("code", ISBN));
 
@@ -687,10 +685,18 @@ public class RestTest {
         response = client.execute(addSecondCopyBook);
         assertEquals(200, response.getStatusLine().getStatusCode());
 
+
         HttpGet request = new HttpGet(URL_BOOK_COPY_ONE);
         HttpResponse response2 = client.execute(request);
+
+
+        String wanted = "{\"medium\":{\"title\":\"TestTitle1\",\"author\":\"TestName1\",\"isbn\":\"3-446-193138\"},\"user\":{\"userName\":\"Joh\"},\"lfnr\":1}";
+        String have = EntityUtils.toString(response2.getEntity());
+
+        assertEquals(wanted, have);
+
         System.out.println("Ergebnis:");
-        System.out.println(EntityUtils.toString(response2.getEntity()));
+        System.out.println(have);
         assertEquals(200, response2.getStatusLine().getStatusCode());
 
     }
@@ -836,10 +842,17 @@ public class RestTest {
         response = client.execute(addSecondCopyDisc);
         assertEquals(200, response.getStatusLine().getStatusCode());
 
+
         HttpGet request = new HttpGet(URL_DISC_COPY_ONE);
         HttpResponse response2 = client.execute(request);
+
+        String wanted = "{\"medium\":{\"title\":\"TestTitle1\",\"barcode\":\"9783815820865\",\"director\":\"TestName1\",\"fsk\":16},\"user\":{\"userName\":\"Joh\"},\"lfnr\":1}";
+        String have = EntityUtils.toString(response2.getEntity());
+
+        assertEquals(wanted, have);
+
         System.out.println("Ergebnis:");
-        System.out.println(EntityUtils.toString(response2.getEntity()));
+        System.out.println(have);
         assertEquals(200, response2.getStatusLine().getStatusCode());
 
         // PLEASE DELETE ME
