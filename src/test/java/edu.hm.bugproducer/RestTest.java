@@ -1,6 +1,7 @@
 package edu.hm.bugproducer;
 
 import edu.hm.JettyStarter;
+import edu.hm.bugproducer.restAPI.copy.CopyServiceImpl;
 import edu.hm.bugproducer.restAPI.media.MediaServiceImpl;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -54,6 +55,7 @@ public class RestTest {
 
         MediaServiceImpl.books.clear();
         MediaServiceImpl.discs.clear();
+        CopyServiceImpl.copies.clear();
 
         jettyStarter = new JettyStarter();
         jettyStarter.startJetty();
