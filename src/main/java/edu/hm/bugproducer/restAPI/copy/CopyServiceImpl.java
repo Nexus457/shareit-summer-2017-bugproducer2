@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 
 import static edu.hm.bugproducer.restAPI.MediaServiceResult.*;
 import static edu.hm.bugproducer.restAPI.media.MediaServiceImpl.books;
+import static edu.hm.bugproducer.restAPI.media.MediaServiceImpl.discs;
 
 public class CopyServiceImpl implements CopyService {
 
@@ -28,6 +29,7 @@ public class CopyServiceImpl implements CopyService {
     @Override
     public MediaServiceResult addCopy(String username, String code) {
         boolean noUserFound = false;
+        int discCounter = 0;
 
         // MediaServiceResult mediaServiceResult = MSR_INTERNAL_SERVER_ERROR;
 
@@ -65,8 +67,9 @@ public class CopyServiceImpl implements CopyService {
                         return addUserAndAddDiscCopy(username, d);
                     }
                 } else {
-                    return MSR_BAD_REQUEST;
+                    if (discCounter == discs.size()) return MSR_BAD_REQUEST;
                 }
+                discCounter++;
             }
         } else if (Isbn.isValid(code)) {
             MediaServiceResult x = checkBook(username, code, noUserFound);

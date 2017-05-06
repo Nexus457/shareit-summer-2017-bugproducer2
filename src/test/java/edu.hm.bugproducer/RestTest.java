@@ -25,6 +25,7 @@ import java.util.List;
 import static org.apache.http.HttpHeaders.USER_AGENT;
 import static org.junit.Assert.assertEquals;
 
+@SuppressWarnings("Duplicates")
 public class RestTest {
 
     private static final String USER_NAME = "JOh";
@@ -43,6 +44,7 @@ public class RestTest {
     private static final String URL_COPIES_DISCS = "http://localhost:8082/shareit/copy/discs";
     private static final String URL_COPIES =  "http://localhost:8082/shareit/copy/";
     private static final String URL_BOOK_COPY_ONE =  URL_COPIES_BOOKS+"/"+ISBN+"/"+1;
+    private static final String URL_DISC_COPY_ONE = URL_COPIES_DISCS + "/" + EAN + "/"+1;
     
 
     private JettyStarter jettyStarter;
@@ -498,7 +500,6 @@ public class RestTest {
 
         nameValuePairs.add(new BasicNameValuePair("user", "Joh"));
         nameValuePairs.add(new BasicNameValuePair("code", ISBN));
-        //nameValuePairs.add(new BasicNameValuePair("lfnr", "1"));
 
         HttpClient client = HttpClientBuilder.create().build();
         HttpPost addBook = new HttpPost(URL_BOOKS);
@@ -528,7 +529,6 @@ public class RestTest {
 
         nameValuePairs.add(new BasicNameValuePair("user", "Joh"));
         nameValuePairs.add(new BasicNameValuePair("code", EAN));
-        //nameValuePairs.add(new BasicNameValuePair("lfnr", "1"));
 
         HttpClient client = HttpClientBuilder.create().build();
         HttpPost addDisc = new HttpPost(URL_DISCS);
@@ -547,7 +547,7 @@ public class RestTest {
 
 
     @Test
-    public void testGetCopies() throws IOException {
+    public void testGetCopiesBook() throws IOException {
         List<NameValuePair> nameValuePairs = new ArrayList<>();
         List<NameValuePair> nameValuePairs2 = new ArrayList<>();
 
@@ -570,7 +570,6 @@ public class RestTest {
 
 
         HttpClient client = HttpClientBuilder.create().build();
-        HttpClient client2 = HttpClientBuilder.create().build();
         HttpPost addFirstBook = new HttpPost(URL_BOOKS);
         HttpPost addSecondBook = new HttpPost(URL_BOOKS);
 
@@ -614,16 +613,15 @@ public class RestTest {
 
 
         HttpGet request = new HttpGet(URL_COPIES);
-        //request.addHeader("User-Agent", USER_AGENT);
         HttpResponse response2 = client.execute(request);
-        System.out.println("Ergebniss:");
+        System.out.println("Ergebnis:");
         System.out.println(EntityUtils.toString(response2.getEntity()));
         assertEquals(200, response2.getStatusLine().getStatusCode());
 
     }
 
     @Test
-    public void testGetCopy() throws IOException {
+    public void testGetCopyBook() throws IOException {
         List<NameValuePair> nameValuePairs = new ArrayList<>();
         List<NameValuePair> nameValuePairs2 = new ArrayList<>();
 
@@ -646,7 +644,6 @@ public class RestTest {
 
 
         HttpClient client = HttpClientBuilder.create().build();
-        HttpClient client2 = HttpClientBuilder.create().build();
         HttpPost addFirstBook = new HttpPost(URL_BOOKS);
         HttpPost addSecondBook = new HttpPost(URL_BOOKS);
 
@@ -688,12 +685,158 @@ public class RestTest {
         assertEquals(200, response.getStatusLine().getStatusCode());
 
         HttpGet request = new HttpGet(URL_BOOK_COPY_ONE);
-        //request.addHeader("User-Agent", USER_AGENT);
         HttpResponse response2 = client.execute(request);
-        System.out.println("Ergebniss:");
+        System.out.println("Ergebnis:");
         System.out.println(EntityUtils.toString(response2.getEntity()));
         assertEquals(200, response2.getStatusLine().getStatusCode());
 
     }
 
+    @Test
+    public void testGetCopiesDisc() throws IOException {
+        List<NameValuePair> nameValuePairs = new ArrayList<>();
+        List<NameValuePair> nameValuePairs2 = new ArrayList<>();
+
+        JSONObject disc = new JSONObject();
+        disc.put("title", TITLE);
+        disc.put("barcode", EAN);
+        disc.put("director", NAME);
+        disc.put("fsk", 16);
+
+        JSONObject disc2 = new JSONObject();
+        disc2.put("title", TITLE);
+        disc2.put("barcode", EAN_ALT);
+        disc2.put("director", NAME);
+        disc2.put("fsk", 16);
+
+
+        nameValuePairs.add(new BasicNameValuePair("user", "Joh"));
+        nameValuePairs.add(new BasicNameValuePair("code", EAN));
+
+        nameValuePairs2.add(new BasicNameValuePair("user", "Joh"));
+        nameValuePairs2.add(new BasicNameValuePair("code", EAN_ALT));
+
+
+        HttpClient client = HttpClientBuilder.create().build();
+        HttpPost addFirstDisc = new HttpPost(URL_DISCS);
+        HttpPost addSecondDisc = new HttpPost(URL_DISCS);
+
+        HttpPost addFirstCopyDisc = new HttpPost(URL_COPIES_DISCS);
+        HttpPost addSecondCopyDisc = new HttpPost(URL_COPIES_DISCS);
+
+        addFirstDisc.setEntity(new StringEntity(disc.toString()));
+        addSecondDisc.setEntity(new StringEntity(disc2.toString()));
+
+        addFirstCopyDisc.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+        addSecondCopyDisc.setEntity(new UrlEncodedFormEntity(nameValuePairs2));
+
+        addFirstDisc.addHeader("content-Type", "application/json");
+        addSecondDisc.addHeader("content-Type", "application/json");
+
+        addFirstCopyDisc.addHeader("content-Type", "application/x-www-form-urlencoded");
+        addSecondCopyDisc.addHeader("content-Type", "application/x-www-form-urlencoded");
+
+        HttpResponse response = client.execute(addFirstDisc);
+        assertEquals(200, response.getStatusLine().getStatusCode());
+
+        response = client.execute(addSecondDisc);
+        assertEquals(200, response.getStatusLine().getStatusCode());
+
+        response = client.execute(addFirstCopyDisc);
+        assertEquals(200, response.getStatusLine().getStatusCode());
+
+        response = client.execute(addFirstCopyDisc);
+        assertEquals(200, response.getStatusLine().getStatusCode());
+
+        response = client.execute(addFirstCopyDisc);
+        assertEquals(200, response.getStatusLine().getStatusCode());
+
+        response = client.execute(addSecondCopyDisc);
+        assertEquals(200, response.getStatusLine().getStatusCode());
+
+        response = client.execute(addSecondCopyDisc);
+        assertEquals(200, response.getStatusLine().getStatusCode());
+
+
+        HttpGet request = new HttpGet(URL_COPIES);
+        HttpResponse response2 = client.execute(request);
+        System.out.println("Ergebnis:");
+        System.out.println(EntityUtils.toString(response2.getEntity()));
+        assertEquals(200, response2.getStatusLine().getStatusCode());
+
+    }
+    @Test
+    public void testGetCopyDisc() throws IOException {
+        List<NameValuePair> nameValuePairs = new ArrayList<>();
+        List<NameValuePair> nameValuePairs2 = new ArrayList<>();
+
+        JSONObject disc = new JSONObject();
+        disc.put("title", TITLE);
+        disc.put("barcode", EAN);
+        disc.put("director", NAME);
+        disc.put("fsk", 16);
+
+        JSONObject disc2 = new JSONObject();
+        disc2.put("title", TITLE);
+        disc2.put("barcode", EAN_ALT);
+        disc2.put("director", NAME);
+        disc2.put("fsk", 16);
+
+
+        nameValuePairs.add(new BasicNameValuePair("user", "Joh"));
+        nameValuePairs.add(new BasicNameValuePair("code", EAN));
+
+        nameValuePairs2.add(new BasicNameValuePair("user", "Joh"));
+        nameValuePairs2.add(new BasicNameValuePair("code", EAN_ALT));
+
+
+        HttpClient client = HttpClientBuilder.create().build();
+        HttpPost addFirstDisc = new HttpPost(URL_DISCS);
+        HttpPost addSecondDisc = new HttpPost(URL_DISCS);
+
+        HttpPost addFirstCopyDisc = new HttpPost(URL_COPIES_DISCS);
+        HttpPost addSecondCopyDisc = new HttpPost(URL_COPIES_DISCS);
+
+        addFirstDisc.setEntity(new StringEntity(disc.toString()));
+        addSecondDisc.setEntity(new StringEntity(disc2.toString()));
+
+        addFirstCopyDisc.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+        addSecondCopyDisc.setEntity(new UrlEncodedFormEntity(nameValuePairs2));
+
+        addFirstDisc.addHeader("content-Type", "application/json");
+        addSecondDisc.addHeader("content-Type", "application/json");
+
+        addFirstCopyDisc.addHeader("content-Type", "application/x-www-form-urlencoded");
+        addSecondCopyDisc.addHeader("content-Type", "application/x-www-form-urlencoded");
+
+        HttpResponse response = client.execute(addFirstDisc);
+        assertEquals(200, response.getStatusLine().getStatusCode());
+
+        response = client.execute(addSecondDisc);
+        assertEquals(200, response.getStatusLine().getStatusCode());
+
+        response = client.execute(addFirstCopyDisc);
+        assertEquals(200, response.getStatusLine().getStatusCode());
+
+        response = client.execute(addFirstCopyDisc);
+        assertEquals(200, response.getStatusLine().getStatusCode());
+
+        response = client.execute(addFirstCopyDisc);
+        assertEquals(200, response.getStatusLine().getStatusCode());
+
+        response = client.execute(addSecondCopyDisc);
+        assertEquals(200, response.getStatusLine().getStatusCode());
+
+        response = client.execute(addSecondCopyDisc);
+        assertEquals(200, response.getStatusLine().getStatusCode());
+
+        HttpGet request = new HttpGet(URL_DISC_COPY_ONE);
+        HttpResponse response2 = client.execute(request);
+        System.out.println("Ergebnis:");
+        System.out.println(EntityUtils.toString(response2.getEntity()));
+        assertEquals(200, response2.getStatusLine().getStatusCode());
+
+    }
 }

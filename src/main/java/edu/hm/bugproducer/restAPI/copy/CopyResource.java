@@ -42,13 +42,28 @@ public class CopyResource {
 
     @POST
     @Path("/books/")
-    public Response createCopy(@FormParam("user") String user,
+    public Response createCopyBook(@FormParam("user") String user,
                                @FormParam("code") String code) {
 
         System.out.println("user: " + user + " ISBN: " + code);
 
         MediaServiceResult result = copyService.addCopy(user, code);
-        System.out.print("Create Copy!!!");
+        System.out.print("Create Copy Book!!!");
+
+        return Response
+                .status(result.getCode())
+                .build();
+    }
+
+    @POST
+    @Path("/discs/")
+    public Response createCopyDisc(@FormParam("user") String user,
+                               @FormParam("code") String code) {
+
+        System.out.println("user: " + user + " EAN: " + code);
+
+        MediaServiceResult result = copyService.addCopy(user, code);
+        System.out.print("Create Copy Disc!!!");
 
         return Response
                 .status(result.getCode())
