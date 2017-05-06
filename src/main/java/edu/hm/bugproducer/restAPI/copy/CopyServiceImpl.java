@@ -146,19 +146,7 @@ public class CopyServiceImpl implements CopyService {
     @Override
     public Pair<MediaServiceResult, Copy> getCopy(String identifier, int lfnr) {
         if (EAN13CheckDigit.EAN13_CHECK_DIGIT.isValid(identifier)) {
-            List<Copy> resultList = copies
-                    .stream()
-                    .map(copy -> {
-                        if (copy.getMedium() instanceof Disc) {
-                            Disc disc = (Disc) copy.getMedium();
-                            if (disc.getBarcode().equals(identifier) && copy.getLfnr() == lfnr) {
-                                return copy;
-                            }
-
-                        }
-                        return null;
-                    }).filter(Objects::nonNull).collect(Collectors.toList());
-
+            List<Copy> resultList = getspezialDiscCopies(identifier, lfnr);
             if (resultList.size() != 1) {
                 return new Pair<>(MSR_BAD_REQUEST, null);
             } else {
@@ -166,18 +154,7 @@ public class CopyServiceImpl implements CopyService {
             }
 
         } else if (Isbn.isValid(identifier)) {
-            List<Copy> resultList = copies
-                    .stream()
-                    .map(copy -> {
-                        if (copy.getMedium() instanceof Book) {
-                            Book book = (Book) copy.getMedium();
-                            if (book.getIsbn().equals(identifier) && copy.getLfnr() == lfnr) {
-                                return copy;
-                            }
-                        }
-                        return null;
-                    }).filter(Objects::nonNull).collect(Collectors.toList());
-
+            List<Copy> resultList = getspezialBookCopy(identifier, lfnr);
             if (resultList.size() != 1) {
                 return new Pair<>(MSR_BAD_REQUEST, null);
             } else {
@@ -189,14 +166,79 @@ public class CopyServiceImpl implements CopyService {
 
     }
 
+
     @Override
     public List<Copy> getCopies() {
         return copies;
     }
 
     @Override
-    public MediaServiceResult updateCopy(String user, String code, int lfnr) {
-        return null;
+    public MediaServiceResult updateCopy(String username, String code, int lfnr) {
+        List<User> tmpUserList;
+        if (EAN13CheckDigit.EAN13_CHECK_DIGIT.isValid(code)) {
+            List<Copy> resultList = getspezialDiscCopies(code, lfnr);
+            if (resultList.size() != 1) {
+                return MSR_BAD_REQUEST;
+            } else {
+                checkUser(username, resultList);
+                return MSR_OK;
+            }
+
+        } else if (Isbn.isValid(code)) {
+            List<Copy> resultList = getspezialBookCopy(code, lfnr);
+            if (resultList.size() != 1) {
+                return MSR_BAD_REQUEST;
+            } else {
+                checkUser(username, resultList);
+                return MSR_OK;
+            }
+        }
+        return MSR_INTERNAL_SERVER_ERROR;
+
+    }
+
+    private void checkUser(String username, List<Copy> resultList) {
+        List<User> tmpUserList;
+        tmpUserList = users.stream().filter(user -> user.getUserName().equals(username)).collect(Collectors.toList());
+
+        if (tmpUserList.isEmpty()) {
+            User newUser = new User(username);
+            users.add(newUser);
+            resultList.get(0).setUser(newUser);
+        }
+        else{
+             User user = tmpUserList.get(0);
+             resultList.get(0).setUser(user);
+        }
+    }
+
+    private List<Copy> getspezialDiscCopies(String code, int lfnr) {
+        return copies
+                .stream()
+                .map(copy -> {
+                    if (copy.getMedium() instanceof Disc) {
+                        Disc disc = (Disc) copy.getMedium();
+                        if (disc.getBarcode().equals(code) && copy.getLfnr() == lfnr) {
+                            return copy;
+                        }
+
+                    }
+                    return null;
+                }).filter(Objects::nonNull).collect(Collectors.toList());
+    }
+
+    private List<Copy> getspezialBookCopy(String identifier, int lfnr) {
+        return copies
+                .stream()
+                .map(copy -> {
+                    if (copy.getMedium() instanceof Book) {
+                        Book book = (Book) copy.getMedium();
+                        if (book.getIsbn().equals(identifier) && copy.getLfnr() == lfnr) {
+                            return copy;
+                        }
+                    }
+                    return null;
+                }).filter(Objects::nonNull).collect(Collectors.toList());
     }
 
 
