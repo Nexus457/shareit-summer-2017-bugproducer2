@@ -30,7 +30,7 @@ public class CopyServiceImpl implements CopyService {
     public MediaServiceResult addCopy(String username, String code) {
         boolean noUserFound = false;
         int discCounter = 0;
-
+// PLEASE DELETE ME AS WELL
         // MediaServiceResult mediaServiceResult = MSR_INTERNAL_SERVER_ERROR;
 
         if (EAN13CheckDigit.EAN13_CHECK_DIGIT.isValid(code)) {
