@@ -4,7 +4,7 @@ Heroku:
 https://shareitbugproducer.herokuapp.com
 
 
-Johannes Arzt
-Tom Maier
-Mark Tripolt
+Johannes Arzt,
+Tom Maier,
+Mark Tripolt,
 Patrick Kuntz
