@@ -61,6 +61,19 @@ public class MediaResource {
     }
 
     @GET
+    @Path("/discs/")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getDiscs() {
+        System.out.println("getDiscs");
+        List<Disc> discList = mediaService.getDiscs();
+        return Response
+                .status(RESPONSECODE)
+                .entity(discList)
+                .build();
+    }
+
+
+    @GET
     @Path("/books/{isbn}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getBook(@PathParam("isbn") String isbn) {
