@@ -1,5 +1,8 @@
 package edu.hm.bugproducer.restAPI;
 
+/**
+ * MediaServiceResult enum.
+ */
 public enum MediaServiceResult {
 
     MSR_OK(200, Status.OK),
@@ -18,19 +21,35 @@ public enum MediaServiceResult {
 
     MSR_SERVICE_UNAVAILABLE(503, Status.SERVICE_UNAVAILABLE);
 
+    /** status code of response */
     private int code;
+    /** Status object */
     private Status status;
 
-
+    /**
+     * MediaServiceResult Constructor.
+     * @param code of status
+     * @param status Status object
+     */
     MediaServiceResult(int code, Status status) {
         this.code = code;
         this.status = status;
     }
 
+    /**
+     * getCode method.
+     * getter for statusCode
+     * @return code
+     */
     public int getCode() {
         return code;
     }
 
+    /**
+     * getStatus method.
+     * getter for the Status object
+     * @return status
+     */
     public Status getStatus() {
         return status;
     }

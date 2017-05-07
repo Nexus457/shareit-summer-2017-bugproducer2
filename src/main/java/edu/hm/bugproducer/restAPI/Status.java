@@ -1,6 +1,8 @@
 package edu.hm.bugproducer.restAPI;
 
-
+/**
+ * Status enum.
+ */
 public enum Status {
 
     OK(),
