@@ -23,10 +23,8 @@ public class MediaServiceImpl implements MediaService {
     public MediaServiceResult addBook(Book book) {
         MediaServiceResult mediaServiceResult = MSR_INTERNAL_SERVER_ERROR;
 
-        System.out.println("Ich füge ein Wunderbares Buch hinzu !!!!");
 
         if (book == null) {
-            //todo Author und ISBN auf Null prüfen!!! DAS gleiche brauchen wir auch bei der Disc
             mediaServiceResult = MSR_NO_CONTENT;
         } else if (book.getAuthor().isEmpty() || book.getTitle().isEmpty() || book.getIsbn().isEmpty()) {
             mediaServiceResult = MSR_BAD_REQUEST;
@@ -126,7 +124,6 @@ public class MediaServiceImpl implements MediaService {
         return discs;
     }
 
-    //todo Was passiert bei ungültiger ISBN
     @Override
     public MediaServiceResult updateBook(String isbn, Book newBook) {
         MediaServiceResult mediaServiceResult = MSR_INTERNAL_SERVER_ERROR;
@@ -181,14 +178,7 @@ public class MediaServiceImpl implements MediaService {
 
             if (newDisc.getBarcode() != null) {
              validEAN = EAN13CheckDigit.EAN13_CHECK_DIGIT.isValid(newDisc.getBarcode());
-                if (!validEAN) {
-                    mediaServiceResult = MSR_BAD_REQUEST;
-                } else {
-                    for (Disc d : oneDisc) {
-                        d.setBarcode(newDisc.getBarcode());
-                    }
-                    mediaServiceResult = MSR_OK;
-                }
+                mediaServiceResult = updateBarCode(newDisc, oneDisc, validEAN);
             }
 
             if (newDisc.getDirector() != null && validEAN) {
@@ -213,6 +203,28 @@ public class MediaServiceImpl implements MediaService {
             mediaServiceResult = MSR_BAD_REQUEST;
         }
 
+        return mediaServiceResult;
+    }
+
+    /**
+     * Some help function.
+     * updates the barCode of a Disc
+     * @param newDisc disc with the new Barcode
+     * @param oneDisc old disc
+     * @param validEAN some test value if the barcode is valid
+     * @return media result
+     */
+
+    private MediaServiceResult updateBarCode(Disc newDisc, List<Disc> oneDisc, boolean validEAN) {
+        MediaServiceResult mediaServiceResult;
+        if (!validEAN) {
+            mediaServiceResult = MSR_BAD_REQUEST;
+        } else {
+            for (Disc d : oneDisc) {
+                d.setBarcode(newDisc.getBarcode());
+            }
+            mediaServiceResult = MSR_OK;
+        }
         return mediaServiceResult;
     }
 }

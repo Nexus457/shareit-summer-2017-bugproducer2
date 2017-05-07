@@ -17,19 +17,28 @@ import static edu.hm.bugproducer.restAPI.media.MediaServiceImpl.discs;
 
 /**
  * CopyServiceImpl Class.
+ *
  * @author Mark Tripolt
  * @author Johannes Arzt
  * @author Tom Maier
  * @author Patrick Kuntz
  */
 public class CopyServiceImpl implements CopyService {
-    /** ArrayList that contains the copies */
+    /**
+     * ArrayList that contains the copies.
+     */
     public static List<Copy> copies = new ArrayList<>();
-    /** ArrayList that contains the users */
+    /**
+     * ArrayList that contains the users.
+     */
     public static List<User> users = new ArrayList<>();
-    /** running number of copies of books with value 0 */
+    /**
+     * running number of copies of books with value 0.
+     */
     private int booklfnr = 0;
-    /** running number of copies of discs with value 0 */
+    /**
+     * running number of copies of discs with value 0.
+     */
     private int disclfnr = 0;
 
     /**
@@ -42,8 +51,9 @@ public class CopyServiceImpl implements CopyService {
     /**
      * addCopy method of type MediaServiceResult.
      * after checking if the barcode is valid, it´s analyzing if the user is already in the list
+     *
      * @param username name of person who wants to borrow a disc
-     * @param code the unique number of a disc
+     * @param code     the unique number of a disc
      * @return it either returns that a disc was borrowed by an already exist user, or from a new user or it returns
      * a status code of what happened
      */
@@ -88,13 +98,17 @@ public class CopyServiceImpl implements CopyService {
                         return addUserAndAddDiscCopy(username, d);
                     }
                 } else {
-                    if (discCounter == discs.size()) return MSR_BAD_REQUEST;
+                    if (discCounter == discs.size()) {
+                        return MSR_BAD_REQUEST;
+                    }
                 }
                 discCounter++;
             }
         } else if (Isbn.isValid(code)) {
             MediaServiceResult x = checkBook(username, code, noUserFound);
-            if (x != null) return x;
+            if (x != null) {
+                return x;
+            }
         } else {
             return MSR_NO_CONTENT;
         }
@@ -105,7 +119,8 @@ public class CopyServiceImpl implements CopyService {
     /**
      * private addDiscCopy method.
      * adds a new copy of a disc with it´s user
-     * @param d a disc Object
+     *
+     * @param d     a disc Object
      * @param user1 user who borrows it
      * @return statusCode OK
      */
@@ -118,8 +133,9 @@ public class CopyServiceImpl implements CopyService {
     /**
      * private addUserAndAddDiscCopy method.
      * adds a new user to the list and creates a new copy of the disc
+     *
      * @param username user who wants to borrow a disc but was not in the list
-     * @param d disc object
+     * @param d        disc object
      * @return the executing of addDiscCopy method
      */
     private MediaServiceResult addUserAndAddDiscCopy(String username, Disc d) {
@@ -131,8 +147,9 @@ public class CopyServiceImpl implements CopyService {
     /**
      * private checkBook method.
      * after checking if the isbn is valid, it´s analyzing if the user is already in the list
-     * @param username name of person
-     * @param code isbn of book
+     *
+     * @param username    name of person
+     * @param code        isbn of book
      * @param noUserFound check variable
      * @return it either returns that a book was borrowed by an already exist user, or from a new user or it returns
      * a status code of what happened or null
@@ -170,7 +187,9 @@ public class CopyServiceImpl implements CopyService {
                     }
                 }
             } else {
-                if (counter == books.size()) return MSR_BAD_REQUEST;
+                if (counter == books.size()) {
+                    return MSR_BAD_REQUEST;
+                }
             }
             counter++;
         }
@@ -180,7 +199,8 @@ public class CopyServiceImpl implements CopyService {
     /**
      * private addCopy method.
      * adds a new copy of book and it´s user
-     * @param b book object
+     *
+     * @param b     book object
      * @param user1 name of person
      * @return statusCode OK
      */
@@ -193,8 +213,9 @@ public class CopyServiceImpl implements CopyService {
     /**
      * private addUserAndAddBookCopy method.
      * adds a new user to the list and creates a new copy of the book
+     *
      * @param username user who wants to borrow a book but was not in the list
-     * @param b book object
+     * @param b        book object
      * @return the executing of addCopy method
      */
     private MediaServiceResult createUserAndAddBookCopy(String username, Book b) {
@@ -206,8 +227,9 @@ public class CopyServiceImpl implements CopyService {
     /**
      * getCopy method.
      * checking if barcode is valid and returns the copy if it exist, the same with isbn
+     *
      * @param identifier code that identifies a book or a disc
-     * @param lfnr running number for a copy
+     * @param lfnr       running number for a copy
      * @return statusCode OK and the copy or BAD_REQUEST and null
      */
     @Override
@@ -236,6 +258,7 @@ public class CopyServiceImpl implements CopyService {
     /**
      * getCopies method.
      * getter for copies list
+     *
      * @return list of copies
      */
     @Override
@@ -247,9 +270,10 @@ public class CopyServiceImpl implements CopyService {
      * updateCopy method.
      * checking if barcode is valid and updates the copy if it exist,  if barcode is invalid it checks if isbn is valid
      * and update that book if it exists
+     *
      * @param username name of person
-     * @param code identifier number of book or disc
-     * @param lfnr running number of a copy
+     * @param code     identifier number of book or disc
+     * @param lfnr     running number of a copy
      * @return statusCode OK, BAD_REQUEST or INTERNAL_SERVER_ERROR
      */
     @Override
@@ -280,7 +304,8 @@ public class CopyServiceImpl implements CopyService {
     /**
      * checkUser method.
      * if user list is empty, it creates a new user, else it sets the user into the user list
-     * @param username name of the person
+     *
+     * @param username   name of the person
      * @param resultList the user list
      */
     private void checkUser(String username, List<Copy> resultList) {
@@ -291,16 +316,16 @@ public class CopyServiceImpl implements CopyService {
             User newUser = new User(username);
             users.add(newUser);
             resultList.get(0).setUser(newUser);
-        }
-        else{
-             User user = tmpUserList.get(0);
-             resultList.get(0).setUser(user);
+        } else {
+            User user = tmpUserList.get(0);
+            resultList.get(0).setUser(user);
         }
     }
 
     /**
      * getSpecialDiscCopies method.
      * used the get a specific copy of disc if it exist
+     *
      * @param code barcode of disc
      * @param lfnr running number of copy of disc
      * @return copy if it exist, else null
@@ -319,11 +344,13 @@ public class CopyServiceImpl implements CopyService {
                     return null;
                 }).filter(Objects::nonNull).collect(Collectors.toList());
     }
+
     /**
      * getSpecialBookCopies method.
      * used the get a specific copy of book if it exist
+     *
      * @param identifier isbn of book
-     * @param lfnr running number of copy of book
+     * @param lfnr       running number of copy of book
      * @return copy if it exist, else null
      */
     private List<Copy> getSpecialBookCopy(String identifier, int lfnr) {
