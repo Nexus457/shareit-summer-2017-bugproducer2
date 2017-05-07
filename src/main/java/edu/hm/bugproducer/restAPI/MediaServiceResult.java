@@ -2,6 +2,10 @@ package edu.hm.bugproducer.restAPI;
 
 /**
  * MediaServiceResult enum.
+ * @author Mark Tripolt
+ * @author Johannes Arzt
+ * @author Tom Maier
+ * @author Patrick Kuntz
  */
 public enum MediaServiceResult {
 

@@ -2,6 +2,10 @@ package edu.hm.bugproducer.restAPI;
 
 /**
  * Status enum.
+ * @author Mark Tripolt
+ * @author Johannes Arzt
+ * @author Tom Maier
+ * @author Patrick Kuntz
  */
 public enum Status {
 
@@ -12,6 +16,6 @@ public enum Status {
     NOT_FOUND(),
     INTERNAL_SERVER_ERROR(),
     NOT_IMPLEMENTED(),
-    SERVICE_UNAVAILABLE();
+    SERVICE_UNAVAILABLE()
 
 }

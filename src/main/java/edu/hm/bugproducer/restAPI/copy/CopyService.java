@@ -6,7 +6,9 @@ import javafx.util.Pair;
 
 import java.util.List;
 
-
+/**
+ * CopyService Class.
+ */
 public interface CopyService {
 
     MediaServiceResult addCopy(String user, String code);

@@ -350,7 +350,7 @@ public class CopyServiceImpl implements CopyService {
      * used the get a specific copy of book if it exist
      *
      * @param identifier isbn of book
-     * @param lfnr       running number of copy of book
+     * @param lfnr running number of copy of book
      * @return copy if it exist, else null
      */
     private List<Copy> getSpecialBookCopy(String identifier, int lfnr) {
