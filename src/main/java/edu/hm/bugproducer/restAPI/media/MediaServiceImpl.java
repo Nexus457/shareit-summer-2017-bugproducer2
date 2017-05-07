@@ -22,9 +22,9 @@ import static edu.hm.bugproducer.restAPI.MediaServiceResult.*;
  * @author Patrick Kuntz
  */
 public class MediaServiceImpl implements MediaService {
-    /** ArrayList that contains the books */
+    /** ArrayList that contains the books. */
     public static List<Book> books = new ArrayList<>();
-    /** ArrayList that contains the discs */
+    /** ArrayList that contains the discs. */
     public static List<Disc> discs = new ArrayList<>();
 
     /**
