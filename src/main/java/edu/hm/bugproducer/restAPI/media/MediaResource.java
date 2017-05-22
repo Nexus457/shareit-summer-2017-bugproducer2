@@ -12,17 +12,35 @@ import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * MediaResource Class.
+ * @author Mark Tripolt
+ * @author Johannes Arzt
+ * @author Tom Maier
+ * @author Patrick Kuntz
+ */
 @Path("/media")
 public class MediaResource {
+    /** response code for OK */
     private static final int RESPONSECODE = 200;
     // static, weil bei jedem Methodenaufruf ein neues Objekt erstellt wird.
+    /** ArrayList which contains books */
     private static List<Book> books = new ArrayList<>();
-
+    /** mediaService variable for the media service implementation */
     private MediaServiceImpl mediaService = new MediaServiceImpl();
 
+    /**
+     * MediaResource Constructor.
+     */
     public MediaResource() {
     }
 
+    /**
+     * createDiscs method.
+     * create a disc by using the HTTP verb POST
+     * @param disc disc object
+     * @return statusCode
+     */
     @POST
     @Path("/discs/")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -35,6 +53,12 @@ public class MediaResource {
                 .build();
     }
 
+    /**
+     * createBooks method.
+     * create books by using the HTTP verb POST
+     * @param book book object
+     * @return statusCode
+     */
     @POST
     @Path("/books/")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -48,6 +72,11 @@ public class MediaResource {
                 .build();
     }
 
+    /**
+     * getBooks method.
+     * gets the list with books by using the HTTP verb GET
+     * @return statusCode and the bookList entity
+     */
     @GET
     @Path("/books/")
     @Produces(MediaType.APPLICATION_JSON)
@@ -60,6 +89,12 @@ public class MediaResource {
                 .build();
     }
 
+    /**
+
+     * getDiscs method.
+     * gets the list with discs by using the HTTP verb GET
+     * @return statusCode and the discList entitiy
+     */
     @GET
     @Path("/discs/")
     @Produces(MediaType.APPLICATION_JSON)
@@ -73,6 +108,12 @@ public class MediaResource {
     }
 
 
+    /**
+     * getBook method.
+     * gets the book from mediaService with a specific isbn by using the HTTP verb GET
+     * @param isbn unique number of a book
+     * @return statusCode and the book entity
+     */
     @GET
     @Path("/books/{isbn}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -86,6 +127,12 @@ public class MediaResource {
                 .build();
     }
 
+    /**
+     * getDisc method.
+     * gets a disc from mediaService with a specific barcode by using the HTTP verb GET
+     * @param barcode unique number of a disc
+     * @return statusCode and the disc entity
+     */
     @GET
     @Path("/discs/{barcode}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -99,6 +146,13 @@ public class MediaResource {
                 .build();
     }
 
+    /**
+     * updateBook method.
+     * updates the book by using the HTTP verb PUT
+     * @param isbn unique number of book
+     * @param book book object
+     * @return statusCode
+     */
     @PUT
     @Path("/books/{isbn}")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -113,6 +167,13 @@ public class MediaResource {
                 .build();
     }
 
+    /**
+     * updateDisc method.
+     * updates the disc by using the HTTP verb PUT
+     * @param barcode unique number of a disc
+     * @param disc disc object
+     * @return statusCode
+     */
     @PUT
     @Path("/discs/{barcode}")
     @Consumes(MediaType.APPLICATION_JSON)

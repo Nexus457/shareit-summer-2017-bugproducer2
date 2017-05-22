@@ -14,19 +14,31 @@ import java.util.stream.Collectors;
 
 import static edu.hm.bugproducer.restAPI.MediaServiceResult.*;
 
+/**
+ * MediaServiceImpl Class.
+ * @author Mark Tripolt
+ * @author Johannes Arzt
+ * @author Tom Maier
+ * @author Patrick Kuntz
+ */
 public class MediaServiceImpl implements MediaService {
-
+    /** ArrayList that contains the books. */
     public static List<Book> books = new ArrayList<>();
+    /** ArrayList that contains the discs. */
     public static List<Disc> discs = new ArrayList<>();
 
+    /**
+     * addBook method.
+     * checks if a book contains essential information and if the isbn is valid to add it to the list books
+     * @param book book object
+     * @return mediaServiceResult
+     */
     @Override
     public MediaServiceResult addBook(Book book) {
         MediaServiceResult mediaServiceResult = MSR_INTERNAL_SERVER_ERROR;
 
-        System.out.println("Ich füge ein Wunderbares Buch hinzu !!!!");
 
         if (book == null) {
-            //todo Author und ISBN auf Null prüfen!!! DAS gleiche brauchen wir auch bei der Disc
             mediaServiceResult = MSR_NO_CONTENT;
         } else if (book.getAuthor().isEmpty() || book.getTitle().isEmpty() || book.getIsbn().isEmpty()) {
             mediaServiceResult = MSR_BAD_REQUEST;
@@ -54,6 +66,12 @@ public class MediaServiceImpl implements MediaService {
         return mediaServiceResult;
     }
 
+    /**
+     * addDisc method.
+     * checks if a disc contains essential information and if the barcode is valid to add it to the list discs
+     * @param disc disc object
+     * @return mediaServiceResult
+     */
     @Override
     public MediaServiceResult addDisc(Disc disc) {
         MediaServiceResult mediaServiceResult = MSR_INTERNAL_SERVER_ERROR;
@@ -87,12 +105,22 @@ public class MediaServiceImpl implements MediaService {
         return mediaServiceResult;
     }
 
-
+    /**
+     * getBooks method.
+     * getter for the books list
+     * @return books a list of books
+     */
     @Override
     public List<Book> getBooks() {
         return books;
     }
 
+    /**
+     * getBook method.
+     * gets a specific book by his isbn
+     * @param isbn unique number of book
+     * @return myResult pair of statusCode and the book object or null
+     */
     @Override
     public Pair<MediaServiceResult, Book> getBook(String isbn) {
         Pair<MediaServiceResult, Book> myResult = null;
@@ -107,6 +135,12 @@ public class MediaServiceImpl implements MediaService {
         return myResult;
     }
 
+    /**
+     * getDisc method.
+     * gets a specific disc by his barcode
+     * @param barcode unique number of disc
+     * @return myResult pair of statusCode and disc object or null
+     */
     @Override
     public Pair<MediaServiceResult, Disc> getDisc(String barcode) {
         Pair<MediaServiceResult, Disc> myResult = null;
@@ -121,12 +155,23 @@ public class MediaServiceImpl implements MediaService {
         return myResult;
     }
 
+    /**
+     * getDiscs method.
+     * getter for list of discs
+     * @return discs
+     */
     @Override
     public List<Disc> getDiscs() {
         return discs;
     }
 
-    //todo Was passiert bei ungültiger ISBN
+    /**
+     * updateBook method.
+     * checking if the information of the new book are okay, and updates the book
+     * @param isbn unique number of a book
+     * @param newBook newBook object
+     * @return statusCode
+     */
     @Override
     public MediaServiceResult updateBook(String isbn, Book newBook) {
         MediaServiceResult mediaServiceResult = MSR_INTERNAL_SERVER_ERROR;
@@ -167,6 +212,13 @@ public class MediaServiceImpl implements MediaService {
         return mediaServiceResult;
     }
 
+    /**
+     * updateDisc method.
+     * checking if the information of the new disc are okay, and updates the disc
+     * @param barcode uniqu number of a disc
+     * @param newDisc newDisc object
+     * @return statusCode
+     */
     @Override
     public MediaServiceResult updateDisc(String barcode, Disc newDisc) {
         MediaServiceResult mediaServiceResult = MSR_INTERNAL_SERVER_ERROR;
@@ -181,14 +233,7 @@ public class MediaServiceImpl implements MediaService {
 
             if (newDisc.getBarcode() != null) {
              validEAN = EAN13CheckDigit.EAN13_CHECK_DIGIT.isValid(newDisc.getBarcode());
-                if (!validEAN) {
-                    mediaServiceResult = MSR_BAD_REQUEST;
-                } else {
-                    for (Disc d : oneDisc) {
-                        d.setBarcode(newDisc.getBarcode());
-                    }
-                    mediaServiceResult = MSR_OK;
-                }
+                mediaServiceResult = updateBarCode(newDisc, oneDisc, validEAN);
             }
 
             if (newDisc.getDirector() != null && validEAN) {
@@ -213,6 +258,28 @@ public class MediaServiceImpl implements MediaService {
             mediaServiceResult = MSR_BAD_REQUEST;
         }
 
+        return mediaServiceResult;
+    }
+
+    /**
+     * Some help function.
+     * updates the barCode of a Disc
+     * @param newDisc disc with the new Barcode
+     * @param oneDisc old disc
+     * @param validEAN some test value if the barcode is valid
+     * @return media result
+     */
+
+    private MediaServiceResult updateBarCode(Disc newDisc, List<Disc> oneDisc, boolean validEAN) {
+        MediaServiceResult mediaServiceResult;
+        if (!validEAN) {
+            mediaServiceResult = MSR_BAD_REQUEST;
+        } else {
+            for (Disc d : oneDisc) {
+                d.setBarcode(newDisc.getBarcode());
+            }
+            mediaServiceResult = MSR_OK;
+        }
         return mediaServiceResult;
     }
 }

@@ -1,9 +1,11 @@
 package edu.hm.bugproducer.Utils;
-
 import java.util.regex.Pattern;
 
+/*Quelle :https://gist.github.com/kymmt90/a45ae122faeb78096b2c*/
 /**
  * ISBN class.
+ * Quelle: https://gist.github.com/kymmt90/a45ae122faeb78096b2c
+ *
  */
 public class Isbn {
     /** Number of digits in ISBN. */
