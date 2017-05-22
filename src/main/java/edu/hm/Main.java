@@ -1,8 +1,8 @@
 package edu.hm;
 
 import org.apache.commons.validator.routines.checkdigit.EAN13CheckDigit;
-import org.eclipse.jetty.server.*;
-import org.eclipse.jetty.webapp.*;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.webapp.WebAppContext;
 
 /**
  * Start the application without an AppServer like tomcat.
@@ -12,7 +12,7 @@ import org.eclipse.jetty.webapp.*;
 public class Main {
 
     public static final String APP_URL = "/";
-    public static final int PORT = 8082;
+    public static final int PORT = 8080;
     public static final String WEBAPP_DIR = "./src/main/webapp/";
 
     /**

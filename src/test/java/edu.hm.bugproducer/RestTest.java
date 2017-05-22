@@ -39,14 +39,13 @@ public class RestTest {
     private static final String URL = "http://localhost:8082";
     private static final String EAN = "9783815820865";
     private static final String EAN_ALT = "9783827317100";
-    private static final String URL_BOOKS = "http://localhost:8082/shareit/media/books/";
-    private static final String URL_DISCS = "http://localhost:8082/shareit/media/discs/";
-    private static final String URL_COPIES_BOOKS = "http://localhost:8082/shareit/copy/books";
-    private static final String URL_COPIES_DISCS = "http://localhost:8082/shareit/copy/discs";
-    private static final String URL_COPIES = "http://localhost:8082/shareit/copy/";
+    private static final String URL_BOOKS = "http://localhost:8080/shareit/media/books/";
+    private static final String URL_DISCS = "http://localhost:8080/shareit/media/discs/";
+    private static final String URL_COPIES_BOOKS = "http://localhost:8080/shareit/copy/books";
+    private static final String URL_COPIES_DISCS = "http://localhost:8080/shareit/copy/discs";
+    private static final String URL_COPIES = "http://localhost:8080/shareit/copy/";
     private static final String URL_BOOK_COPY_ONE = URL_COPIES_BOOKS + "/" + ISBN + "/" + 1;
     private static final String URL_DISC_COPY_ONE = URL_COPIES_DISCS + "/" + EAN + "/" + 1;
-
 
 
     private JettyStarter jettyStarter;
@@ -981,6 +980,7 @@ public class RestTest {
 
 
     }
+
     @Test
     public void testGetBooks() throws IOException {
         JSONObject book = new JSONObject();
@@ -1015,6 +1015,7 @@ public class RestTest {
         System.out.println(EntityUtils.toString(response2.getEntity()));
         assertEquals(200, response2.getStatusLine().getStatusCode());
     }
+
     @Test
     public void testGetBooksEmpty() throws IOException {
         HttpClient client = HttpClientBuilder.create().build();
@@ -1024,6 +1025,7 @@ public class RestTest {
         System.out.println(EntityUtils.toString(response2.getEntity()));
         assertEquals(200, response2.getStatusLine().getStatusCode());
     }
+
     @Test
     public void testGetDiscs() throws IOException {
         JSONObject disc = new JSONObject();
@@ -1060,6 +1062,7 @@ public class RestTest {
         System.out.println(EntityUtils.toString(response2.getEntity()));
         assertEquals(200, response2.getStatusLine().getStatusCode());
     }
+
     @Test
     public void testGetDiscsEmpty() throws IOException {
         HttpClient client = HttpClientBuilder.create().build();
