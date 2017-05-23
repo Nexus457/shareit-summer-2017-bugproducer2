@@ -14,6 +14,7 @@ import java.util.List;
 
 /**
  * MediaResource Class.
+ *
  * @author Mark Tripolt
  * @author Johannes Arzt
  * @author Tom Maier
@@ -21,12 +22,18 @@ import java.util.List;
  */
 @Path("/media")
 public class MediaResource {
-    /** response code for OK */
+    /**
+     * response code for OK
+     */
     private static final int RESPONSECODE = 200;
     // static, weil bei jedem Methodenaufruf ein neues Objekt erstellt wird.
-    /** ArrayList which contains books */
+    /**
+     * ArrayList which contains books
+     */
     private static List<Book> books = new ArrayList<>();
-    /** mediaService variable for the media service implementation */
+    /**
+     * mediaService variable for the media service implementation
+     */
     private MediaServiceImpl mediaService = new MediaServiceImpl();
 
     /**
@@ -36,8 +43,24 @@ public class MediaResource {
     }
 
     /**
+     * Delete all lists.
+     *
+     * @return
+     */
+    @GET
+    @Path("/reset")
+    public Response deleteAll() {
+        System.out.println("deleteAll");
+        MediaServiceResult result = mediaService.deleteAll();
+        return Response
+                .status(result.getCode())
+                .build();
+    }
+
+    /**
      * createDiscs method.
      * create a disc by using the HTTP verb POST
+     *
      * @param disc disc object
      * @return statusCode
      */
@@ -56,6 +79,7 @@ public class MediaResource {
     /**
      * createBooks method.
      * create books by using the HTTP verb POST
+     *
      * @param book book object
      * @return statusCode
      */
@@ -65,6 +89,8 @@ public class MediaResource {
     public Response createBooks(Book book) {
         //System.out.println("createBooks" + book.getAuthor());
         //ToDo Change Name
+
+
         MediaServiceResult result = mediaService.addBook(book);
 
         return Response
@@ -75,6 +101,7 @@ public class MediaResource {
     /**
      * getBooks method.
      * gets the list with books by using the HTTP verb GET
+     *
      * @return statusCode and the bookList entity
      */
     @GET
@@ -90,9 +117,9 @@ public class MediaResource {
     }
 
     /**
-
      * getDiscs method.
      * gets the list with discs by using the HTTP verb GET
+     *
      * @return statusCode and the discList entitiy
      */
     @GET
@@ -111,6 +138,7 @@ public class MediaResource {
     /**
      * getBook method.
      * gets the book from mediaService with a specific isbn by using the HTTP verb GET
+     *
      * @param isbn unique number of a book
      * @return statusCode and the book entity
      */
@@ -130,6 +158,7 @@ public class MediaResource {
     /**
      * getDisc method.
      * gets a disc from mediaService with a specific barcode by using the HTTP verb GET
+     *
      * @param barcode unique number of a disc
      * @return statusCode and the disc entity
      */
@@ -149,6 +178,7 @@ public class MediaResource {
     /**
      * updateBook method.
      * updates the book by using the HTTP verb PUT
+     *
      * @param isbn unique number of book
      * @param book book object
      * @return statusCode
@@ -170,8 +200,9 @@ public class MediaResource {
     /**
      * updateDisc method.
      * updates the disc by using the HTTP verb PUT
+     *
      * @param barcode unique number of a disc
-     * @param disc disc object
+     * @param disc    disc object
      * @return statusCode
      */
     @PUT

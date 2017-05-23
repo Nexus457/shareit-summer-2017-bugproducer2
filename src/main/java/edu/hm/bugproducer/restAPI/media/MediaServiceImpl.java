@@ -16,27 +16,32 @@ import static edu.hm.bugproducer.restAPI.MediaServiceResult.*;
 
 /**
  * MediaServiceImpl Class.
+ *
  * @author Mark Tripolt
  * @author Johannes Arzt
  * @author Tom Maier
  * @author Patrick Kuntz
  */
 public class MediaServiceImpl implements MediaService {
-    /** ArrayList that contains the books. */
+    /**
+     * ArrayList that contains the books.
+     */
     public static List<Book> books = new ArrayList<>();
-    /** ArrayList that contains the discs. */
+    /**
+     * ArrayList that contains the discs.
+     */
     public static List<Disc> discs = new ArrayList<>();
 
     /**
      * addBook method.
      * checks if a book contains essential information and if the isbn is valid to add it to the list books
+     *
      * @param book book object
      * @return mediaServiceResult
      */
     @Override
     public MediaServiceResult addBook(Book book) {
         MediaServiceResult mediaServiceResult = MSR_INTERNAL_SERVER_ERROR;
-
 
         if (book == null) {
             mediaServiceResult = MSR_NO_CONTENT;
@@ -50,15 +55,23 @@ public class MediaServiceImpl implements MediaService {
                 books.add(book);
             } else {
 
+                boolean duplicate = false;
+
                 ListIterator<Book> lir = books.listIterator();
 
-                while (lir.hasNext()) {
+
+                while (lir.hasNext() && !duplicate) {
                     if (lir.next().getIsbn().equals(book.getIsbn())) {
+                        duplicate = true;
                         mediaServiceResult = MSR_BAD_REQUEST;
                     } else {
-                        lir.add(book);
+                        //lir.add(book);
                         mediaServiceResult = MSR_OK;
                     }
+                }
+
+                if (!duplicate) {
+                    books.add(book);
                 }
             }
         }
@@ -69,6 +82,7 @@ public class MediaServiceImpl implements MediaService {
     /**
      * addDisc method.
      * checks if a disc contains essential information and if the barcode is valid to add it to the list discs
+     *
      * @param disc disc object
      * @return mediaServiceResult
      */
@@ -89,15 +103,22 @@ public class MediaServiceImpl implements MediaService {
                 discs.add(disc);
             } else {
 
+                boolean duplicate = false;
+
                 ListIterator<Disc> lir = discs.listIterator();
 
-                while (lir.hasNext()) {
+                while (lir.hasNext() && !duplicate) {
                     if (lir.next().getBarcode().equals(disc.getBarcode())) {
+                        duplicate = true;
                         mediaServiceResult = MSR_BAD_REQUEST;
                     } else {
-                        lir.add(disc);
+                        //lir.add(disc);
                         mediaServiceResult = MSR_OK;
                     }
+                }
+
+                if (!duplicate) {
+                    discs.add(disc);
                 }
             }
 
@@ -108,6 +129,7 @@ public class MediaServiceImpl implements MediaService {
     /**
      * getBooks method.
      * getter for the books list
+     *
      * @return books a list of books
      */
     @Override
@@ -118,6 +140,7 @@ public class MediaServiceImpl implements MediaService {
     /**
      * getBook method.
      * gets a specific book by his isbn
+     *
      * @param isbn unique number of book
      * @return myResult pair of statusCode and the book object or null
      */
@@ -138,6 +161,7 @@ public class MediaServiceImpl implements MediaService {
     /**
      * getDisc method.
      * gets a specific disc by his barcode
+     *
      * @param barcode unique number of disc
      * @return myResult pair of statusCode and disc object or null
      */
@@ -158,6 +182,7 @@ public class MediaServiceImpl implements MediaService {
     /**
      * getDiscs method.
      * getter for list of discs
+     *
      * @return discs
      */
     @Override
@@ -168,7 +193,8 @@ public class MediaServiceImpl implements MediaService {
     /**
      * updateBook method.
      * checking if the information of the new book are okay, and updates the book
-     * @param isbn unique number of a book
+     *
+     * @param isbn    unique number of a book
      * @param newBook newBook object
      * @return statusCode
      */
@@ -182,7 +208,7 @@ public class MediaServiceImpl implements MediaService {
         boolean validIsbn = true;
         if (!oneBook.isEmpty()) {
             if (newBook.getIsbn() != null) {
-                 validIsbn = Isbn.isValid(newBook.getIsbn());
+                validIsbn = Isbn.isValid(newBook.getIsbn());
                 if (!validIsbn) {
                     mediaServiceResult = MSR_BAD_REQUEST;
                 } else {
@@ -215,6 +241,7 @@ public class MediaServiceImpl implements MediaService {
     /**
      * updateDisc method.
      * checking if the information of the new disc are okay, and updates the disc
+     *
      * @param barcode uniqu number of a disc
      * @param newDisc newDisc object
      * @return statusCode
@@ -232,7 +259,7 @@ public class MediaServiceImpl implements MediaService {
         if (!oneDisc.isEmpty()) {
 
             if (newDisc.getBarcode() != null) {
-             validEAN = EAN13CheckDigit.EAN13_CHECK_DIGIT.isValid(newDisc.getBarcode());
+                validEAN = EAN13CheckDigit.EAN13_CHECK_DIGIT.isValid(newDisc.getBarcode());
                 mediaServiceResult = updateBarCode(newDisc, oneDisc, validEAN);
             }
 
@@ -261,15 +288,22 @@ public class MediaServiceImpl implements MediaService {
         return mediaServiceResult;
     }
 
+    @Override
+    public MediaServiceResult deleteAll() {
+        books.clear();
+        discs.clear();
+        return MSR_OK;
+    }
+
     /**
      * Some help function.
      * updates the barCode of a Disc
-     * @param newDisc disc with the new Barcode
-     * @param oneDisc old disc
+     *
+     * @param newDisc  disc with the new Barcode
+     * @param oneDisc  old disc
      * @param validEAN some test value if the barcode is valid
      * @return media result
      */
-
     private MediaServiceResult updateBarCode(Disc newDisc, List<Disc> oneDisc, boolean validEAN) {
         MediaServiceResult mediaServiceResult;
         if (!validEAN) {
@@ -282,4 +316,6 @@ public class MediaServiceImpl implements MediaService {
         }
         return mediaServiceResult;
     }
+
+
 }

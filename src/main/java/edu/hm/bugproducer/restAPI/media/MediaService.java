@@ -29,4 +29,6 @@ public interface MediaService {
 
     MediaServiceResult updateDisc(String barcode, Disc disc);
 
+    MediaServiceResult deleteAll();
+
 }

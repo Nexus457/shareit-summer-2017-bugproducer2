@@ -66,7 +66,7 @@ public class Book extends Medium {
      * @param isbn string variable
      */
     public void setIsbn(String isbn) {
-        this.isbn = isbn;
+        this.isbn = isbn.replaceAll("-", "");
     }
 
     @Override
