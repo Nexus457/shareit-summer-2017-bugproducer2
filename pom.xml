@@ -23,6 +23,13 @@
       <artifactId>json</artifactId>
       <version>20140107</version>
     </dependency>
+    <!--- JWZ -->
+    <dependency>
+      <groupId>io.jsonwebtoken</groupId>
+      <artifactId>jjwt</artifactId>
+      <version>0.7.0</version>
+    </dependency>
+
     <!-- https://mvnrepository.com/artifact/commons-validator/commons-validator -->
     <dependency>
       <groupId>commons-validator</groupId>

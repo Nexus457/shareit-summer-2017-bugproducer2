@@ -43,6 +43,8 @@ public class MediaServiceImpl implements MediaService {
     public MediaServiceResult addBook(Book book) {
         MediaServiceResult mediaServiceResult = MSR_INTERNAL_SERVER_ERROR;
 
+        //TODO chnage null to empty
+
         if (book == null) {
             mediaServiceResult = MSR_NO_CONTENT;
         } else if (book.getAuthor().isEmpty() || book.getTitle().isEmpty() || book.getIsbn().isEmpty()) {

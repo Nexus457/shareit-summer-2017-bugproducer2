@@ -4,11 +4,15 @@ package edu.hm.bugproducer.restAPI.media;
 import edu.hm.bugproducer.models.Book;
 import edu.hm.bugproducer.models.Disc;
 import edu.hm.bugproducer.restAPI.MediaServiceResult;
+import io.jsonwebtoken.Jwt;
+import io.jsonwebtoken.Jwts;
 import javafx.util.Pair;
+import org.json.JSONObject;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -85,16 +89,51 @@ public class MediaResource {
      */
     @POST
     @Path("/books/")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response createBooks(Book book) {
-        //System.out.println("createBooks" + book.getAuthor());
+    public Response createBooks(String jwtString) {
+
+        try {
+            Jwts.parser()
+                    .setSigningKey("secret".getBytes("UTF-8"))
+                    .parseClaimsJws(jwtString);
+
+            String  derString = Jwts.parser()
+                    .setSigningKey("secret".getBytes("UTF-8"))
+                    .parseClaimsJws(jwtString).getBody().get("book").toString();
+
+            JSONObject jsonObj = new JSONObject(derString);
+
+            Book book = new Book();
+
+
+            book.setAuthor(jsonObj.getString("author"));
+            book.setTitle(jsonObj.getString("title"));
+            book.setIsbn(jsonObj.getString("isbn"));
+
+
+            //TODO HIER WEITERMACHEN !!!!!!!!!!!!!!!eins eins elf
+
+
+
+            System.out.print(book.getIsbn());
+            System.out.print(book.getAuthor());
+            System.out.print(book.getTitle());
+
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+
+
+        //System.out.println("createBooks" +"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         //ToDo Change Name
 
 
-        MediaServiceResult result = mediaService.addBook(book);
+
+        MediaServiceResult result = null;
 
         return Response
-                .status(result.getCode())
+                .status(200)
                 .build();
     }
 
