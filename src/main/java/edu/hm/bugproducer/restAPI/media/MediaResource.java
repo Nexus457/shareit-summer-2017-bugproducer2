@@ -90,6 +90,7 @@ public class MediaResource {
     @POST
     @Path("/books/")
     public Response createBooks(String jwtString) {
+        MediaServiceResult result = MediaServiceResult.MSR_INTERNAL_SERVER_ERROR;
 
         try {
             Jwts.parser()
@@ -103,26 +104,20 @@ public class MediaResource {
             JSONObject jsonObj = new JSONObject(derString);
 
             Book book = new Book();
-
-
             book.setAuthor(jsonObj.getString("author"));
             book.setTitle(jsonObj.getString("title"));
             book.setIsbn(jsonObj.getString("isbn"));
 
-
-            //TODO HIER WEITERMACHEN !!!!!!!!!!!!!!!eins eins elf
-
-
-
-            System.out.print(book.getIsbn());
-            System.out.print(book.getAuthor());
-            System.out.print(book.getTitle());
-
+            result = mediaService.addBook(book);
+            System.out.println(mediaService.getBooks());
 
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
 
+        return Response
+                .status(result.getCode())
+                .build();
 
 
         //System.out.println("createBooks" +"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
@@ -130,11 +125,7 @@ public class MediaResource {
 
 
 
-        MediaServiceResult result = null;
 
-        return Response
-                .status(200)
-                .build();
     }
 
     /**
