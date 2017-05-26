@@ -4,10 +4,11 @@ package edu.hm.bugproducer.restAPI.media;
 import edu.hm.bugproducer.models.Book;
 import edu.hm.bugproducer.models.Disc;
 import edu.hm.bugproducer.restAPI.MediaServiceResult;
-import io.jsonwebtoken.Jwt;
+
 import io.jsonwebtoken.Jwts;
 import javafx.util.Pair;
 import org.json.JSONObject;
+
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -65,16 +66,38 @@ public class MediaResource {
      * createDiscs method.
      * create a disc by using the HTTP verb POST
      *
-     * @param disc disc object
      * @return statusCode
      */
     @POST
     @Path("/discs/")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response createDiscs(Disc disc) {
-        //System.out.println("createBooks" + book.getAuthor());
-        //ToDo Change Name
-        MediaServiceResult result = mediaService.addDisc(disc);
+    public Response createDiscs(String jwtString) {
+        MediaServiceResult result = MediaServiceResult.MSR_INTERNAL_SERVER_ERROR;
+
+        try {
+            Jwts.parser()
+                    .setSigningKey("secret".getBytes("UTF-8"))
+                    .parseClaimsJws(jwtString);
+
+            String  derString = Jwts.parser()
+                    .setSigningKey("secret".getBytes("UTF-8"))
+                    .parseClaimsJws(jwtString).getBody().get("disc").toString();
+
+            JSONObject jsonObj = new JSONObject(derString);
+
+            Disc disc = new Disc();
+            disc.setDirector(jsonObj.getString("director"));
+            disc.setTitle(jsonObj.getString("title"));
+            disc.setBarcode(jsonObj.getString("barcode"));
+            disc.setFsk(jsonObj.getInt("fsk"));
+
+
+            result = mediaService.addDisc(disc);
+            System.out.println(mediaService.getDiscs());
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
         return Response
                 .status(result.getCode())
                 .build();
@@ -84,7 +107,6 @@ public class MediaResource {
      * createBooks method.
      * create books by using the HTTP verb POST
      *
-     * @param book book object
      * @return statusCode
      */
     @POST
