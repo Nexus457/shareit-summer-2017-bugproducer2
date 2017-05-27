@@ -5,7 +5,7 @@ import edu.hm.bugproducer.models.Book;
 import edu.hm.bugproducer.models.Disc;
 import edu.hm.bugproducer.restAPI.MediaServiceResult;
 import javafx.util.Pair;
-import org.apache.commons.validator.routines.checkdigit.*;
+import org.apache.commons.validator.routines.checkdigit.EAN13CheckDigit;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -152,7 +152,7 @@ public class MediaServiceImpl implements MediaService {
 
         for (Book b : books) {
             if (b.getIsbn().equals(isbn)) {
-                myResult = new Pair<>(MSR_OK, b);
+                return new Pair<>(MSR_OK, b);
             } else {
                 myResult = new Pair<>(MSR_NOT_FOUND, null);
             }

@@ -4,11 +4,9 @@ package edu.hm.bugproducer.restAPI.media;
 import edu.hm.bugproducer.models.Book;
 import edu.hm.bugproducer.models.Disc;
 import edu.hm.bugproducer.restAPI.MediaServiceResult;
-
 import io.jsonwebtoken.Jwts;
 import javafx.util.Pair;
 import org.json.JSONObject;
-
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -92,7 +90,7 @@ public class MediaResource {
                 .setSigningKey("secret".getBytes("UTF-8"))
                 .parseClaimsJws(jwtString);
 
-        String  derString = Jwts.parser()
+        String derString = Jwts.parser()
                 .setSigningKey("secret".getBytes("UTF-8"))
                 .parseClaimsJws(jwtString).getBody().get("disc").toString();
 
@@ -135,8 +133,6 @@ public class MediaResource {
         //ToDo Change Name
 
 
-
-
     }
 
     /**
@@ -175,7 +171,6 @@ public class MediaResource {
                 .build();
     }
 
-
     /**
      * getBook method.
      * gets the book from mediaService with a specific isbn by using the HTTP verb GET
@@ -188,7 +183,7 @@ public class MediaResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getBook(@PathParam("isbn") String isbn) {
         System.out.println("getBook");
-        Pair<MediaServiceResult, Book> myResult = mediaService.getBook(isbn);
+        Pair<MediaServiceResult, Book> myResult = mediaService.getBook(isbn.replaceAll("-", ""));
         System.out.println(isbn);
         return Response
                 .status(myResult.getKey().getCode())
@@ -234,7 +229,7 @@ public class MediaResource {
         System.out.print("Hallo ich bins der update!!!!");
         try {
             Book book = createBookOutOfJwt(jwtString);
-            result = mediaService.updateBook(isbn.replaceAll("-",""),book);
+            result = mediaService.updateBook(isbn.replaceAll("-", ""), book);
             System.out.println(mediaService.getBooks());
 
         } catch (UnsupportedEncodingException e) {
@@ -251,7 +246,7 @@ public class MediaResource {
                 .setSigningKey("secret".getBytes("UTF-8"))
                 .parseClaimsJws(jwtString);
 
-        String  derString = Jwts.parser()
+        String derString = Jwts.parser()
                 .setSigningKey("secret".getBytes("UTF-8"))
                 .parseClaimsJws(jwtString).getBody().get("book").toString();
 
@@ -282,7 +277,7 @@ public class MediaResource {
         System.out.print("Hallo ich bins der update!!!!");
         try {
             Disc disc = createDiscOutOfJwt(jwtString);
-            result = mediaService.updateDisc(barcode,disc);
+            result = mediaService.updateDisc(barcode, disc);
 
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
