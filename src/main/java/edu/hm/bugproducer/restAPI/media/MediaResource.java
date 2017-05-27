@@ -74,23 +74,7 @@ public class MediaResource {
         MediaServiceResult result = MediaServiceResult.MSR_INTERNAL_SERVER_ERROR;
 
         try {
-            Jwts.parser()
-                    .setSigningKey("secret".getBytes("UTF-8"))
-                    .parseClaimsJws(jwtString);
-
-            String  derString = Jwts.parser()
-                    .setSigningKey("secret".getBytes("UTF-8"))
-                    .parseClaimsJws(jwtString).getBody().get("disc").toString();
-
-            JSONObject jsonObj = new JSONObject(derString);
-
-            Disc disc = new Disc();
-            disc.setDirector(jsonObj.getString("director"));
-            disc.setTitle(jsonObj.getString("title"));
-            disc.setBarcode(jsonObj.getString("barcode"));
-            disc.setFsk(jsonObj.getInt("fsk"));
-
-
+            Disc disc = createDiscOutOfJwt(jwtString);
             result = mediaService.addDisc(disc);
             System.out.println(mediaService.getDiscs());
 
@@ -101,6 +85,25 @@ public class MediaResource {
         return Response
                 .status(result.getCode())
                 .build();
+    }
+
+    private Disc createDiscOutOfJwt(String jwtString) throws UnsupportedEncodingException {
+        Jwts.parser()
+                .setSigningKey("secret".getBytes("UTF-8"))
+                .parseClaimsJws(jwtString);
+
+        String  derString = Jwts.parser()
+                .setSigningKey("secret".getBytes("UTF-8"))
+                .parseClaimsJws(jwtString).getBody().get("disc").toString();
+
+        JSONObject jsonObj = new JSONObject(derString);
+
+        Disc disc = new Disc();
+        disc.setDirector(jsonObj.getString("director"));
+        disc.setTitle(jsonObj.getString("title"));
+        disc.setBarcode(jsonObj.getString("barcode"));
+        disc.setFsk(jsonObj.getInt("fsk"));
+        return disc;
     }
 
     /**
@@ -115,21 +118,7 @@ public class MediaResource {
         MediaServiceResult result = MediaServiceResult.MSR_INTERNAL_SERVER_ERROR;
 
         try {
-            Jwts.parser()
-                    .setSigningKey("secret".getBytes("UTF-8"))
-                    .parseClaimsJws(jwtString);
-
-            String  derString = Jwts.parser()
-                    .setSigningKey("secret".getBytes("UTF-8"))
-                    .parseClaimsJws(jwtString).getBody().get("book").toString();
-
-            JSONObject jsonObj = new JSONObject(derString);
-
-            Book book = new Book();
-            book.setAuthor(jsonObj.getString("author"));
-            book.setTitle(jsonObj.getString("title"));
-            book.setIsbn(jsonObj.getString("isbn"));
-
+            Book book = createBookOutOfJwt(jwtString);
             result = mediaService.addBook(book);
             System.out.println(mediaService.getBooks());
 
@@ -232,21 +221,47 @@ public class MediaResource {
      * updates the book by using the HTTP verb PUT
      *
      * @param isbn unique number of book
-     * @param book book object
      * @return statusCode
      */
     @PUT
     @Path("/books/{isbn}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateBook(@PathParam("isbn") String isbn, Book book) {
-        System.out.println("updateBook: " + isbn);
-        System.out.println("Title: " + book.getTitle() + "Author: " + book.getAuthor() + " ISBN: " + book.getIsbn());
-        MediaServiceResult result = mediaService.updateBook(isbn, book);
-        System.err.println("RESULT" + result.getCode());
+    public Response updateBook(@PathParam("isbn") String isbn, String jwtString) {
+
+        MediaServiceResult result = MediaServiceResult.MSR_INTERNAL_SERVER_ERROR;
+
+        System.out.print("Hallo ich bins der update!!!!");
+        try {
+            Book book = createBookOutOfJwt(jwtString);
+            result = mediaService.updateBook(isbn.replaceAll("-",""),book);
+            System.out.println(mediaService.getBooks());
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
         return Response
                 .status(result.getCode())
                 .build();
+    }
+
+    private Book createBookOutOfJwt(String jwtString) throws UnsupportedEncodingException {
+        Jwts.parser()
+                .setSigningKey("secret".getBytes("UTF-8"))
+                .parseClaimsJws(jwtString);
+
+        String  derString = Jwts.parser()
+                .setSigningKey("secret".getBytes("UTF-8"))
+                .parseClaimsJws(jwtString).getBody().get("book").toString();
+
+        JSONObject jsonObj = new JSONObject(derString);
+
+        Book book = new Book();
+        book.setAuthor(jsonObj.getString("author"));
+        book.setTitle(jsonObj.getString("title"));
+        book.setIsbn(jsonObj.getString("isbn"));
+        return book;
     }
 
     /**
@@ -254,18 +269,34 @@ public class MediaResource {
      * updates the disc by using the HTTP verb PUT
      *
      * @param barcode unique number of a disc
-     * @param disc    disc object
      * @return statusCode
      */
     @PUT
     @Path("/discs/{barcode}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateDisc(@PathParam("barcode") String barcode, Disc disc) {
+    public Response updateDisc(@PathParam("barcode") String barcode, String jwtString) {
+
+        MediaServiceResult result = MediaServiceResult.MSR_INTERNAL_SERVER_ERROR;
+
+        System.out.print("Hallo ich bins der update!!!!");
+        try {
+            Disc disc = createDiscOutOfJwt(jwtString);
+            result = mediaService.updateDisc(barcode,disc);
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        return Response
+                .status(result.getCode())
+                .build();
+
+        /*
         MediaServiceResult result = mediaService.updateDisc(barcode, disc);
         System.err.println("RESULT" + result.getCode());
         return Response
                 .status(result.getCode())
-                .build();
+                .build();*/
     }
 }

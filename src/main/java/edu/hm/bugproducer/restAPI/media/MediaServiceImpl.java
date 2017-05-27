@@ -204,30 +204,18 @@ public class MediaServiceImpl implements MediaService {
     public MediaServiceResult updateBook(String isbn, Book newBook) {
         MediaServiceResult mediaServiceResult = MSR_INTERNAL_SERVER_ERROR;
 
+
         List<Book> oneBook = getBooks().stream().filter(b ->
                 b.getIsbn().equals(isbn)
         ).collect(Collectors.toList());
-        boolean validIsbn = true;
         if (!oneBook.isEmpty()) {
-            if (newBook.getIsbn() != null) {
-                validIsbn = Isbn.isValid(newBook.getIsbn());
-                if (!validIsbn) {
-                    mediaServiceResult = MSR_BAD_REQUEST;
-                } else {
-                    for (Book b : oneBook) {
-                        b.setIsbn(newBook.getIsbn());
-                    }
-                    mediaServiceResult = MSR_OK;
-                }
-            }
-            if (newBook.getTitle() != null && validIsbn) {
+            if (!newBook.getTitle().isEmpty()) {
                 for (Book b : oneBook) {
                     b.setTitle(newBook.getTitle());
                 }
                 mediaServiceResult = MSR_OK;
             }
-
-            if (newBook.getAuthor() != null && validIsbn) {
+            if (!newBook.getAuthor().isEmpty()) {
                 for (Book b : oneBook) {
                     b.setAuthor(newBook.getAuthor());
                 }
@@ -236,7 +224,6 @@ public class MediaServiceImpl implements MediaService {
         } else {
             mediaServiceResult = MSR_BAD_REQUEST;
         }
-
         return mediaServiceResult;
     }
 
@@ -256,28 +243,22 @@ public class MediaServiceImpl implements MediaService {
                 d.getBarcode().equals(barcode)
         ).collect(Collectors.toList());
 
-        boolean validEAN = true;
 
         if (!oneDisc.isEmpty()) {
 
-            if (newDisc.getBarcode() != null) {
-                validEAN = EAN13CheckDigit.EAN13_CHECK_DIGIT.isValid(newDisc.getBarcode());
-                mediaServiceResult = updateBarCode(newDisc, oneDisc, validEAN);
-            }
-
-            if (newDisc.getDirector() != null && validEAN) {
+            if (!newDisc.getDirector().isEmpty()) {
                 for (Disc d : oneDisc) {
                     d.setDirector(newDisc.getDirector());
                 }
                 mediaServiceResult = MSR_OK;
             }
-            if (newDisc.getFsk() != 0 && validEAN) {
+            if (newDisc.getFsk() != -1 ){
                 for (Disc d : oneDisc) {
                     d.setFsk(newDisc.getFsk());
                 }
                 mediaServiceResult = MSR_OK;
             }
-            if (!newDisc.getTitle().isEmpty() && validEAN) {
+            if (!newDisc.getTitle().isEmpty()) {
                 for (Disc d : oneDisc) {
                     d.setTitle(newDisc.getTitle());
                 }
