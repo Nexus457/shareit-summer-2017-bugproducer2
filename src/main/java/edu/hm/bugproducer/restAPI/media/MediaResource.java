@@ -48,7 +48,7 @@ public class MediaResource {
     /**
      * Delete all lists.
      *
-     * @return
+     * @return status code
      */
     @GET
     @Path("/reset")
@@ -63,7 +63,7 @@ public class MediaResource {
     /**
      * createDiscs method.
      * create a disc by using the HTTP verb POST
-     *
+     * @param jwtString  unique string
      * @return statusCode
      */
     @POST
@@ -85,6 +85,13 @@ public class MediaResource {
                 .build();
     }
 
+    /**
+     * createDiscOutOfJwt
+     * creates a disc by using a jwt
+     * @param jwtString unique string
+     * @return disc object
+     * @throws UnsupportedEncodingException by wrong encoding
+     */
     private Disc createDiscOutOfJwt(String jwtString) throws UnsupportedEncodingException {
         Jwts.parser()
                 .setSigningKey("secret".getBytes("UTF-8"))
@@ -107,7 +114,7 @@ public class MediaResource {
     /**
      * createBooks method.
      * create books by using the HTTP verb POST
-     *
+     * @param jwtString  unique string
      * @return statusCode
      */
     @POST
@@ -216,6 +223,7 @@ public class MediaResource {
      * updates the book by using the HTTP verb PUT
      *
      * @param isbn unique number of book
+     * @param jwtString  unique string
      * @return statusCode
      */
     @PUT
@@ -241,6 +249,13 @@ public class MediaResource {
                 .build();
     }
 
+    /**
+     * createBookOutOfJwt
+     * creates a book by using a jwt
+     * @param jwtString unique string
+     * @return book object
+     * @throws UnsupportedEncodingException by wrong encoding
+     */
     private Book createBookOutOfJwt(String jwtString) throws UnsupportedEncodingException {
         Jwts.parser()
                 .setSigningKey("secret".getBytes("UTF-8"))
@@ -264,6 +279,7 @@ public class MediaResource {
      * updates the disc by using the HTTP verb PUT
      *
      * @param barcode unique number of a disc
+     * @param jwtString unique string
      * @return statusCode
      */
     @PUT

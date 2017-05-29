@@ -27,11 +27,11 @@ public class CopyServiceImpl implements CopyService {
     /**
      * ArrayList that contains the copies.
      */
-    public static List<Copy> copies = new ArrayList<>();
+    private static List<Copy> copies = new ArrayList<>();
     /**
      * ArrayList that contains the users.
      */
-    public static List<User> users = new ArrayList<>();
+    private static List<User> users = new ArrayList<>();
     /**
      * running number of copies of books with value 0.
      */
@@ -48,15 +48,7 @@ public class CopyServiceImpl implements CopyService {
 
     }
 
-    /**
-     * addCopy method of type MediaServiceResult.
-     * after checking if the barcode is valid, it´s analyzing if the user is already in the list
-     *
-     * @param username name of person who wants to borrow a disc
-     * @param code     the unique number of a disc
-     * @return it either returns that a disc was borrowed by an already exist user, or from a new user or it returns
-     * a status code of what happened
-     */
+
     @Override
     public MediaServiceResult addCopy(String username, String code) {
         boolean noUserFound = false;
@@ -224,14 +216,7 @@ public class CopyServiceImpl implements CopyService {
         return addCopy(b, user2);
     }
 
-    /**
-     * getCopy method.
-     * checking if barcode is valid and returns the copy if it exist, the same with isbn
-     *
-     * @param identifier code that identifies a book or a disc
-     * @param lfnr       running number for a copy
-     * @return statusCode OK and the copy or BAD_REQUEST and null
-     */
+
     @Override
     public Pair<MediaServiceResult, Copy> getCopy(String identifier, int lfnr) {
         if (EAN13CheckDigit.EAN13_CHECK_DIGIT.isValid(identifier)) {
@@ -255,27 +240,13 @@ public class CopyServiceImpl implements CopyService {
 
     }
 
-    /**
-     * getCopies method.
-     * getter for copies list
-     *
-     * @return list of copies
-     */
+
     @Override
     public List<Copy> getCopies() {
         return copies;
     }
 
-    /**
-     * updateCopy method.
-     * checking if barcode is valid and updates the copy if it exist,  if barcode is invalid it checks if isbn is valid
-     * and update that book if it exists
-     *
-     * @param username name of person
-     * @param code     identifier number of book or disc
-     * @param lfnr     running number of a copy
-     * @return statusCode OK, BAD_REQUEST or INTERNAL_SERVER_ERROR
-     */
+
     @Override
     public MediaServiceResult updateCopy(String username, String code, int lfnr) {
         List<User> tmpUserList;
