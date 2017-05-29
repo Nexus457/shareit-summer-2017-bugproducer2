@@ -7,9 +7,7 @@ import javafx.util.Pair;
 
 import java.util.List;
 
-/**
- * Created by Johannes Arzt on 25.04.17.
- */
+
 
 public interface MediaService {
 

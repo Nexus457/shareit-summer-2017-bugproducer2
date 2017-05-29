@@ -136,9 +136,6 @@ public class MediaResource {
                 .build();
 
 
-        //System.out.println("createBooks" +"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-        //ToDo Change Name
-
 
     }
 
@@ -303,11 +300,5 @@ public class MediaResource {
                 .status(result.getCode())
                 .build();
 
-        /*
-        MediaServiceResult result = mediaService.updateDisc(barcode, disc);
-        System.err.println("RESULT" + result.getCode());
-        return Response
-                .status(result.getCode())
-                .build();*/
     }
 }

@@ -61,7 +61,6 @@ public class MediaServiceImpl implements MediaService {
                         duplicate = true;
                         mediaServiceResult = MSR_BAD_REQUEST;
                     } else {
-                        //lir.add(book);
                         mediaServiceResult = MSR_OK;
                     }
                 }
@@ -102,7 +101,6 @@ public class MediaServiceImpl implements MediaService {
                         duplicate = true;
                         mediaServiceResult = MSR_BAD_REQUEST;
                     } else {
-                        //lir.add(disc);
                         mediaServiceResult = MSR_OK;
                     }
                 }

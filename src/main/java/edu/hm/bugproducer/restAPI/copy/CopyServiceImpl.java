@@ -27,7 +27,7 @@ public class CopyServiceImpl implements CopyService {
     /**
      * ArrayList that contains the copies.
      */
-    private static List<Copy> copies = new ArrayList<>();
+    public static List<Copy> copies = new ArrayList<>();
     /**
      * ArrayList that contains the users.
      */
@@ -53,8 +53,7 @@ public class CopyServiceImpl implements CopyService {
     public MediaServiceResult addCopy(String username, String code) {
         boolean noUserFound = false;
         int discCounter = 0;
-// PLEASE DELETE ME AS WELL
-        // MediaServiceResult mediaServiceResult = MSR_INTERNAL_SERVER_ERROR;
+
 
         if (EAN13CheckDigit.EAN13_CHECK_DIGIT.isValid(code)) {
 
@@ -249,7 +248,6 @@ public class CopyServiceImpl implements CopyService {
 
     @Override
     public MediaServiceResult updateCopy(String username, String code, int lfnr) {
-        List<User> tmpUserList;
         if (EAN13CheckDigit.EAN13_CHECK_DIGIT.isValid(code)) {
             List<Copy> resultList = getSpecialDiscCopies(code, lfnr);
             if (resultList.size() != 1) {
