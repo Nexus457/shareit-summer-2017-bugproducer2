@@ -3,7 +3,7 @@ package edu.hm.bugproducer.restAPI.media;
 import edu.hm.bugproducer.Utils.Isbn;
 import edu.hm.bugproducer.models.Book;
 import edu.hm.bugproducer.models.Disc;
-import edu.hm.bugproducer.restAPI.MediaServiceResult;
+import edu.hm.bugproducer.Status.MediaServiceResult;
 import javafx.util.Pair;
 import org.apache.commons.validator.routines.checkdigit.EAN13CheckDigit;
 
@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.stream.Collectors;
 
-import static edu.hm.bugproducer.restAPI.MediaServiceResult.*;
+import static edu.hm.bugproducer.Status.MediaServiceResult.*;
 
 /**
  * MediaServiceImpl Class.

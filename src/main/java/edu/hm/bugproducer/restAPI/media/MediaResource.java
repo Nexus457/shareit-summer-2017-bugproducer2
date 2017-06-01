@@ -3,7 +3,7 @@ package edu.hm.bugproducer.restAPI.media;
 
 import edu.hm.bugproducer.models.Book;
 import edu.hm.bugproducer.models.Disc;
-import edu.hm.bugproducer.restAPI.MediaServiceResult;
+import edu.hm.bugproducer.Status.MediaServiceResult;
 import io.jsonwebtoken.Jwts;
 import javafx.util.Pair;
 import org.json.JSONObject;

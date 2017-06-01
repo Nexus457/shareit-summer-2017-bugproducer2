@@ -2,7 +2,7 @@
 package edu.hm.bugproducer.restAPI.copy;
 
 import edu.hm.bugproducer.models.*;
-import edu.hm.bugproducer.restAPI.MediaServiceResult;
+import edu.hm.bugproducer.Status.MediaServiceResult;
 import javafx.util.Pair;
 
 import javax.ws.rs.*;
