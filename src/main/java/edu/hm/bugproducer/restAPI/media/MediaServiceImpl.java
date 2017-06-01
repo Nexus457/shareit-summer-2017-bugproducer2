@@ -1,5 +1,6 @@
 package edu.hm.bugproducer.restAPI.media;
 
+import edu.hm.bugproducer.Status.StatusMgnt;
 import edu.hm.bugproducer.Utils.Isbn;
 import edu.hm.bugproducer.models.Book;
 import edu.hm.bugproducer.models.Disc;
@@ -34,19 +35,19 @@ public class MediaServiceImpl implements MediaService {
 
 
     @Override
-    public MediaServiceResult addBook(Book book) {
-        MediaServiceResult mediaServiceResult = MSR_INTERNAL_SERVER_ERROR;
+    public StatusMgnt addBook(Book book) {
+        StatusMgnt status = new StatusMgnt(MSR_INTERNAL_SERVER_ERROR, "An internal error has occurred");
 
 
         if (book == null) {
-            mediaServiceResult = MSR_NO_CONTENT;
+             status = new StatusMgnt(MSR_NO_CONTENT, "The book was empty");
         } else if (book.getAuthor().isEmpty() || book.getTitle().isEmpty() || book.getIsbn().isEmpty()) {
-            mediaServiceResult = MSR_BAD_REQUEST;
+            status = new StatusMgnt(MSR_BAD_REQUEST, "Author or title or ISBN was empty");
         } else if (!Isbn.isValid(book.getIsbn())) {
-            mediaServiceResult = MSR_BAD_REQUEST;
+            status = new StatusMgnt(MSR_BAD_REQUEST, "ISBN was not valid");
         } else {
             if (books.isEmpty()) {
-                mediaServiceResult = MSR_OK;
+                status = new StatusMgnt(MSR_OK, "ok");
                 books.add(book);
             } else {
 
@@ -58,9 +59,9 @@ public class MediaServiceImpl implements MediaService {
                 while (lir.hasNext() && !duplicate) {
                     if (lir.next().getIsbn().equals(book.getIsbn())) {
                         duplicate = true;
-                        mediaServiceResult = MSR_BAD_REQUEST;
+                        status = new StatusMgnt(MSR_BAD_REQUEST, "The book is already in the system. No duplicate allowed");
                     } else {
-                        mediaServiceResult = MSR_OK;
+                        status = new StatusMgnt(MSR_OK, "ok");
                     }
                 }
 
@@ -70,24 +71,24 @@ public class MediaServiceImpl implements MediaService {
             }
         }
 
-        return mediaServiceResult;
+        return status;
     }
 
 
     @Override
-    public MediaServiceResult addDisc(Disc disc) {
-        MediaServiceResult mediaServiceResult = MSR_INTERNAL_SERVER_ERROR;
+    public StatusMgnt addDisc(Disc disc) {
+        StatusMgnt status = new StatusMgnt(MSR_INTERNAL_SERVER_ERROR, "An internal error has occurred");
         System.out.println(disc.getFsk());
 
         if (disc == null) {
-            mediaServiceResult = MSR_NO_CONTENT;
+            status = new StatusMgnt(MSR_NO_CONTENT, "The disc was empty");
         } else if (!EAN13CheckDigit.EAN13_CHECK_DIGIT.isValid(disc.getBarcode())) {
-            mediaServiceResult = MSR_BAD_REQUEST;
+            status = new StatusMgnt(MSR_BAD_REQUEST, "Barcode was not valid");
         } else if (disc.getBarcode().isEmpty() || disc.getDirector().isEmpty() || disc.getTitle().isEmpty() || disc.getFsk() < 0) {
-            mediaServiceResult = MSR_NO_CONTENT;
+            status = new StatusMgnt(MSR_BAD_REQUEST, "Barcode or director or title was empty or FSK was less than 0 ");
         } else {
             if (discs.isEmpty()) {
-                mediaServiceResult = MSR_OK;
+                status = new StatusMgnt(MSR_OK, "ok");
                 discs.add(disc);
             } else {
 
@@ -98,9 +99,9 @@ public class MediaServiceImpl implements MediaService {
                 while (lir.hasNext() && !duplicate) {
                     if (lir.next().getBarcode().equals(disc.getBarcode())) {
                         duplicate = true;
-                        mediaServiceResult = MSR_BAD_REQUEST;
+                        status = new StatusMgnt(MSR_BAD_REQUEST, "The disc is already in the system. No duplicate allowed");
                     } else {
-                        mediaServiceResult = MSR_OK;
+                        status = new StatusMgnt(MSR_OK, "ok");
                     }
                 }
 
@@ -110,7 +111,7 @@ public class MediaServiceImpl implements MediaService {
             }
 
         }
-        return mediaServiceResult;
+        return status;
     }
 
 
@@ -121,28 +122,28 @@ public class MediaServiceImpl implements MediaService {
 
 
     @Override
-    public Pair<MediaServiceResult, Book> getBook(String isbn) {
-        Pair<MediaServiceResult, Book> myResult = null;
+    public Pair<StatusMgnt, Book> getBook(String isbn) {
+        Pair<StatusMgnt, Book> myResult = null;
 
         for (Book b : books) {
             if (b.getIsbn().equals(isbn)) {
-                return new Pair<>(MSR_OK, b);
+                return new Pair<>(new StatusMgnt(MSR_OK, "ok"), b);
             } else {
-                myResult = new Pair<>(MSR_NOT_FOUND, null);
+                myResult = new Pair<>(new StatusMgnt(MSR_NOT_FOUND, "The book you have searched for is not in the system!"), null);
             }
         }
         return myResult;
     }
 
     @Override
-    public Pair<MediaServiceResult, Disc> getDisc(String barcode) {
-        Pair<MediaServiceResult, Disc> myResult = null;
+    public Pair<StatusMgnt, Disc> getDisc(String barcode) {
+        Pair<StatusMgnt, Disc> myResult = null;
 
         for (Disc d : discs) {
             if (d.getBarcode().equals(barcode)) {
-                myResult = new Pair<>(MSR_OK, d);
+                myResult = new Pair<>(new StatusMgnt(MSR_OK, "ok"), d);
             } else {
-                myResult = new Pair<>(MSR_NOT_FOUND, null);
+                myResult = new Pair<>(new StatusMgnt(MSR_NOT_FOUND, "The disc you have searched for is not in the system!"), null);
             }
         }
         return myResult;
@@ -156,8 +157,8 @@ public class MediaServiceImpl implements MediaService {
 
 
     @Override
-    public MediaServiceResult updateBook(String isbn, Book newBook) {
-        MediaServiceResult mediaServiceResult = MSR_INTERNAL_SERVER_ERROR;
+    public StatusMgnt updateBook(String isbn, Book newBook) {
+        StatusMgnt status = new StatusMgnt(MSR_INTERNAL_SERVER_ERROR, "An internal error has occurred");
 
 
         List<Book> oneBook = getBooks().stream().filter(b ->
@@ -168,24 +169,24 @@ public class MediaServiceImpl implements MediaService {
                 for (Book b : oneBook) {
                     b.setTitle(newBook.getTitle());
                 }
-                mediaServiceResult = MSR_OK;
+                status = new StatusMgnt(MSR_OK, "ok");
             }
             if (!newBook.getAuthor().isEmpty()) {
                 for (Book b : oneBook) {
                     b.setAuthor(newBook.getAuthor());
                 }
-                mediaServiceResult = MSR_OK;
+                status = new StatusMgnt(MSR_OK, "ok");
             }
         } else {
-            mediaServiceResult = MSR_BAD_REQUEST;
+            status = new StatusMgnt(MSR_BAD_REQUEST, "The book you want to update is not in the system!");
         }
-        return mediaServiceResult;
+        return status;
     }
 
 
     @Override
-    public MediaServiceResult updateDisc(String barcode, Disc newDisc) {
-        MediaServiceResult mediaServiceResult = MSR_INTERNAL_SERVER_ERROR;
+    public StatusMgnt updateDisc(String barcode, Disc newDisc) {
+        StatusMgnt status = new StatusMgnt(MSR_INTERNAL_SERVER_ERROR, "An internal error has occurred");
 
         List<Disc> oneDisc = getDiscs().stream().filter(d ->
                 d.getBarcode().equals(barcode)
@@ -198,25 +199,25 @@ public class MediaServiceImpl implements MediaService {
                 for (Disc d : oneDisc) {
                     d.setDirector(newDisc.getDirector());
                 }
-                mediaServiceResult = MSR_OK;
+                status = new StatusMgnt(MSR_OK, "ok");
             }
             if (newDisc.getFsk() != -1) {
                 for (Disc d : oneDisc) {
                     d.setFsk(newDisc.getFsk());
                 }
-                mediaServiceResult = MSR_OK;
+                status = new StatusMgnt(MSR_OK, "ok");
             }
             if (!newDisc.getTitle().isEmpty()) {
                 for (Disc d : oneDisc) {
                     d.setTitle(newDisc.getTitle());
                 }
-                mediaServiceResult = MSR_OK;
+                status = new StatusMgnt(MSR_OK, "ok");
             }
         } else {
-            mediaServiceResult = MSR_BAD_REQUEST;
+            status = new StatusMgnt(MSR_BAD_REQUEST, "The disc you want to update is not in the system!");
         }
 
-        return mediaServiceResult;
+        return status;
     }
 
     @Override
@@ -226,27 +227,6 @@ public class MediaServiceImpl implements MediaService {
         return MSR_OK;
     }
 
-    /**
-     * Some help function.
-     * updates the barCode of a Disc
-     *
-     * @param newDisc  disc with the new Barcode
-     * @param oneDisc  old disc
-     * @param validEAN some test value if the barcode is valid
-     * @return media result
-     */
-    private MediaServiceResult updateBarCode(Disc newDisc, List<Disc> oneDisc, boolean validEAN) {
-        MediaServiceResult mediaServiceResult;
-        if (!validEAN) {
-            mediaServiceResult = MSR_BAD_REQUEST;
-        } else {
-            for (Disc d : oneDisc) {
-                d.setBarcode(newDisc.getBarcode());
-            }
-            mediaServiceResult = MSR_OK;
-        }
-        return mediaServiceResult;
-    }
 
 
 }

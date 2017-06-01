@@ -1,5 +1,6 @@
 package edu.hm.bugproducer.restAPI.media;
 
+import edu.hm.bugproducer.Status.StatusMgnt;
 import edu.hm.bugproducer.models.Book;
 import edu.hm.bugproducer.models.Disc;
 import edu.hm.bugproducer.Status.MediaServiceResult;
@@ -18,7 +19,7 @@ public interface MediaService {
      * @param book book object
      * @return mediaServiceResult
      */
-    MediaServiceResult addBook(Book book);
+    StatusMgnt addBook(Book book);
 
     /**
      * addDisc method.
@@ -27,7 +28,7 @@ public interface MediaService {
      * @param disc disc object
      * @return mediaServiceResult
      */
-    MediaServiceResult addDisc(Disc disc);
+    StatusMgnt addDisc(Disc disc);
     /**
      * getBooks method.
      * getter for the books list
@@ -43,7 +44,7 @@ public interface MediaService {
      * @param isbn unique number of book
      * @return myResult pair of statusCode and the book object or null
      */
-    Pair<MediaServiceResult, Book> getBook(String isbn);
+    Pair<StatusMgnt, Book> getBook(String isbn);
 
     /**
      * getDisc method.
@@ -52,7 +53,7 @@ public interface MediaService {
      * @param barcode unique number of disc
      * @return myResult pair of statusCode and disc object or null
      */
-    Pair<MediaServiceResult, Disc> getDisc(String barcode);
+    Pair<StatusMgnt, Disc> getDisc(String barcode);
     /**
      * getDiscs method.
      * getter for list of discs
@@ -68,7 +69,7 @@ public interface MediaService {
      * @param book newBook object
      * @return statusCode
      */
-    MediaServiceResult updateBook(String isbn, Book book);
+    StatusMgnt updateBook(String isbn, Book book);
 
     /**
      * updateDisc method.
@@ -78,7 +79,7 @@ public interface MediaService {
      * @param disc newDisc object
      * @return statusCode
      */
-    MediaServiceResult updateDisc(String barcode, Disc disc);
+    StatusMgnt updateDisc(String barcode, Disc disc);
 
     /**
      * deleteAll method.

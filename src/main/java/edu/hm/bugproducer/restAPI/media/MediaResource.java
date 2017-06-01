@@ -1,6 +1,7 @@
 
 package edu.hm.bugproducer.restAPI.media;
 
+import edu.hm.bugproducer.Status.StatusMgnt;
 import edu.hm.bugproducer.models.Book;
 import edu.hm.bugproducer.models.Disc;
 import edu.hm.bugproducer.Status.MediaServiceResult;
@@ -14,6 +15,9 @@ import javax.ws.rs.core.Response;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static edu.hm.bugproducer.Status.MediaServiceResult.MSR_INTERNAL_SERVER_ERROR;
+import static edu.hm.bugproducer.Status.MediaServiceResult.MSR_OK;
 
 /**
  * MediaResource Class.
@@ -63,13 +67,15 @@ public class MediaResource {
     /**
      * createDiscs method.
      * create a disc by using the HTTP verb POST
-     * @param jwtString  unique string
+     *
+     * @param jwtString unique string
      * @return statusCode
      */
     @POST
     @Path("/discs/")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response createDiscs(String jwtString) {
-        MediaServiceResult result = MediaServiceResult.MSR_INTERNAL_SERVER_ERROR;
+        StatusMgnt result = new StatusMgnt(MSR_INTERNAL_SERVER_ERROR, "An internal error has occurred");
 
         try {
             Disc disc = createDiscOutOfJwt(jwtString);
@@ -80,22 +86,28 @@ public class MediaResource {
             e.printStackTrace();
         }
 
+
         return Response
                 .status(result.getCode())
+                .entity(result)
                 .build();
+
+
     }
 
 
     /**
      * createBooks method.
      * create books by using the HTTP verb POST
-     * @param jwtString  unique string
+     *
+     * @param jwtString unique string
      * @return statusCode
      */
     @POST
     @Path("/books/")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response createBooks(String jwtString) {
-        MediaServiceResult result = MediaServiceResult.MSR_INTERNAL_SERVER_ERROR;
+        StatusMgnt result = new StatusMgnt(MSR_INTERNAL_SERVER_ERROR, "An internal error has occurred");
 
         try {
             Book book = createBookOutOfJwt(jwtString);
@@ -108,8 +120,8 @@ public class MediaResource {
 
         return Response
                 .status(result.getCode())
+                .entity(result)
                 .build();
-
 
 
     }
@@ -162,12 +174,20 @@ public class MediaResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getBook(@PathParam("isbn") String isbn) {
         System.out.println("getBook");
-        Pair<MediaServiceResult, Book> myResult = mediaService.getBook(isbn.replaceAll("-", ""));
+        Pair<StatusMgnt, Book> myResult = mediaService.getBook(isbn.replaceAll("-", ""));
         System.out.println(isbn);
-        return Response
-                .status(myResult.getKey().getCode())
-                .entity(myResult.getValue())
-                .build();
+        if (myResult.getKey().getCode() == MSR_OK.getCode()) {
+            return Response
+                    .status(myResult.getKey().getCode())
+                    .entity(myResult.getValue())
+                    .build();
+        } else {
+            return Response
+                    .status(myResult.getKey().getCode())
+                    .entity(myResult.getKey())
+                    .build();
+
+        }
     }
 
     /**
@@ -182,20 +202,28 @@ public class MediaResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getDisc(@PathParam("barcode") String barcode) {
         System.out.println("getBook");
-        Pair<MediaServiceResult, Disc> myResult = mediaService.getDisc(barcode);
+        Pair<StatusMgnt, Disc> myResult = mediaService.getDisc(barcode);
         System.out.println(barcode);
-        return Response
-                .status(myResult.getKey().getCode())
-                .entity(myResult.getValue())
-                .build();
+        if (myResult.getKey().getCode() == MSR_OK.getCode()) {
+            return Response
+                    .status(myResult.getKey().getCode())
+                    .entity(myResult.getValue())
+                    .build();
+        } else {
+            return Response
+                    .status(myResult.getKey().getCode())
+                    .entity(myResult.getKey())
+                    .build();
+
+        }
     }
 
     /**
      * updateBook method.
      * updates the book by using the HTTP verb PUT
      *
-     * @param isbn unique number of book
-     * @param jwtString  unique string
+     * @param isbn      unique number of book
+     * @param jwtString unique string
      * @return statusCode
      */
     @PUT
@@ -204,7 +232,7 @@ public class MediaResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response updateBook(@PathParam("isbn") String isbn, String jwtString) {
 
-        MediaServiceResult result = MediaServiceResult.MSR_INTERNAL_SERVER_ERROR;
+        StatusMgnt result = new StatusMgnt(MSR_INTERNAL_SERVER_ERROR, "An internal error has occurred");
 
         System.out.print("Hallo ich bins der update!!!!");
         try {
@@ -218,16 +246,16 @@ public class MediaResource {
 
         return Response
                 .status(result.getCode())
+                .entity(result)
                 .build();
     }
-
 
 
     /**
      * updateDisc method.
      * updates the disc by using the HTTP verb PUT
      *
-     * @param barcode unique number of a disc
+     * @param barcode   unique number of a disc
      * @param jwtString unique string
      * @return statusCode
      */
@@ -237,7 +265,8 @@ public class MediaResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response updateDisc(@PathParam("barcode") String barcode, String jwtString) {
 
-        MediaServiceResult result = MediaServiceResult.MSR_INTERNAL_SERVER_ERROR;
+
+        StatusMgnt result = new StatusMgnt(MSR_INTERNAL_SERVER_ERROR, "An internal error has occurred");
 
         System.out.print("Hallo ich bins der update!!!!");
         try {
@@ -250,13 +279,18 @@ public class MediaResource {
 
         return Response
                 .status(result.getCode())
+                .entity(result)
                 .build();
 
     }
 
+
+
+
     /**
      * createDiscOutOfJwt
      * creates a disc by using a jwt
+     *
      * @param jwtString unique string
      * @return disc object
      * @throws UnsupportedEncodingException by wrong encoding
@@ -284,6 +318,7 @@ public class MediaResource {
     /**
      * createBookOutOfJwt
      * creates a book by using a jwt
+     *
      * @param jwtString unique string
      * @return book object
      * @throws UnsupportedEncodingException by wrong encoding
