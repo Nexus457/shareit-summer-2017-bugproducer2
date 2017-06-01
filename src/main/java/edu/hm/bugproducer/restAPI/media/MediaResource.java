@@ -85,31 +85,6 @@ public class MediaResource {
                 .build();
     }
 
-    /**
-     * createDiscOutOfJwt
-     * creates a disc by using a jwt
-     * @param jwtString unique string
-     * @return disc object
-     * @throws UnsupportedEncodingException by wrong encoding
-     */
-    private Disc createDiscOutOfJwt(String jwtString) throws UnsupportedEncodingException {
-        Jwts.parser()
-                .setSigningKey("secret".getBytes("UTF-8"))
-                .parseClaimsJws(jwtString);
-
-        String derString = Jwts.parser()
-                .setSigningKey("secret".getBytes("UTF-8"))
-                .parseClaimsJws(jwtString).getBody().get("disc").toString();
-
-        JSONObject jsonObj = new JSONObject(derString);
-
-        Disc disc = new Disc();
-        disc.setDirector(jsonObj.getString("director"));
-        disc.setTitle(jsonObj.getString("title"));
-        disc.setBarcode(jsonObj.getString("barcode"));
-        disc.setFsk(jsonObj.getInt("fsk"));
-        return disc;
-    }
 
     /**
      * createBooks method.
@@ -246,30 +221,7 @@ public class MediaResource {
                 .build();
     }
 
-    /**
-     * createBookOutOfJwt
-     * creates a book by using a jwt
-     * @param jwtString unique string
-     * @return book object
-     * @throws UnsupportedEncodingException by wrong encoding
-     */
-    private Book createBookOutOfJwt(String jwtString) throws UnsupportedEncodingException {
-        Jwts.parser()
-                .setSigningKey("secret".getBytes("UTF-8"))
-                .parseClaimsJws(jwtString);
 
-        String derString = Jwts.parser()
-                .setSigningKey("secret".getBytes("UTF-8"))
-                .parseClaimsJws(jwtString).getBody().get("book").toString();
-
-        JSONObject jsonObj = new JSONObject(derString);
-
-        Book book = new Book();
-        book.setAuthor(jsonObj.getString("author"));
-        book.setTitle(jsonObj.getString("title"));
-        book.setIsbn(jsonObj.getString("isbn"));
-        return book;
-    }
 
     /**
      * updateDisc method.
@@ -300,5 +252,57 @@ public class MediaResource {
                 .status(result.getCode())
                 .build();
 
+    }
+
+    /**
+     * createDiscOutOfJwt
+     * creates a disc by using a jwt
+     * @param jwtString unique string
+     * @return disc object
+     * @throws UnsupportedEncodingException by wrong encoding
+     */
+    private Disc createDiscOutOfJwt(String jwtString) throws UnsupportedEncodingException {
+        Jwts.parser()
+                .setSigningKey("secret".getBytes("UTF-8"))
+                .parseClaimsJws(jwtString);
+
+        String derString = Jwts.parser()
+                .setSigningKey("secret".getBytes("UTF-8"))
+                .parseClaimsJws(jwtString).getBody().get("disc").toString();
+
+        JSONObject jsonObj = new JSONObject(derString);
+
+        Disc disc = new Disc();
+        disc.setDirector(jsonObj.getString("director"));
+        disc.setTitle(jsonObj.getString("title"));
+        disc.setBarcode(jsonObj.getString("barcode"));
+        disc.setFsk(jsonObj.getInt("fsk"));
+        return disc;
+    }
+
+
+    /**
+     * createBookOutOfJwt
+     * creates a book by using a jwt
+     * @param jwtString unique string
+     * @return book object
+     * @throws UnsupportedEncodingException by wrong encoding
+     */
+    private Book createBookOutOfJwt(String jwtString) throws UnsupportedEncodingException {
+        Jwts.parser()
+                .setSigningKey("secret".getBytes("UTF-8"))
+                .parseClaimsJws(jwtString);
+
+        String derString = Jwts.parser()
+                .setSigningKey("secret".getBytes("UTF-8"))
+                .parseClaimsJws(jwtString).getBody().get("book").toString();
+
+        JSONObject jsonObj = new JSONObject(derString);
+
+        Book book = new Book();
+        book.setAuthor(jsonObj.getString("author"));
+        book.setTitle(jsonObj.getString("title"));
+        book.setIsbn(jsonObj.getString("isbn"));
+        return book;
     }
 }

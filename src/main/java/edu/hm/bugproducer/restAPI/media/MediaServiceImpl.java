@@ -37,7 +37,6 @@ public class MediaServiceImpl implements MediaService {
     public MediaServiceResult addBook(Book book) {
         MediaServiceResult mediaServiceResult = MSR_INTERNAL_SERVER_ERROR;
 
-        //TODO change null to empty
 
         if (book == null) {
             mediaServiceResult = MSR_NO_CONTENT;
