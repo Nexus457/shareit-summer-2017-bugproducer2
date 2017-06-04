@@ -41,4 +41,10 @@
 		<servlet-name>Media Resource</servlet-name>
 		<url-pattern>/shareit/*</url-pattern>
 	</servlet-mapping>
+
+	<listener>
+		<listener-class>
+			edu.hm.ShareitServletContextListener
+		</listener-class>
+	</listener>
 </web-app>
