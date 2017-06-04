@@ -7,7 +7,7 @@ package edu.hm.bugproducer.models;
  * @author Tom Maier
  * @author Patrick Kuntz
  */
-public class Book extends Medium {
+public class Book extends Medium implements IBook  {
     /** author of a book  */
     private String author;
     /** unique isbn of a book */
@@ -68,6 +68,15 @@ public class Book extends Medium {
     public void setIsbn(String isbn) {
         this.isbn = isbn.replaceAll("-", "");
     }
+
+    public void setTitle(String title){
+        super.setTitle(title);
+    }
+
+    public String getTitle(){
+        return super.getTitle();
+    }
+
 
     @Override
     public String toString() {
