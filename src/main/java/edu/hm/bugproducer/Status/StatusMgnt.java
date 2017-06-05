@@ -44,4 +44,24 @@ public class StatusMgnt {
     public void setCode(int code) {
         this.code = code;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof StatusMgnt)) return false;
+
+        StatusMgnt that = (StatusMgnt) o;
+
+        if (getCode() != that.getCode()) return false;
+        if (getResult() != that.getResult()) return false;
+        return getMsg().equals(that.getMsg());
+    }
+
+    @Override
+    public int hashCode() {
+        int result1 = getResult().hashCode();
+        result1 = 31 * result1 + getMsg().hashCode();
+        result1 = 31 * result1 + getCode();
+        return result1;
+    }
 }
