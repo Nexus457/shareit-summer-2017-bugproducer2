@@ -52,7 +52,6 @@ public class MockTest {
         assertEquals(wanted,status);
     }
 
-
     @Test
     public void testAddBookNoAuthor(){
         MediaService mediaService = new MediaServiceImpl();
@@ -99,6 +98,29 @@ public class MockTest {
         mediaService.addBook(book);
         StatusMgnt status = mediaService.addBook(book);
         StatusMgnt wanted = new StatusMgnt(MSR_BAD_REQUEST, "The book is already in the system. No duplicate allowed");
+        assertEquals(wanted,status);
+
+    }
+
+    @Test
+    public void testUpdateBook(){
+        MediaService mediaService = new MediaServiceImpl();
+        Book book = Mockito.mock(Book.class);
+        Mockito.when(book.getTitle()).thenReturn(TITLE);
+        Mockito.when(book.getAuthor()).thenReturn(NAME);
+        Mockito.when(book.getIsbn()).thenReturn(ISBN);
+
+        mediaService.addBook(book);
+
+        Book updatedBook = Mockito.mock(Book.class);
+        Mockito.when(updatedBook.getTitle()).thenReturn(TITLE_ALT);
+        Mockito.when(updatedBook.getAuthor()).thenReturn("");
+        Mockito.when(updatedBook.getIsbn()).thenReturn("");
+
+        StatusMgnt status = mediaService.updateBook(ISBN,updatedBook);
+        StatusMgnt wanted = new StatusMgnt(MSR_OK, "ok");
+
+
         assertEquals(wanted,status);
 
     }
