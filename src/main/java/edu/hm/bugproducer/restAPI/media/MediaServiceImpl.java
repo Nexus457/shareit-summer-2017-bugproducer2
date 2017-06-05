@@ -77,7 +77,6 @@ public class MediaServiceImpl implements MediaService {
     @Override
     public StatusMgnt addDisc(Disc disc) {
         StatusMgnt status = new StatusMgnt(MSR_INTERNAL_SERVER_ERROR, "An internal error has occurred");
-        System.out.println(disc.getFsk());
 
         if (disc == null) {
             status = new StatusMgnt(MSR_NO_CONTENT, "The disc was empty");

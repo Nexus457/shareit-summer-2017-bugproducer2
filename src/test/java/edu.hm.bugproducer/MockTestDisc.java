@@ -69,7 +69,7 @@ public class MockTestDisc {
         Disc disc = Mockito.mock(Disc.class);
         Mockito.when(disc.getTitle()).thenReturn(TITLE);
         Mockito.when(disc.getDirector()).thenReturn(NAME);
-        Mockito.when(disc.getBarcode()).thenReturn("");
+        Mockito.when(disc.getBarcode()).thenReturn("111111111");
         Mockito.when(disc.getFsk()).thenReturn(FSK);
         StatusMgnt status = mediaService.addDisc(disc);
         StatusMgnt wanted = new StatusMgnt(MSR_BAD_REQUEST, "Barcode was not valid");
@@ -86,6 +86,20 @@ public class MockTestDisc {
         Mockito.when(disc.getFsk()).thenReturn(-1);
         StatusMgnt status = mediaService.addDisc(disc);
         StatusMgnt wanted = new StatusMgnt(MSR_BAD_REQUEST, "Barcode or director or title was empty or FSK was less than 0 ");
+        assertEquals(wanted,status);
+    }
+
+    @Test
+    public void testAddDiscDuplicate(){
+        MediaService mediaService = new MediaServiceImpl();
+        Disc disc = Mockito.mock(Disc.class);
+        Mockito.when(disc.getTitle()).thenReturn(TITLE);
+        Mockito.when(disc.getDirector()).thenReturn(NAME);
+        Mockito.when(disc.getBarcode()).thenReturn(EAN);
+        Mockito.when(disc.getFsk()).thenReturn(FSK);
+        mediaService.addDisc(disc);
+        StatusMgnt status = mediaService.addDisc(disc);
+        StatusMgnt wanted = new StatusMgnt(MSR_BAD_REQUEST, "The disc is already in the system. No duplicate allowed");
         assertEquals(wanted,status);
     }
 

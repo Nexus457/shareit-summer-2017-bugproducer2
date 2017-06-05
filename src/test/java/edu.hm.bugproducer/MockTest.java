@@ -89,7 +89,7 @@ public class MockTest {
     }
 
     @Test
-    public void testAddDoublicateBook(){
+    public void testAddDuplicateBook(){
         MediaService mediaService = new MediaServiceImpl();
         Book book = Mockito.mock(Book.class);
         Mockito.when(book.getTitle()).thenReturn(TITLE);
