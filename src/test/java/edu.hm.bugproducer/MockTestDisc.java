@@ -14,6 +14,8 @@ import org.mockito.Mockito;
 
 import static edu.hm.bugproducer.Status.MediaServiceResult.*;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 @SuppressWarnings("Duplicates")
 public class MockTestDisc {
@@ -46,6 +48,7 @@ public class MockTestDisc {
         StatusMgnt status = mediaService.addDisc(disc);
         StatusMgnt wanted = new StatusMgnt(MSR_OK, "ok");
         assertEquals(wanted, status);
+        assertTrue(mediaService.getDiscs().contains(disc));
     }
 
     @Test
@@ -59,6 +62,7 @@ public class MockTestDisc {
         StatusMgnt status = mediaService.addDisc(disc);
         StatusMgnt wanted = new StatusMgnt(MSR_BAD_REQUEST, "Barcode or director or title was empty or FSK was less than 0 ");
         assertEquals(wanted, status);
+        assertFalse(mediaService.getDiscs().contains(disc));
     }
 
     @Test
@@ -72,6 +76,7 @@ public class MockTestDisc {
         StatusMgnt status = mediaService.addDisc(disc);
         StatusMgnt wanted = new StatusMgnt(MSR_BAD_REQUEST, "Barcode or director or title was empty or FSK was less than 0 ");
         assertEquals(wanted, status);
+        assertFalse(mediaService.getDiscs().contains(disc));
     }
 
     @Test
@@ -85,6 +90,7 @@ public class MockTestDisc {
         StatusMgnt status = mediaService.addDisc(disc);
         StatusMgnt wanted = new StatusMgnt(MSR_BAD_REQUEST, "Barcode was not valid");
         assertEquals(wanted, status);
+        assertFalse(mediaService.getDiscs().contains(disc));
     }
 
     @Test
@@ -98,6 +104,7 @@ public class MockTestDisc {
         StatusMgnt status = mediaService.addDisc(disc);
         StatusMgnt wanted = new StatusMgnt(MSR_BAD_REQUEST, "Barcode or director or title was empty or FSK was less than 0 ");
         assertEquals(wanted, status);
+        assertFalse(mediaService.getDiscs().contains(disc));
     }
 
     @Test
@@ -111,6 +118,7 @@ public class MockTestDisc {
         StatusMgnt status = mediaService.addDisc(disc);
         StatusMgnt wanted = new StatusMgnt(MSR_BAD_REQUEST, "Barcode or director or title was empty or FSK was less than 0 ");
         assertEquals(wanted, status);
+        assertFalse(mediaService.getDiscs().contains(disc));
     }
 
     @Test
@@ -125,6 +133,7 @@ public class MockTestDisc {
         StatusMgnt status = mediaService.addDisc(disc);
         StatusMgnt wanted = new StatusMgnt(MSR_BAD_REQUEST, "The disc is already in the system. No duplicate allowed");
         assertEquals(wanted, status);
+        assertEquals(mediaService.getDiscs().size(),1);
     }
 
     @Test
@@ -174,6 +183,12 @@ public class MockTestDisc {
         StatusMgnt actual = mediaService.updateDisc(EAN,updateDisc);
         StatusMgnt wanted = new StatusMgnt(MSR_OK, "ok");
         assertEquals(wanted,actual);
+
+        Mockito.when(disc.getTitle()).thenReturn(TITLE_ALT);
+        Mockito.when(disc.getDirector()).thenReturn(NAME_ALT);
+        Mockito.when(disc.getFsk()).thenReturn(FSK_ALT);
+        assertTrue(mediaService.getDiscs().contains(disc));
+
     }
 
     @Test
@@ -195,6 +210,7 @@ public class MockTestDisc {
         StatusMgnt actual = mediaService.updateDisc(EAN,updateDisc);
         StatusMgnt wanted = new StatusMgnt(MSR_BAD_REQUEST, "Director, Title and FSK are empty!");;
         assertEquals(wanted,actual);
+        assertTrue(mediaService.getDiscs().contains(disc));
     }
 
     @Test
@@ -216,7 +232,49 @@ public class MockTestDisc {
         StatusMgnt actual = mediaService.updateDisc(EAN_ALT,updateDisc);
         StatusMgnt wanted = new StatusMgnt(MSR_BAD_REQUEST, "The disc you want to update is not in the system!");
         assertEquals(wanted,actual);
+        assertTrue(mediaService.getDiscs().contains(disc));
     }
+
+    @Test
+    public void testGetDiscs(){
+        MediaService mediaService = new MediaServiceImpl();
+        Disc disc = Mockito.mock(Disc.class);
+        Mockito.when(disc.getTitle()).thenReturn(TITLE);
+        Mockito.when(disc.getDirector()).thenReturn(NAME);
+        Mockito.when(disc.getBarcode()).thenReturn(EAN);
+        Mockito.when(disc.getFsk()).thenReturn(FSK);
+        mediaService.addDisc(disc);
+        assertTrue(mediaService.getDiscs().contains(disc));
+    }
+
+    @Test
+    public void testGetDiscsEmptyList(){
+        MediaService mediaService = new MediaServiceImpl();
+        assertTrue(mediaService.getDiscs().isEmpty());
+    }
+
+    @Test
+    public void testGetDiscsMultiples(){
+        MediaService mediaService = new MediaServiceImpl();
+
+        Disc disc = Mockito.mock(Disc.class);
+        Mockito.when(disc.getTitle()).thenReturn(TITLE);
+        Mockito.when(disc.getDirector()).thenReturn(NAME);
+        Mockito.when(disc.getBarcode()).thenReturn(EAN);
+        Mockito.when(disc.getFsk()).thenReturn(FSK);
+
+        Disc disc2 = Mockito.mock(Disc.class);
+        Mockito.when(disc2.getTitle()).thenReturn(TITLE_ALT);
+        Mockito.when(disc2.getDirector()).thenReturn(NAME_ALT);
+        Mockito.when(disc2.getBarcode()).thenReturn(EAN_ALT);
+        Mockito.when(disc2.getFsk()).thenReturn(FSK_ALT);
+
+        mediaService.addDisc(disc);
+        mediaService.addDisc(disc2);
+        assertTrue(mediaService.getDiscs().contains(disc));
+        assertTrue(mediaService.getDiscs().contains(disc2));
+    }
+
 
 
 
