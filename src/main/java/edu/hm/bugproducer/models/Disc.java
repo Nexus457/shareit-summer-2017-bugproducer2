@@ -6,7 +6,7 @@ package edu.hm.bugproducer.models;
  * @author Tom Maier
  * @author Patrick Kuntz
  */
-public class Disc extends Medium {
+public class Disc extends Medium implements IDisc{
     /** unique number of a disc */
     private String barcode;
     /** name of the director of the disc*/
@@ -87,6 +87,14 @@ public class Disc extends Medium {
      */
     public void setFsk(int fsk) {
         this.fsk = fsk;
+    }
+
+    public void setTitle(String title){
+        super.setTitle(title);
+    }
+
+    public String getTitle(){
+        return super.getTitle();
     }
 
     @Override
