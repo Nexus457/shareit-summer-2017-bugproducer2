@@ -209,6 +209,8 @@ public class MediaServiceImpl implements MediaService {
                 }
                 status = new StatusMgnt(MSR_OK, "ok");
             }
+            if (newDisc.getDirector().isEmpty() && newDisc.getTitle().isEmpty() && newDisc.getFsk()==-1)
+                status = new StatusMgnt(MSR_BAD_REQUEST, "Director, Title and FSK are empty!");
         } else {
             status = new StatusMgnt(MSR_BAD_REQUEST, "The disc you want to update is not in the system!");
         }

@@ -155,6 +155,70 @@ public class MockTestDisc {
         assertEquals(wanted, actual);
     }
 
+    @Test
+    public void testUpdateDisc() {
+        MediaService mediaService = new MediaServiceImpl();
+        Disc disc = Mockito.mock(Disc.class);
+        Mockito.when(disc.getTitle()).thenReturn(TITLE);
+        Mockito.when(disc.getDirector()).thenReturn(NAME);
+        Mockito.when(disc.getBarcode()).thenReturn(EAN);
+        Mockito.when(disc.getFsk()).thenReturn(FSK);
+
+        mediaService.addDisc(disc);
+
+        Disc updateDisc = Mockito.mock(Disc.class);
+        Mockito.when(updateDisc.getTitle()).thenReturn(TITLE_ALT);
+        Mockito.when(updateDisc.getDirector()).thenReturn(NAME_ALT);
+        Mockito.when(updateDisc.getFsk()).thenReturn(FSK_ALT);
+
+        StatusMgnt actual = mediaService.updateDisc(EAN,updateDisc);
+        StatusMgnt wanted = new StatusMgnt(MSR_OK, "ok");
+        assertEquals(wanted,actual);
+    }
+
+    @Test
+    public void testUpdateDiscEmpty() {
+        MediaService mediaService = new MediaServiceImpl();
+        Disc disc = Mockito.mock(Disc.class);
+        Mockito.when(disc.getTitle()).thenReturn(TITLE);
+        Mockito.when(disc.getDirector()).thenReturn(NAME);
+        Mockito.when(disc.getBarcode()).thenReturn(EAN);
+        Mockito.when(disc.getFsk()).thenReturn(FSK);
+
+        mediaService.addDisc(disc);
+
+        Disc updateDisc = Mockito.mock(Disc.class);
+        Mockito.when(updateDisc.getTitle()).thenReturn("");
+        Mockito.when(updateDisc.getDirector()).thenReturn("");
+        Mockito.when(updateDisc.getFsk()).thenReturn(-1);
+
+        StatusMgnt actual = mediaService.updateDisc(EAN,updateDisc);
+        StatusMgnt wanted = new StatusMgnt(MSR_BAD_REQUEST, "Director, Title and FSK are empty!");;
+        assertEquals(wanted,actual);
+    }
+
+    @Test
+    public void testUpdateNonExistingDisc() {
+        MediaService mediaService = new MediaServiceImpl();
+        Disc disc = Mockito.mock(Disc.class);
+        Mockito.when(disc.getTitle()).thenReturn(TITLE);
+        Mockito.when(disc.getDirector()).thenReturn(NAME);
+        Mockito.when(disc.getBarcode()).thenReturn(EAN);
+        Mockito.when(disc.getFsk()).thenReturn(FSK);
+
+        mediaService.addDisc(disc);
+
+        Disc updateDisc = Mockito.mock(Disc.class);
+        Mockito.when(updateDisc.getTitle()).thenReturn(TITLE_ALT);
+        Mockito.when(updateDisc.getDirector()).thenReturn(NAME_ALT);
+        Mockito.when(updateDisc.getFsk()).thenReturn(FSK_ALT);
+
+        StatusMgnt actual = mediaService.updateDisc(EAN_ALT,updateDisc);
+        StatusMgnt wanted = new StatusMgnt(MSR_BAD_REQUEST, "The disc you want to update is not in the system!");
+        assertEquals(wanted,actual);
+    }
+
+
 
 
 }
