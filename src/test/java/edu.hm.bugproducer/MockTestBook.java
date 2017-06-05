@@ -139,7 +139,7 @@ public class MockTestBook {
         Book updatedBook = Mockito.mock(Book.class);
         Mockito.when(updatedBook.getTitle()).thenReturn(TITLE_ALT);
         Mockito.when(updatedBook.getAuthor()).thenReturn("");
-        Mockito.when(updatedBook.getIsbn()).thenReturn("");
+
 
         StatusMgnt status = mediaService.updateBook(ISBN,updatedBook);
         StatusMgnt wanted = new StatusMgnt(MSR_OK, "ok");
@@ -161,11 +161,11 @@ public class MockTestBook {
         Book updatedBook = Mockito.mock(Book.class);
         Mockito.when(updatedBook.getTitle()).thenReturn("");
         Mockito.when(updatedBook.getAuthor()).thenReturn("");
-        Mockito.when(updatedBook.getIsbn()).thenReturn("");
+
 
         StatusMgnt status = mediaService.updateBook(ISBN,updatedBook);
-        StatusMgnt wanted = new StatusMgnt(MSR_BAD_REQUEST, "Status and title are empty!");
-        System.out.print(status.getMsg());
+        StatusMgnt wanted = new StatusMgnt(MSR_BAD_REQUEST, "Author and title are empty!");
+
         assertEquals(wanted,status);
     }
 
@@ -182,7 +182,6 @@ public class MockTestBook {
         Book updatedBook = Mockito.mock(Book.class);
         Mockito.when(updatedBook.getTitle()).thenReturn("Hans");
         Mockito.when(updatedBook.getAuthor()).thenReturn("Dampf");
-        Mockito.when(updatedBook.getIsbn()).thenReturn("123141411414");
 
         StatusMgnt status = mediaService.updateBook(ISBN_ALT,updatedBook);
         StatusMgnt wanted = new StatusMgnt(MSR_BAD_REQUEST, "The book you want to update is not in the system!");
