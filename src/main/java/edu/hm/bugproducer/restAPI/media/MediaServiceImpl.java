@@ -40,7 +40,7 @@ public class MediaServiceImpl implements MediaService {
 
 
         if (book == null) {
-             status = new StatusMgnt(MSR_NO_CONTENT, "The book was empty");
+            status = new StatusMgnt(MSR_NO_CONTENT, "The book was empty");
         } else if (book.getAuthor().isEmpty() || book.getTitle().isEmpty() || book.getIsbn().isEmpty()) {
             status = new StatusMgnt(MSR_BAD_REQUEST, "Author or title or ISBN was empty");
         } else if (!Isbn.isValid(book.getIsbn())) {
@@ -121,13 +121,11 @@ public class MediaServiceImpl implements MediaService {
 
     @Override
     public Pair<StatusMgnt, Book> getBook(String isbn) {
-        Pair<StatusMgnt, Book> myResult = null;
+        Pair<StatusMgnt, Book> myResult = new Pair<>(new StatusMgnt(MSR_NOT_FOUND, "The book you have searched for is not in the system!"), null);
 
         for (Book b : books) {
             if (b.getIsbn().equals(isbn)) {
                 return new Pair<>(new StatusMgnt(MSR_OK, "ok"), b);
-            } else {
-                myResult = new Pair<>(new StatusMgnt(MSR_NOT_FOUND, "The book you have searched for is not in the system!"), null);
             }
         }
         return myResult;
@@ -173,6 +171,8 @@ public class MediaServiceImpl implements MediaService {
                 }
                 status = new StatusMgnt(MSR_OK, "ok");
             }
+            if (newBook.getAuthor().isEmpty() && newBook.getTitle().isEmpty())
+                status = new StatusMgnt(MSR_BAD_REQUEST, "Status and title are empty!");
         } else {
             status = new StatusMgnt(MSR_BAD_REQUEST, "The book you want to update is not in the system!");
         }
@@ -222,7 +222,6 @@ public class MediaServiceImpl implements MediaService {
         discs.clear();
         return MSR_OK;
     }
-
 
 
 }

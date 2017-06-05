@@ -109,6 +109,24 @@ public class MockTestBook {
     }
 
     @Test
+    public void testGetBook() {
+        MediaService mediaService = new MediaServiceImpl();
+        Book book = Mockito.mock(Book.class);
+        Mockito.when(book.getTitle()).thenReturn(TITLE);
+        Mockito.when(book.getAuthor()).thenReturn(NAME);
+        Mockito.when(book.getIsbn()).thenReturn(ISBN);
+
+        mediaService.addBook(book);
+        Pair<StatusMgnt, Book> have = mediaService.getBook(book.getIsbn());
+        Pair<StatusMgnt, Book> wanted = new Pair<>(new StatusMgnt(MSR_OK, "ok"), book);
+
+        System.out.print(book.equals(have.getValue()));
+        assertEquals(wanted.getKey(), have.getKey());
+        assertEquals(wanted.getValue(), have.getValue());
+
+    }
+
+    @Test
     public void testUpdateBook(){
         MediaService mediaService = new MediaServiceImpl();
         Book book = Mockito.mock(Book.class);
@@ -129,8 +147,9 @@ public class MockTestBook {
 
     }
 
+
     @Test
-    public void testGetBook() {
+    public void testUpdateBookEmpty(){
         MediaService mediaService = new MediaServiceImpl();
         Book book = Mockito.mock(Book.class);
         Mockito.when(book.getTitle()).thenReturn(TITLE);
@@ -138,15 +157,39 @@ public class MockTestBook {
         Mockito.when(book.getIsbn()).thenReturn(ISBN);
 
         mediaService.addBook(book);
-        Pair<StatusMgnt, Book> have = mediaService.getBook(book.getIsbn());
-        Pair<StatusMgnt, Book> wanted = new Pair<>(new StatusMgnt(MSR_OK, "ok"), book);
 
-        System.out.print(book.equals(have.getValue()));
-        assertEquals(wanted.getKey(), have.getKey());
-        assertEquals(wanted.getValue(), have.getValue());
+        Book updatedBook = Mockito.mock(Book.class);
+        Mockito.when(updatedBook.getTitle()).thenReturn("");
+        Mockito.when(updatedBook.getAuthor()).thenReturn("");
+        Mockito.when(updatedBook.getIsbn()).thenReturn("");
 
-
+        StatusMgnt status = mediaService.updateBook(ISBN,updatedBook);
+        StatusMgnt wanted = new StatusMgnt(MSR_BAD_REQUEST, "Status and title are empty!");
+        System.out.print(status.getMsg());
+        assertEquals(wanted,status);
     }
+
+    @Test
+    public void testUpdateNotExistingBook(){
+        MediaService mediaService = new MediaServiceImpl();
+        Book book = Mockito.mock(Book.class);
+        Mockito.when(book.getTitle()).thenReturn(TITLE);
+        Mockito.when(book.getAuthor()).thenReturn(NAME);
+        Mockito.when(book.getIsbn()).thenReturn(ISBN);
+
+        mediaService.addBook(book);
+
+        Book updatedBook = Mockito.mock(Book.class);
+        Mockito.when(updatedBook.getTitle()).thenReturn("Hans");
+        Mockito.when(updatedBook.getAuthor()).thenReturn("Dampf");
+        Mockito.when(updatedBook.getIsbn()).thenReturn("123141411414");
+
+        StatusMgnt status = mediaService.updateBook(ISBN_ALT,updatedBook);
+        StatusMgnt wanted = new StatusMgnt(MSR_BAD_REQUEST, "The book you want to update is not in the system!");
+        System.out.print(status.getMsg());
+        assertEquals(wanted,status);
+    }
+
 
 
 
