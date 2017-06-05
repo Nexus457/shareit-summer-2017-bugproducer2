@@ -55,7 +55,6 @@ public class MediaServiceImpl implements MediaService {
 
                 ListIterator<Book> lir = books.listIterator();
 
-
                 while (lir.hasNext() && !duplicate) {
                     if (lir.next().getIsbn().equals(book.getIsbn())) {
                         duplicate = true;
