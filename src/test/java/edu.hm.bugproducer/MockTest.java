@@ -40,20 +40,71 @@ public class MockTest {
     }
 
     @Test
-    public void testAddBookWrongTitle(){
+    public void testAddBookNoTitle(){
         MediaService mediaService = new MediaServiceImpl();
         Book book = Mockito.mock(Book.class);
         Mockito.when(book.getTitle()).thenReturn("");
         Mockito.when(book.getAuthor()).thenReturn(NAME);
         Mockito.when(book.getIsbn()).thenReturn(ISBN);
-
-
         StatusMgnt status = mediaService.addBook(book);
         StatusMgnt wanted = new StatusMgnt(MSR_BAD_REQUEST, "Author or title or ISBN was empty");
 
-        System.out.print(status.equals(wanted));
+        assertEquals(wanted,status);
+    }
+
+
+    @Test
+    public void testAddBookNoAuthor(){
+        MediaService mediaService = new MediaServiceImpl();
+        Book book = Mockito.mock(Book.class);
+        Mockito.when(book.getTitle()).thenReturn(TITLE);
+        Mockito.when(book.getAuthor()).thenReturn("");
+        Mockito.when(book.getIsbn()).thenReturn(ISBN);
+        StatusMgnt status = mediaService.addBook(book);
+        StatusMgnt wanted = new StatusMgnt(MSR_BAD_REQUEST, "Author or title or ISBN was empty");
+        assertEquals(wanted,status);
+    }
+
+    @Test
+    public void testAddBookNoISBN(){
+        MediaService mediaService = new MediaServiceImpl();
+        Book book = Mockito.mock(Book.class);
+        Mockito.when(book.getTitle()).thenReturn(TITLE);
+        Mockito.when(book.getAuthor()).thenReturn(NAME);
+        Mockito.when(book.getIsbn()).thenReturn("");
+        StatusMgnt status = mediaService.addBook(book);
+        StatusMgnt wanted = new StatusMgnt(MSR_BAD_REQUEST, "Author or title or ISBN was empty");
+        assertEquals(wanted,status);
+    }
+
+    @Test
+    public void testAddBookInValidISBN(){
+        MediaService mediaService = new MediaServiceImpl();
+        Book book = Mockito.mock(Book.class);
+        Mockito.when(book.getTitle()).thenReturn(TITLE);
+        Mockito.when(book.getAuthor()).thenReturn(NAME);
+        Mockito.when(book.getIsbn()).thenReturn(ISBN_ALT+457);
+        StatusMgnt status = mediaService.addBook(book);
+        StatusMgnt wanted = new StatusMgnt(MSR_BAD_REQUEST, "ISBN was not valid");
+        assertEquals(wanted,status);
+    }
+
+    @Test
+    public void testAddDoublicateBook(){
+        MediaService mediaService = new MediaServiceImpl();
+        Book book = Mockito.mock(Book.class);
+        Mockito.when(book.getTitle()).thenReturn(TITLE);
+        Mockito.when(book.getAuthor()).thenReturn(NAME);
+        Mockito.when(book.getIsbn()).thenReturn(ISBN);
+        mediaService.addBook(book);
+        StatusMgnt status = mediaService.addBook(book);
+        StatusMgnt wanted = new StatusMgnt(MSR_BAD_REQUEST, "The book is already in the system. No duplicate allowed");
         assertEquals(wanted,status);
 
     }
+
+
+
+
 
 }
