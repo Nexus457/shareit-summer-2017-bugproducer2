@@ -42,4 +42,19 @@ public abstract class Medium {
     public void setTitle(String title) {
         this.title = title;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Medium)) return false;
+
+        Medium medium = (Medium) o;
+
+        return getTitle().equals(medium.getTitle());
+    }
+
+    @Override
+    public int hashCode() {
+        return getTitle().hashCode();
+    }
 }

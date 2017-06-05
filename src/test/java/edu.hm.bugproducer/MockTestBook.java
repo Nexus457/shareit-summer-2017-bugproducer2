@@ -6,6 +6,7 @@ import edu.hm.bugproducer.models.Book;
 import edu.hm.bugproducer.restAPI.media.MediaService;
 import edu.hm.bugproducer.restAPI.media.MediaServiceImpl;
 import javafx.util.Pair;
+import org.junit.After;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -14,7 +15,7 @@ import static edu.hm.bugproducer.Status.MediaServiceResult.MSR_OK;
 import static org.junit.Assert.assertEquals;
 
 
-public class MockTest {
+public class MockTestBook {
     private static final String USER_NAME = "Joh";
     private static final String NAME = "TestName1";
     private static final String NAME_ALT = "TestName2";
@@ -24,6 +25,13 @@ public class MockTest {
     private static final String ISBN_ALT = "0-7475-51006";
     private static final String EAN = "9783815820865";
     private static final String EAN_ALT = "9783827317100";
+
+    @After
+    public void clearList(){
+        MediaService mediaService = new MediaServiceImpl();
+        mediaService.deleteAll();
+
+    }
 
     @Test
    public void testAddBook(){
@@ -118,8 +126,6 @@ public class MockTest {
 
         StatusMgnt status = mediaService.updateBook(ISBN,updatedBook);
         StatusMgnt wanted = new StatusMgnt(MSR_OK, "ok");
-
-
         assertEquals(wanted,status);
 
     }
@@ -132,14 +138,14 @@ public class MockTest {
         Mockito.when(book.getAuthor()).thenReturn(NAME);
         Mockito.when(book.getIsbn()).thenReturn(ISBN);
 
+        mediaService.addBook(book);
         Pair<StatusMgnt, Book> have = mediaService.getBook(book.getIsbn());
         Pair<StatusMgnt, Book> wanted = new Pair<>(new StatusMgnt(MSR_OK, "ok"), book);
 
-
+        System.out.print(book.equals(have.getValue()));
         assertEquals(wanted.getKey(), have.getKey());
-        assertEquals(wanted.getValue().getAuthor(), have.getValue().getAuthor());
-        assertEquals(wanted.getValue().getTitle(), have.getValue().getTitle());
-        assertEquals(wanted.getValue().getIsbn(), have.getValue().getIsbn());
+        assertEquals(wanted.getValue(), have.getValue());
+
 
     }
 

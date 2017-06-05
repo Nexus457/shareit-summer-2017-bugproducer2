@@ -83,6 +83,8 @@ public class Book extends Medium implements IBook  {
         if (this == o) return true;
         if (!(o instanceof Book)) return false;
 
+        if(!super.equals(o)) return false;
+
         Book book = (Book) o;
 
         if (!getAuthor().equals(book.getAuthor())) return false;
