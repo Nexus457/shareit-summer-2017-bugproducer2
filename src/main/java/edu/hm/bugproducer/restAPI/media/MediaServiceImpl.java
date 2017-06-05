@@ -80,10 +80,10 @@ public class MediaServiceImpl implements MediaService {
 
         if (disc == null) {
             status = new StatusMgnt(MSR_NO_CONTENT, "The disc was empty");
-        } else if (!EAN13CheckDigit.EAN13_CHECK_DIGIT.isValid(disc.getBarcode())) {
-            status = new StatusMgnt(MSR_BAD_REQUEST, "Barcode was not valid");
         } else if (disc.getBarcode().isEmpty() || disc.getDirector().isEmpty() || disc.getTitle().isEmpty() || disc.getFsk() < 0) {
             status = new StatusMgnt(MSR_BAD_REQUEST, "Barcode or director or title was empty or FSK was less than 0 ");
+        } else if (!EAN13CheckDigit.EAN13_CHECK_DIGIT.isValid(disc.getBarcode())) {
+            status = new StatusMgnt(MSR_BAD_REQUEST, "Barcode was not valid");
         } else {
             if (discs.isEmpty()) {
                 status = new StatusMgnt(MSR_OK, "ok");
@@ -135,13 +135,11 @@ public class MediaServiceImpl implements MediaService {
 
     @Override
     public Pair<StatusMgnt, Disc> getDisc(String barcode) {
-        Pair<StatusMgnt, Disc> myResult = null;
+        Pair<StatusMgnt, Disc> myResult = new Pair<>(new StatusMgnt(MSR_NOT_FOUND, "The disc you have searched for is not in the system!"), null);
 
         for (Disc d : discs) {
             if (d.getBarcode().equals(barcode)) {
                 myResult = new Pair<>(new StatusMgnt(MSR_OK, "ok"), d);
-            } else {
-                myResult = new Pair<>(new StatusMgnt(MSR_NOT_FOUND, "The disc you have searched for is not in the system!"), null);
             }
         }
         return myResult;

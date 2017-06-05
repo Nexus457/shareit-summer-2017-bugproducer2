@@ -30,7 +30,6 @@ public class MockTestBook {
     public void clearList(){
         MediaService mediaService = new MediaServiceImpl();
         mediaService.deleteAll();
-
     }
 
     @Test
