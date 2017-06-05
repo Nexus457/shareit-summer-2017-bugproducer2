@@ -172,7 +172,7 @@ public class MediaServiceImpl implements MediaService {
                 status = new StatusMgnt(MSR_OK, "ok");
             }
             if (newBook.getAuthor().isEmpty() && newBook.getTitle().isEmpty())
-                status = new StatusMgnt(MSR_BAD_REQUEST, "Status and title are empty!");
+                status = new StatusMgnt(MSR_BAD_REQUEST, "Author and title are empty!");
         } else {
             status = new StatusMgnt(MSR_BAD_REQUEST, "The book you want to update is not in the system!");
         }
