@@ -43,21 +43,22 @@ public class Book extends Medium implements IBook  {
     }
 
     /**
-     * getIsbn method.
-     * gives you the isbn of a book
-     * @return isbn
-     */
-    public String getIsbn() {
-        return isbn;
-    }
-
-    /**
      * setAuthor method.
      * you can set the name of an author
      * @param author string variable
      */
     public void setAuthor(String author) {
         this.author = author;
+    }
+
+    /**
+     * getIsbn method.
+     * gives you the isbn of a book
+     *
+     * @return isbn
+     */
+    public String getIsbn() {
+        return isbn;
     }
 
     /**
@@ -69,19 +70,37 @@ public class Book extends Medium implements IBook  {
         this.isbn = isbn.replaceAll("-", "");
     }
 
-    public void setTitle(String title){
-        super.setTitle(title);
-    }
-
     public String getTitle(){
         return super.getTitle();
     }
 
+    public void setTitle(String title) {
+        super.setTitle(title);
+    }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Book)) return false;
 
+        Book book = (Book) o;
+
+        if (!getAuthor().equals(book.getAuthor())) return false;
+        return getIsbn().equals(book.getIsbn());
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getAuthor().hashCode();
+        result = 31 * result + getIsbn().hashCode();
+        return result;
+    }
 
     @Override
     public String toString() {
-        return super.toString();
+        return "Book{" +
+                "author='" + author + '\'' +
+                ", isbn='" + isbn + '\'' +
+                '}';
     }
 }

@@ -5,12 +5,11 @@ import edu.hm.bugproducer.Status.StatusMgnt;
 import edu.hm.bugproducer.models.Book;
 import edu.hm.bugproducer.restAPI.media.MediaService;
 import edu.hm.bugproducer.restAPI.media.MediaServiceImpl;
+import javafx.util.Pair;
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.mockito.Matchers;
 
 import static edu.hm.bugproducer.Status.MediaServiceResult.MSR_BAD_REQUEST;
-import static edu.hm.bugproducer.Status.MediaServiceResult.MSR_NO_CONTENT;
 import static edu.hm.bugproducer.Status.MediaServiceResult.MSR_OK;
 import static org.junit.Assert.assertEquals;
 
@@ -122,6 +121,25 @@ public class MockTest {
 
 
         assertEquals(wanted,status);
+
+    }
+
+    @Test
+    public void testGetBook() {
+        MediaService mediaService = new MediaServiceImpl();
+        Book book = Mockito.mock(Book.class);
+        Mockito.when(book.getTitle()).thenReturn(TITLE);
+        Mockito.when(book.getAuthor()).thenReturn(NAME);
+        Mockito.when(book.getIsbn()).thenReturn(ISBN);
+
+        Pair<StatusMgnt, Book> have = mediaService.getBook(book.getIsbn());
+        Pair<StatusMgnt, Book> wanted = new Pair<>(new StatusMgnt(MSR_OK, "ok"), book);
+
+
+        assertEquals(wanted.getKey(), have.getKey());
+        assertEquals(wanted.getValue().getAuthor(), have.getValue().getAuthor());
+        assertEquals(wanted.getValue().getTitle(), have.getValue().getTitle());
+        assertEquals(wanted.getValue().getIsbn(), have.getValue().getIsbn());
 
     }
 
