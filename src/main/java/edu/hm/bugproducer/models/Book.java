@@ -15,12 +15,12 @@ import java.io.Serializable;
  * @author Patrick Kuntz
  */
 @Entity
-@Table(name = "TBook")
+@Table(name = "Book")
 public class Book extends Medium implements IBook, Serializable {
     /**
      * author of a book
      */
-    @Column(name = "authorTest", length = 50)
+    @Column(name = "author", length = 50)
     private String author;
     /**
      * unique isbn of a book
