@@ -1,16 +1,31 @@
 package edu.hm.bugproducer.models;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import java.io.Serializable;
+
 /**
  * Book Class.
+ *
  * @author Mark Tripolt
  * @author Johannes Arzt
  * @author Tom Maier
  * @author Patrick Kuntz
  */
-public class Book extends Medium implements IBook  {
-    /** author of a book  */
+@Entity
+@Table(name = "TBook")
+public class Book extends Medium implements IBook, Serializable {
+    /**
+     * author of a book
+     */
+    @Column(name = "authorTest", length = 50)
     private String author;
-    /** unique isbn of a book */
+    /**
+     * unique isbn of a book
+     */
+    @Id
     private String isbn;
 
     /**
@@ -23,9 +38,10 @@ public class Book extends Medium implements IBook  {
 
     /**
      * Book Constructor.
+     *
      * @param author name of the writer
-     * @param isbn unique identification number
-     * @param title name of book
+     * @param isbn   unique identification number
+     * @param title  name of book
      */
     public Book(String author, String isbn, String title) {
         super(title);
@@ -36,6 +52,7 @@ public class Book extends Medium implements IBook  {
     /**
      * getAuthor method.
      * gives you the name of the author of a book
+     *
      * @return author
      */
     public String getAuthor() {
@@ -45,6 +62,7 @@ public class Book extends Medium implements IBook  {
     /**
      * setAuthor method.
      * you can set the name of an author
+     *
      * @param author string variable
      */
     public void setAuthor(String author) {
@@ -64,13 +82,14 @@ public class Book extends Medium implements IBook  {
     /**
      * setIsbn method.
      * set the isbn you want
+     *
      * @param isbn string variable
      */
     public void setIsbn(String isbn) {
         this.isbn = isbn.replaceAll("-", "");
     }
 
-    public String getTitle(){
+    public String getTitle() {
         return super.getTitle();
     }
 
@@ -83,7 +102,7 @@ public class Book extends Medium implements IBook  {
         if (this == o) return true;
         if (!(o instanceof Book)) return false;
 
-        if(!super.equals(o)) return false;
+        if (!super.equals(o)) return false;
 
         Book book = (Book) o;
 

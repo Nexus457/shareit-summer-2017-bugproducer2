@@ -6,16 +6,14 @@ import edu.hm.bugproducer.models.Book;
 import edu.hm.bugproducer.restAPI.media.MediaService;
 import edu.hm.bugproducer.restAPI.media.MediaServiceImpl;
 import javafx.util.Pair;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.After;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import static edu.hm.bugproducer.Status.MediaServiceResult.MSR_BAD_REQUEST;
-import static edu.hm.bugproducer.Status.MediaServiceResult.MSR_NOT_FOUND;
-import static edu.hm.bugproducer.Status.MediaServiceResult.MSR_OK;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static edu.hm.bugproducer.Status.MediaServiceResult.*;
+import static org.junit.Assert.*;
 
 
 public class MockTestBook {
@@ -36,6 +34,9 @@ public class MockTestBook {
 
     @Test
    public void testAddBook(){
+        final Logger logger = LogManager.getLogger();
+        logger.error("DAS IST KIEN ERROR");
+
         MediaService mediaService = new MediaServiceImpl();
         Book book = Mockito.mock(Book.class);
         Mockito.when(book.getTitle()).thenReturn(TITLE);

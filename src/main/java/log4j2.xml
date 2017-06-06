@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Configuration>
+    <Appenders>
+        <File name="html" fileName="bugproducerShareit.html" append="false">
+            <HTMLLayout title=" BAR"/>
+        </File>
+    </Appenders>
+    <Loggers>
+        <Logger name="edu.hm" level="ALL" additivity="false ">
+            <AppenderRef ref="html"/>
+        </Logger>
+    </Loggers>
+</Configuration>
