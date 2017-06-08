@@ -16,7 +16,7 @@ import java.io.Serializable;
  */
 @Entity
 @Table(name = "Book")
-public class Book extends Medium implements IBook, Serializable {
+public class Book extends Medium implements Serializable {
     /**
      * author of a book
      */

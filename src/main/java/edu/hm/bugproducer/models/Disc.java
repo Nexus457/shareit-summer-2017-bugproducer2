@@ -6,7 +6,7 @@ package edu.hm.bugproducer.models;
  * @author Tom Maier
  * @author Patrick Kuntz
  */
-public class Disc extends Medium implements IDisc{
+public class Disc extends Medium{
     /** unique number of a disc */
     private String barcode;
     /** name of the director of the disc*/
