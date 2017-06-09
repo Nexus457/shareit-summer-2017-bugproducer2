@@ -9,6 +9,7 @@ import io.jsonwebtoken.Jwts;
 import javafx.util.Pair;
 import org.json.JSONObject;
 
+import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -41,12 +42,15 @@ public class MediaResource {
     /**
      * mediaService variable for the media service implementation
      */
-    private MediaServiceImpl mediaService = new MediaServiceImpl();
+    private final MediaService mediaService;
 
     /**
      * MediaResource Constructor.
+     * @param mediaService aktueller service
      */
-    public MediaResource() {
+    @Inject
+    public MediaResource(MediaService mediaService) {
+        this.mediaService = mediaService;
     }
 
     /**
