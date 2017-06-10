@@ -15,6 +15,7 @@ public class ShareItApplication extends ResourceConfig {
         GuiceIntoHK2Bridge guiceBridge
                 = serviceLocator.getService(GuiceIntoHK2Bridge.class);
         guiceBridge.bridgeGuiceInjector(
-                ShareitServletContextListener.getInjectorInstance());
+                ShareitServletContextListenerMock.getInjectorInstance());
+        //changed its shit
     }
 }
