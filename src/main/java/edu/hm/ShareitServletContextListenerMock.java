@@ -9,6 +9,9 @@ import edu.hm.bugproducer.models.Book;
 import edu.hm.bugproducer.restAPI.media.MediaService;
 import edu.hm.bugproducer.restAPI.media.MediaServiceImpl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static edu.hm.bugproducer.Status.MediaServiceResult.MSR_INTERNAL_SERVER_ERROR;
 import static edu.hm.bugproducer.Status.MediaServiceResult.MSR_OK;
 import static org.mockito.Mockito.mock;
@@ -34,15 +37,12 @@ public class ShareitServletContextListenerMock
         @Override
         protected void configureServlets() {
 
+            List<Book> emptyList = new ArrayList<>();
+
             MediaService mediaService = mock(MediaService.class);
-
             Book book = new Book(NAME, ISBN, TITLE);
-
-
             when(mediaService.addBook(book)).thenReturn(new StatusMgnt(MSR_OK, "ok"));
-
-
-
+            when(mediaService.getBooks()).thenReturn(emptyList);
             bind((MediaService.class)).toInstance(mediaService);
 
 
