@@ -89,8 +89,8 @@ public class RestTestWithMock {
         addBook.addHeader("content-Type", "application/json");
         HttpResponse response = client.execute(addBook);
 
-        System.err.println("Ergebnis: " + EntityUtils.toString(response.getEntity()));
         assertEquals(MSR_OK.getCode(), response.getStatusLine().getStatusCode());
+        assertEquals("{\"result\":\"MSR_OK\",\"msg\":\"ok\",\"code\":200}", EntityUtils.toString(response.getEntity()));
     }
 
     @Test
@@ -124,8 +124,8 @@ public class RestTestWithMock {
         addBook.addHeader("content-Type", "application/json");
         HttpResponse response = client.execute(addBook);
 
-        System.err.println("Ergebnis: " + EntityUtils.toString(response.getEntity()));
         assertEquals(MSR_BAD_REQUEST.getCode(), response.getStatusLine().getStatusCode());
+        assertEquals("{\"result\":\"MSR_BAD_REQUEST\",\"msg\":\"Author or title or ISBN was empty\",\"code\":400}", EntityUtils.toString(response.getEntity()));
     }
 
     @Test
@@ -159,8 +159,8 @@ public class RestTestWithMock {
         addBook.addHeader("content-Type", "application/json");
         HttpResponse response = client.execute(addBook);
 
-        System.err.println("Ergebnis: " + EntityUtils.toString(response.getEntity()));
         assertEquals(MSR_BAD_REQUEST.getCode(), response.getStatusLine().getStatusCode());
+        assertEquals("{\"result\":\"MSR_BAD_REQUEST\",\"msg\":\"ISBN was not valid\",\"code\":400}", EntityUtils.toString(response.getEntity()));
     }
 
     @Test
@@ -196,9 +196,8 @@ public class RestTestWithMock {
         HttpResponse response = client.execute(addBook);
         HttpResponse response2 = client.execute(addBook);
 
-
-        System.err.println("Ergebnis: " + EntityUtils.toString(response2.getEntity()));
         assertEquals(MSR_BAD_REQUEST.getCode(), response2.getStatusLine().getStatusCode());
+        assertEquals("{\"result\":\"MSR_BAD_REQUEST\",\"msg\":\"The book is already in the system. No duplicate allowed\",\"code\":400}", EntityUtils.toString(response2.getEntity()));
     }
 
     @Test
@@ -207,8 +206,8 @@ public class RestTestWithMock {
         HttpClient client = HttpClientBuilder.create().build();
         HttpGet request = new HttpGet(URL_BOOKS);
         HttpResponse shareItResponse = client.execute(request);
-        System.err.println("Ergebnis: " + EntityUtils.toString(shareItResponse.getEntity()));
         assertEquals(MSR_OK.getCode(), shareItResponse.getStatusLine().getStatusCode());
+        assertEquals("[{\"title\":\"TestTitle1\",\"author\":\"TestName1\",\"isbn\":\"3446193138\"}]", EntityUtils.toString(shareItResponse.getEntity()));
     }
 
     @Test
@@ -217,8 +216,8 @@ public class RestTestWithMock {
         HttpGet request = new HttpGet(URL_BOOKS + ISBN);
         HttpResponse shareItResponse = client.execute(request);
 
-        System.err.println("Ergebnis: " + EntityUtils.toString(shareItResponse.getEntity()));
         assertEquals(MSR_OK.getCode(), shareItResponse.getStatusLine().getStatusCode());
+        assertEquals("{\"title\":\"TestTitle1\",\"author\":\"TestName1\",\"isbn\":\"3446193138\"}", EntityUtils.toString(shareItResponse.getEntity()));
     }
 
     @Test
@@ -227,8 +226,8 @@ public class RestTestWithMock {
         HttpGet request = new HttpGet(URL_BOOKS + "1234");
         HttpResponse shareItResponse = client.execute(request);
 
-        System.err.println("Ergebnis: " + EntityUtils.toString(shareItResponse.getEntity()));
         assertEquals(MSR_NOT_FOUND.getCode(), shareItResponse.getStatusLine().getStatusCode());
+        assertEquals("{\"result\":\"MSR_NOT_FOUND\",\"msg\":\"The book you have searched for is not in the system!\",\"code\":404}", EntityUtils.toString(shareItResponse.getEntity()));
     }
 
     @Test
