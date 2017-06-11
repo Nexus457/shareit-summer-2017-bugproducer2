@@ -20,6 +20,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -51,6 +52,11 @@ public class RestTestWithMock {
     public void openConnection() throws Exception {
         jettyStarter = new JettyStarter();
         jettyStarter.startJetty();
+    }
+
+    @After
+    public void closeConnection() throws Exception {
+        jettyStarter.stopJetty();
     }
 
 
