@@ -30,6 +30,7 @@ public class ShareitServletContextListenerMock
     private static final String NAME = "TestName1";
     private static final String NAME_ALT = "TestName2";
     private static final String TITLE = "TestTitle1";
+    private static final String TITLE_ALT = "TestTitle2";
     private static final String ISBN = "3446193138";
     private static final String URL = "http://localhost:8082";
     private static final String EAN = "9783815820865";
@@ -69,9 +70,9 @@ public class ShareitServletContextListenerMock
             Disc normalDisc = new Disc(NAME, EAN, TITLE, FSK);
             Disc emptyDisc = new Disc("", "", "", -1);
             Disc invalidEANDisc = new Disc(NAME, INVALID_EAN, TITLE, FSK);
-            Disc duplicateDisc = new Disc(NAME_ALT, EAN, TITLE, FSK);
+            Disc duplicateDisc = new Disc(NAME, EAN, TITLE_ALT, FSK);
             Disc updateDisc = new Disc(NAME, "", TITLE, FSK);
-            Disc emptyUpdateDisc = new Disc("", "", "", FSK);
+            Disc emptyUpdateDisc = new Disc("", "", "", -1);
 
             when(mediaService.addDisc(normalDisc)).thenReturn(new StatusMgnt(MSR_OK, "ok"));
             when(mediaService.addDisc(emptyDisc)).thenReturn(new StatusMgnt(MSR_BAD_REQUEST, "Barcode or director or title was empty or FSK was less than 0 "));
