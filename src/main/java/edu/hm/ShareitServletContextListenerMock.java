@@ -60,6 +60,8 @@ public class ShareitServletContextListenerMock
             when(mediaService.getBook(ISBN)).thenReturn(new Pair<>(new StatusMgnt(MSR_OK, "ok"), normalBook));
             when(mediaService.getBook("1234")).thenReturn(new Pair<>(new StatusMgnt(MSR_NOT_FOUND, "The book you have searched for is not in the system!"), null));
             when(mediaService.updateBook(ISBN, normalBook)).thenReturn(new StatusMgnt(MSR_OK, "ok"));
+            when(mediaService.updateBook(ISBN, noAuthorBook)).thenReturn(new StatusMgnt(MSR_BAD_REQUEST, "Author and title are empty!"));
+            when(mediaService.updateBook("", normalBook)).thenReturn(new StatusMgnt(MSR_BAD_REQUEST, "The book you want to update is not in the system!"));
             bind((MediaService.class)).toInstance(mediaService);
 
 
