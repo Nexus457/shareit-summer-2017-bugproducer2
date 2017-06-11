@@ -43,16 +43,18 @@ public class ShareitServletContextListenerMock
         protected void configureServlets() {
 
             List<Book> emptyList = new ArrayList<>();
-            Book normalBook = new Book("Hans", "123", "Im Glueck");
+            Book normalBook = new Book(NAME, ISBN, TITLE);
+            Book duplicateBook = new Book(NAME_ALT, ISBN, TITLE);
             emptyList.add(normalBook);
 
             MediaService mediaService = mock(MediaService.class);
-            Book book = new Book(NAME, ISBN, TITLE);
-            when(mediaService.addBook(book)).thenReturn(new StatusMgnt(MSR_OK, "ok"));
+
+            when(mediaService.addBook(normalBook)).thenReturn(new StatusMgnt(MSR_OK, "ok"));
+            when(mediaService.addBook(duplicateBook)).thenReturn(new StatusMgnt(MSR_BAD_REQUEST, "The book is already in the system. No duplicate allowed"));
             when(mediaService.getBooks()).thenReturn(emptyList);
             when(mediaService.getBook(ISBN)).thenReturn(new Pair<>(new StatusMgnt(MSR_OK, "ok"), normalBook));
+            when(mediaService.getBook("1234")).thenReturn(new Pair<>(new StatusMgnt(MSR_NOT_FOUND, "The book you have searched for is not in the system!"), null));
             bind((MediaService.class)).toInstance(mediaService);
-
 
 
             List<Disc> emptyDiscList = new ArrayList<>();
