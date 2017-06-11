@@ -258,8 +258,10 @@ public class RestTestWithMock {
         updateBook.addHeader("content-Type", "application/json");
         HttpResponse shareItResponse = client.execute(updateBook);
 
-        System.err.println("Ergebnis: " + EntityUtils.toString(shareItResponse.getEntity()));
+
+        String want = "{\"result\":\"MSR_OK\",\"msg\":\"ok\",\"code\":200}";
         assertEquals(MSR_OK.getCode(), shareItResponse.getStatusLine().getStatusCode());
+        assertEquals(want,EntityUtils.toString(shareItResponse.getEntity()));
     }
 
     @Test
@@ -290,8 +292,9 @@ public class RestTestWithMock {
         updateBook.addHeader("content-Type", "application/json");
         HttpResponse shareItResponse = client.execute(updateBook);
 
-        System.err.println("Ergebnis: " + EntityUtils.toString(shareItResponse.getEntity()));
+        String want = "{\"result\":\"MSR_BAD_REQUEST\",\"msg\":\"The book you want to update is not in the system!\",\"code\":400}";
         assertEquals(MSR_BAD_REQUEST.getCode(), shareItResponse.getStatusLine().getStatusCode());
+        assertEquals(want,EntityUtils.toString(shareItResponse.getEntity()));
     }
 
     @Test
@@ -322,8 +325,8 @@ public class RestTestWithMock {
         updateBook.addHeader("content-Type", "application/json");
         HttpResponse shareItResponse = client.execute(updateBook);
 
-
-        System.err.println("Ergebnis: " + EntityUtils.toString(shareItResponse.getEntity()));
+        String want = "{\"result\":\"MSR_BAD_REQUEST\",\"msg\":\"Author and title are empty!\",\"code\":400}";
         assertEquals(MSR_BAD_REQUEST.getCode(), shareItResponse.getStatusLine().getStatusCode());
+        assertEquals(want, EntityUtils.toString(shareItResponse.getEntity()));
     }
 }
