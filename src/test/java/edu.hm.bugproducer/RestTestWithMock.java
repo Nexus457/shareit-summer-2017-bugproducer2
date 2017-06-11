@@ -13,11 +13,15 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -26,7 +30,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
-
 
 public class RestTestWithMock {
 
@@ -51,9 +54,8 @@ public class RestTestWithMock {
     }
 
 
-
     @Test
-    public void firstRNDTest() throws IOException {
+    public void testAddBook() throws IOException {
 
         HttpClient client = HttpClientBuilder.create().build();
 
@@ -66,8 +68,6 @@ public class RestTestWithMock {
         Map<String, Object> headerClaims = new HashMap();
         headerClaims.put("type", Header.JWT_TYPE);
         String compactJws = null;
-
-
 
         try {
             compactJws = Jwts.builder()
@@ -85,8 +85,55 @@ public class RestTestWithMock {
         addBook.addHeader("content-Type", "application/json");
         HttpResponse response = client.execute(addBook);
         assertEquals(200, response.getStatusLine().getStatusCode());
-
-
     }
 
+    @Test
+    public void testGetBooks() throws IOException {
+
+        HttpClient client = HttpClientBuilder.create().build();
+        HttpGet request = new HttpGet(URL_BOOKS);
+        HttpResponse shareItResponse = client.execute(request);
+        System.err.println("Ergebnis: " + EntityUtils.toString(shareItResponse.getEntity()));
+        assertEquals(200, shareItResponse.getStatusLine().getStatusCode());
+    }
+
+    @Test
+    public void testGetBook() throws IOException{
+        HttpClient client = HttpClientBuilder.create().build();
+        HttpGet request = new HttpGet(URL_BOOKS + ISBN);
+        HttpResponse shareItResponse = client.execute(request);
+        System.err.println("Ergebnis: " + EntityUtils.toString(shareItResponse.getEntity()));
+        assertEquals(200, shareItResponse.getStatusLine().getStatusCode());
+    }
+
+    @Test
+    public void testUpdateBook() throws IOException{
+        HttpClient client = HttpClientBuilder.create().build();
+
+        JSONObject book = new JSONObject();
+        book.put("title", TITLE);
+        book.put("author", NAME);
+        book.put("isbn", ISBN);
+
+
+        Map<String, Object> headerClaims = new HashMap();
+        headerClaims.put("type", Header.JWT_TYPE);
+        String compactJws = null;
+
+        try {
+            compactJws = Jwts.builder()
+                    .claim("book", book.toString())
+                    .setHeader(headerClaims)
+                    .signWith(SignatureAlgorithm.HS256, "secret".getBytes("UTF-8"))
+                    .compact();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        HttpPut updateBook = new HttpPut(URL_BOOKS + ISBN);
+        updateBook.setEntity(new StringEntity(compactJws));
+        updateBook.addHeader("content-Type", "application/json");
+        HttpResponse shareItResponse = client.execute(updateBook);
+        System.out.println(shareItResponse.getStatusLine().getStatusCode());
+    }
 }

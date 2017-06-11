@@ -41,6 +41,7 @@ public class ShareitServletContextListenerMock
         protected void configureServlets() {
 
             List<Book> emptyList = new ArrayList<>();
+            emptyList.add(new Book("Hans", "123", "Im Glueck"));
 
             MediaService mediaService = mock(MediaService.class);
             Book book = new Book(NAME, ISBN, TITLE);
