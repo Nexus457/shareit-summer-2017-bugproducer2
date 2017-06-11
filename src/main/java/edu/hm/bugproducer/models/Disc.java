@@ -14,7 +14,7 @@ import java.io.Serializable;
  * @author Patrick Kuntz
  */
 @Entity
-@Table(name = "Disc")
+@Table(name = "TDisc")
 public class Disc extends Medium implements Serializable{
     /** unique number of a disc */
     @Id
