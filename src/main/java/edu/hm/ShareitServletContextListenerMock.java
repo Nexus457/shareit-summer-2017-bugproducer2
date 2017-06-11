@@ -34,6 +34,7 @@ public class ShareitServletContextListenerMock
     private static final String URL = "http://localhost:8082";
     private static final String EAN = "9783815820865";
     private static final String EAN_ALT = "9783827317100";
+    private static final String INVALID_ISBN = "1234";
     private static final String INVALID_EAN = "1234";
     private static final int FSK = 6;
     private static final int FSK_ALT = 18;
@@ -45,12 +46,14 @@ public class ShareitServletContextListenerMock
             List<Book> emptyList = new ArrayList<>();
             Book normalBook = new Book(NAME, ISBN, TITLE);
             Book duplicateBook = new Book(NAME_ALT, ISBN, TITLE);
+            Book invalidIsbnBook = new Book(NAME, INVALID_ISBN, TITLE);
             emptyList.add(normalBook);
 
             MediaService mediaService = mock(MediaService.class);
 
             when(mediaService.addBook(normalBook)).thenReturn(new StatusMgnt(MSR_OK, "ok"));
             when(mediaService.addBook(duplicateBook)).thenReturn(new StatusMgnt(MSR_BAD_REQUEST, "The book is already in the system. No duplicate allowed"));
+            when(mediaService.addBook(invalidIsbnBook)).thenReturn(new StatusMgnt(MSR_BAD_REQUEST, "ISBN was not valid"));
             when(mediaService.getBooks()).thenReturn(emptyList);
             when(mediaService.getBook(ISBN)).thenReturn(new Pair<>(new StatusMgnt(MSR_OK, "ok"), normalBook));
             when(mediaService.getBook("1234")).thenReturn(new Pair<>(new StatusMgnt(MSR_NOT_FOUND, "The book you have searched for is not in the system!"), null));
