@@ -18,6 +18,8 @@
         <property name="transaction.auto_close_session">true</property>
 
         <mapping class="edu.hm.bugproducer.models.Book"/>
+        <mapping class="edu.hm.bugproducer.models.Disc"/>
+        <mapping class="edu.hm.bugproducer.models.Medium"/>
 
     </session-factory>
 

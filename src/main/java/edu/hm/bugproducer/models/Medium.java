@@ -1,13 +1,21 @@
 package edu.hm.bugproducer.models;
+
+import javax.persistence.*;
+import java.io.Serializable;
+
 /**
  * Medium Class.
+ *
  * @author Mark Tripolt
  * @author Johannes Arzt
  * @author Tom Maier
  * @author Patrick Kuntz
  */
-public abstract class Medium {
-    /** name of a medium */
+@MappedSuperclass
+public abstract class Medium implements Serializable {
+    /**
+     * name of a medium
+     */
     private String title;
 
     /**
@@ -19,6 +27,7 @@ public abstract class Medium {
 
     /**
      * Medium Constructor.
+     *
      * @param title name of a medium
      */
     public Medium(String title) {
@@ -28,6 +37,7 @@ public abstract class Medium {
     /**
      * getTitle method.
      * gets the title of a medium
+     *
      * @return title
      */
     public String getTitle() {
@@ -37,6 +47,7 @@ public abstract class Medium {
     /**
      * setTitle method.
      * sets the title of a medium
+     *
      * @param title name of it
      */
     public void setTitle(String title) {

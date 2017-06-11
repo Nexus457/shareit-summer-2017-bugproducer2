@@ -26,6 +26,7 @@ public class HibernateTest {
         session.beginTransaction();
         //Save the Model object
         session.save(book);
+
         //Commit transaction
         session.getTransaction().commit();
 
@@ -38,6 +39,7 @@ public class HibernateTest {
         //Commit transaction
         session2.getTransaction().commit();
 
+        System.err.println("" + book2.toString());
         Assert.assertEquals(book.toString(), book2.toString());
 
         //terminate session factory, otherwise program won't end

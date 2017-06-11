@@ -1,4 +1,11 @@
 package edu.hm.bugproducer.models;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import java.io.Serializable;
+
 /**
  * Disc Class.
  * @author Mark Tripolt
@@ -6,12 +13,17 @@ package edu.hm.bugproducer.models;
  * @author Tom Maier
  * @author Patrick Kuntz
  */
-public class Disc extends Medium{
+@Entity
+@Table(name = "Disc")
+public class Disc extends Medium implements Serializable{
     /** unique number of a disc */
+    @Id
     private String barcode;
     /** name of the director of the disc*/
+    @Column
     private String director;
     /** required age to watch the disc */
+    @Column
     private int fsk;
 
     /**

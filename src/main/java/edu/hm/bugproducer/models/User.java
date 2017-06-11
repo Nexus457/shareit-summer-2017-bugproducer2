@@ -1,4 +1,7 @@
 package edu.hm.bugproducer.models;
+
+import javax.persistence.Entity;
+
 /**
  * User Class.
  * @author Mark Tripolt
