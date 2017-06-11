@@ -47,6 +47,7 @@ public class ShareitServletContextListenerMock
             Book normalBook = new Book(NAME, ISBN, TITLE);
             Book duplicateBook = new Book(NAME_ALT, ISBN, TITLE);
             Book invalidIsbnBook = new Book(NAME, INVALID_ISBN, TITLE);
+            Book noAuthorBook = new Book("", ISBN, TITLE);
             emptyList.add(normalBook);
 
             MediaService mediaService = mock(MediaService.class);
@@ -54,6 +55,7 @@ public class ShareitServletContextListenerMock
             when(mediaService.addBook(normalBook)).thenReturn(new StatusMgnt(MSR_OK, "ok"));
             when(mediaService.addBook(duplicateBook)).thenReturn(new StatusMgnt(MSR_BAD_REQUEST, "The book is already in the system. No duplicate allowed"));
             when(mediaService.addBook(invalidIsbnBook)).thenReturn(new StatusMgnt(MSR_BAD_REQUEST, "ISBN was not valid"));
+            when(mediaService.addBook(noAuthorBook)).thenReturn(new StatusMgnt(MSR_BAD_REQUEST, "Author or title or ISBN was empty"));
             when(mediaService.getBooks()).thenReturn(emptyList);
             when(mediaService.getBook(ISBN)).thenReturn(new Pair<>(new StatusMgnt(MSR_OK, "ok"), normalBook));
             when(mediaService.getBook("1234")).thenReturn(new Pair<>(new StatusMgnt(MSR_NOT_FOUND, "The book you have searched for is not in the system!"), null));
