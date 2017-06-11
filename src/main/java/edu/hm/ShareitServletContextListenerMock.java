@@ -43,13 +43,16 @@ public class ShareitServletContextListenerMock
         protected void configureServlets() {
 
             List<Book> emptyList = new ArrayList<>();
-            emptyList.add(new Book("Hans", "123", "Im Glueck"));
+            Book normalBook = new Book("Hans", "123", "Im Glueck");
+            emptyList.add(normalBook);
 
             MediaService mediaService = mock(MediaService.class);
             Book book = new Book(NAME, ISBN, TITLE);
             when(mediaService.addBook(book)).thenReturn(new StatusMgnt(MSR_OK, "ok"));
             when(mediaService.getBooks()).thenReturn(emptyList);
+            when(mediaService.getBook(ISBN)).thenReturn(new Pair<>(new StatusMgnt(MSR_OK, "ok"), normalBook));
             bind((MediaService.class)).toInstance(mediaService);
+
 
 
             List<Disc> emptyDiscList = new ArrayList<>();
