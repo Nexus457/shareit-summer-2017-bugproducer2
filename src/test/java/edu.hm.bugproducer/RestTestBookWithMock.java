@@ -27,7 +27,7 @@ import static org.junit.Assert.assertEquals;
 
 import static edu.hm.bugproducer.Status.MediaServiceResult.*;
 
-public class RestTestWithMock {
+public class RestTestBookWithMock {
 
     private static final String NAME = "TestName1";
     private static final String NAME_ALT = "TestName2";
