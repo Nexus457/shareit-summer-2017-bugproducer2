@@ -1,9 +1,9 @@
 package edu.hm.bugproducer.restAPI.media;
 
+import edu.hm.bugproducer.Status.MediaServiceResult;
 import edu.hm.bugproducer.Status.StatusMgnt;
 import edu.hm.bugproducer.models.Book;
 import edu.hm.bugproducer.models.Disc;
-import edu.hm.bugproducer.Status.MediaServiceResult;
 import javafx.util.Pair;
 
 import java.util.List;
@@ -35,7 +35,7 @@ public interface MediaService {
      *
      * @return books a list of books
      */
-    List<Book> getBooks();
+    List getBooks();
 
     /**
      * getBook method.

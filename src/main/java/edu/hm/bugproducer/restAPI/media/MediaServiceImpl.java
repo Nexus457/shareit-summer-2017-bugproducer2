@@ -12,7 +12,6 @@ import org.hibernate.Session;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.stream.Collectors;
 
 import static edu.hm.bugproducer.Status.MediaServiceResult.*;
@@ -35,6 +34,7 @@ public class MediaServiceImpl implements MediaService {
      */
     public static List<Disc> discs = new ArrayList<>();
 
+    private Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 
     @Override
     public StatusMgnt addBook(Book book) {
@@ -48,64 +48,27 @@ public class MediaServiceImpl implements MediaService {
             status = new StatusMgnt(MSR_BAD_REQUEST, "ISBN was not valid");
         } else {
 
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            session.beginTransaction();
+            Book bookDB = session.get(Book.class, book.getIsbn());
+            session.getTransaction().commit();
 
-            Session sessionCheck = startDBSession();
-
-            org.hibernate.query.Query query = sessionCheck.createQuery("from TBook");
-            List list = query.list();
-
-
-            Book bookDB = sessionCheck.get(Book.class, book.getIsbn());
-            sessionCheck.getTransaction().commit();
             if (bookDB == null) {
                 System.err.println("check");
-            }
-
-            if (books.isEmpty()) {
-
-                Session session = startDBSession();
-                session.save(book);
-                session.getTransaction().commit();
+                Session session2 = HibernateUtil.getSessionFactory().getCurrentSession();
+                session2.beginTransaction();
+                session2.save(book);
+                session2.getTransaction().commit();
 
                 status = new StatusMgnt(MSR_OK, "ok");
-                books.add(book);
+
             } else {
-
-
-                boolean duplicate = false;
-
-                ListIterator<Book> lir = books.listIterator();
-
-                while (lir.hasNext() && !duplicate) {
-                    if (lir.next().getIsbn().equals(book.getIsbn())) {
-                        duplicate = true;
-                        status = new StatusMgnt(MSR_BAD_REQUEST, "The book is already in the system. No duplicate allowed");
-                    } else {
-                        status = new StatusMgnt(MSR_OK, "ok");
-                    }
-                }
-
-                if (!duplicate) {
-
-                    Session session = startDBSession();
-                    session.save(book);
-                    session.getTransaction().commit();
-
-                    books.add(book);
-                }
+                status = new StatusMgnt(MSR_BAD_REQUEST, "The book is already in the system. No duplicate allowed");
             }
+
         }
 
         return status;
-    }
-
-    private Session startDBSession() {
-        //Get Session
-        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-        //start transaction
-        session.beginTransaction();
-
-        return session;
     }
 
 
@@ -120,37 +83,22 @@ public class MediaServiceImpl implements MediaService {
         } else if (!EAN13CheckDigit.EAN13_CHECK_DIGIT.isValid(disc.getBarcode())) {
             status = new StatusMgnt(MSR_BAD_REQUEST, "Barcode was not valid");
         } else {
-            if (discs.isEmpty()) {
-                Session session = startDBSession();
-                session.save(disc);
-                session.getTransaction().commit();
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            session.beginTransaction();
+            Disc discDB = session.get(Disc.class, disc.getBarcode());
+            session.getTransaction().commit();
+
+            if (discDB == null) {
+                Session session2 = HibernateUtil.getSessionFactory().getCurrentSession();
+                session2.beginTransaction();
+                session2.save(disc);
+                session2.getTransaction().commit();
 
                 status = new StatusMgnt(MSR_OK, "ok");
-                discs.add(disc);
+
             } else {
-
-                boolean duplicate = false;
-
-                ListIterator<Disc> lir = discs.listIterator();
-
-                while (lir.hasNext() && !duplicate) {
-                    if (lir.next().getBarcode().equals(disc.getBarcode())) {
-                        duplicate = true;
-                        status = new StatusMgnt(MSR_BAD_REQUEST, "The disc is already in the system. No duplicate allowed");
-                    } else {
-                        status = new StatusMgnt(MSR_OK, "ok");
-                    }
-                }
-
-                if (!duplicate) {
-                    Session session = startDBSession();
-                    session.save(disc);
-                    session.getTransaction().commit();
-
-                    discs.add(disc);
-                }
+                status = new StatusMgnt(MSR_BAD_REQUEST, "The disc is already in the system. No duplicate allowed");
             }
-
         }
         return status;
     }
@@ -158,7 +106,11 @@ public class MediaServiceImpl implements MediaService {
 
     @Override
     public List<Book> getBooks() {
-        return books;
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        session.beginTransaction();
+        List<Book> resultBooks = session.createCriteria(Book.class).list();
+
+        return resultBooks;
     }
 
 
@@ -189,7 +141,12 @@ public class MediaServiceImpl implements MediaService {
 
     @Override
     public List<Disc> getDiscs() {
-        return discs;
+
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        session.beginTransaction();
+        List<Disc> resultDiscs = session.createCriteria(Disc.class).list();
+
+        return resultDiscs;
     }
 
 
@@ -263,6 +220,10 @@ public class MediaServiceImpl implements MediaService {
 
     @Override
     public MediaServiceResult deleteAll() {
+
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+
+
         books.clear();
         discs.clear();
         return MSR_OK;

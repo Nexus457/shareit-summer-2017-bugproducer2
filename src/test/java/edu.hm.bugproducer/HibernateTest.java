@@ -21,7 +21,7 @@ public class HibernateTest {
         Book book = new Book(NAME, ISBN, TITLE);
 
         //Get Session
-        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        Session session = HibernateUtil.getSessionFactory().openSession();
         //start transaction
         session.beginTransaction();
         //Save the Model object
@@ -29,6 +29,7 @@ public class HibernateTest {
 
         //Commit transaction
         session.getTransaction().commit();
+        session.close();
 
         //Get Session
         Session session2 = HibernateUtil.getSessionFactory().getCurrentSession();
