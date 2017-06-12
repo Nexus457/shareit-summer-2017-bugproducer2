@@ -24,7 +24,7 @@ public class Disc extends Medium implements Serializable{
     private String director;
     /** required age to watch the disc */
     @Column
-    private int fsk;
+    private Integer fsk;
 
     /**
      * Disc Constructor with parameters.
@@ -57,30 +57,22 @@ public class Disc extends Medium implements Serializable{
     }
 
     /**
-     * getDirector method.
-     * gets the director of a disc
-     * @return director
-     */
-    public String getDirector() {
-        return director;
-    }
-
-    /**
-     * getFsk method.
-     * gets the fsk of a disc
-     * @return fsk
-     */
-    public int getFsk() {
-        return fsk;
-    }
-
-    /**
      * setBarcode method.
      * sets the barcode for a disc
      * @param barcode unique number
      */
     public void setBarcode(String barcode) {
         this.barcode = barcode;
+    }
+
+    /**
+     * getDirector method.
+     * gets the director of a disc
+     *
+     * @return director
+     */
+    public String getDirector() {
+        return director;
     }
 
     /**
@@ -93,6 +85,16 @@ public class Disc extends Medium implements Serializable{
     }
 
     /**
+     * getFsk method.
+     * gets the fsk of a disc
+     *
+     * @return fsk
+     */
+    public int getFsk() {
+        return fsk;
+    }
+
+    /**
      * setFsk method.
      * sets the required age for a disc
      * @param fsk required age
@@ -101,12 +103,12 @@ public class Disc extends Medium implements Serializable{
         this.fsk = fsk;
     }
 
-    public void setTitle(String title){
-        super.setTitle(title);
-    }
-
     public String getTitle(){
         return super.getTitle();
+    }
+
+    public void setTitle(String title) {
+        super.setTitle(title);
     }
 
     @Override

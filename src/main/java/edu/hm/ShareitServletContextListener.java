@@ -6,6 +6,8 @@ import com.google.inject.servlet.GuiceServletContextListener;
 import com.google.inject.servlet.ServletModule;
 import edu.hm.bugproducer.restAPI.media.MediaService;
 import edu.hm.bugproducer.restAPI.media.MediaServiceImpl;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
 
 
 /**
@@ -18,13 +20,9 @@ public class ShareitServletContextListener
         @Override
         protected void configureServlets() {
             bind(MediaService.class).to(MediaServiceImpl.class);
+            bind(SessionFactory.class).toInstance(new Configuration().configure().buildSessionFactory());
         }
     });
-
-    @Override
-    protected Injector getInjector() {
-        return INJECTOR;
-    }
 
     /**
      * This method is only required for the HK2-Guice-Bridge in the
@@ -33,6 +31,11 @@ public class ShareitServletContextListener
      * @return Injector instance.
      */
     static Injector getInjectorInstance() {
+        return INJECTOR;
+    }
+
+    @Override
+    public Injector getInjector() {
         return INJECTOR;
     }
 

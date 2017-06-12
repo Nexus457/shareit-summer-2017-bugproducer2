@@ -1,5 +1,8 @@
 package edu.hm.bugproducer.restAPI.media;
 
+import com.google.inject.Inject;
+import com.google.inject.Injector;
+import edu.hm.ShareitServletContextListener;
 import edu.hm.bugproducer.Status.MediaServiceResult;
 import edu.hm.bugproducer.Status.StatusMgnt;
 import edu.hm.bugproducer.Utils.Isbn;
@@ -9,6 +12,8 @@ import edu.hm.bugproducer.persistenceLayer.HibernateUtil;
 import javafx.util.Pair;
 import org.apache.commons.validator.routines.checkdigit.EAN13CheckDigit;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,11 +39,24 @@ public class MediaServiceImpl implements MediaService {
      */
     public static List<Disc> discs = new ArrayList<>();
 
-    private Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+
+    private static Injector injector = new ShareitServletContextListener().getInjector();
+    @Inject
+    private SessionFactory sessionFactory;
+    private Session entityManager;
+    private Transaction tx;
+
+    public MediaServiceImpl() {
+        injector.injectMembers(this);
+        entityManager = injector.getInstance(SessionFactory.class).getCurrentSession();
+    }
 
     @Override
     public StatusMgnt addBook(Book book) {
-        StatusMgnt status = new StatusMgnt(MSR_INTERNAL_SERVER_ERROR, "An internal error has occurred");
+
+        tx = entityManager.beginTransaction();
+
+        StatusMgnt status;
 
         if (book == null) {
             status = new StatusMgnt(MSR_NO_CONTENT, "The book was empty");
@@ -48,18 +66,9 @@ public class MediaServiceImpl implements MediaService {
             status = new StatusMgnt(MSR_BAD_REQUEST, "ISBN was not valid");
         } else {
 
-            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-            session.beginTransaction();
-            Book bookDB = session.get(Book.class, book.getIsbn());
-            session.getTransaction().commit();
-
+            Book bookDB = entityManager.get(Book.class, book.getIsbn());
             if (bookDB == null) {
-                System.err.println("check");
-                Session session2 = HibernateUtil.getSessionFactory().getCurrentSession();
-                session2.beginTransaction();
-                session2.save(book);
-                session2.getTransaction().commit();
-
+                entityManager.persist(book);
                 status = new StatusMgnt(MSR_OK, "ok");
 
             } else {
@@ -68,13 +77,18 @@ public class MediaServiceImpl implements MediaService {
 
         }
 
+        entityManager.close();
         return status;
     }
 
 
     @Override
     public StatusMgnt addDisc(Disc disc) {
-        StatusMgnt status = new StatusMgnt(MSR_INTERNAL_SERVER_ERROR, "An internal error has occurred");
+
+        Session entityManager = injector.getInstance(SessionFactory.class).getCurrentSession();
+        Transaction tx = entityManager.beginTransaction();
+
+        StatusMgnt status;
 
         if (disc == null) {
             status = new StatusMgnt(MSR_NO_CONTENT, "The disc was empty");
@@ -83,16 +97,11 @@ public class MediaServiceImpl implements MediaService {
         } else if (!EAN13CheckDigit.EAN13_CHECK_DIGIT.isValid(disc.getBarcode())) {
             status = new StatusMgnt(MSR_BAD_REQUEST, "Barcode was not valid");
         } else {
-            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-            session.beginTransaction();
-            Disc discDB = session.get(Disc.class, disc.getBarcode());
-            session.getTransaction().commit();
+            Disc discDB = entityManager.get(Disc.class, disc.getBarcode());
 
             if (discDB == null) {
-                Session session2 = HibernateUtil.getSessionFactory().getCurrentSession();
-                session2.beginTransaction();
-                session2.save(disc);
-                session2.getTransaction().commit();
+
+                entityManager.persist(disc);
 
                 status = new StatusMgnt(MSR_OK, "ok");
 
@@ -100,6 +109,8 @@ public class MediaServiceImpl implements MediaService {
                 status = new StatusMgnt(MSR_BAD_REQUEST, "The disc is already in the system. No duplicate allowed");
             }
         }
+
+        tx.commit();
         return status;
     }
 
