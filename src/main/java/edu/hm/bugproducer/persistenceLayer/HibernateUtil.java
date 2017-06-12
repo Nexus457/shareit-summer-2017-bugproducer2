@@ -1,6 +1,8 @@
 package edu.hm.bugproducer.persistenceLayer;
 
 import edu.hm.bugproducer.models.Book;
+import edu.hm.bugproducer.models.Disc;
+import edu.hm.bugproducer.models.Medium;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
@@ -23,6 +25,8 @@ public class HibernateUtil {
             Configuration configuration = new Configuration();
             configuration.configure("hibernate.cfg.xml");
             configuration.addAnnotatedClass(Book.class);
+            configuration.addAnnotatedClass(Disc.class);
+            configuration.addAnnotatedClass(Medium.class);  //hier lag der Fehler!
             System.out.println("Hibernate Configuration loaded");
 
             ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
