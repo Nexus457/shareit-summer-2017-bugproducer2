@@ -1,12 +1,14 @@
 package edu.hm.bugproducer.restAPI.media;
 
+import edu.hm.bugproducer.Status.MediaServiceResult;
 import edu.hm.bugproducer.Status.StatusMgnt;
 import edu.hm.bugproducer.Utils.Isbn;
 import edu.hm.bugproducer.models.Book;
 import edu.hm.bugproducer.models.Disc;
-import edu.hm.bugproducer.Status.MediaServiceResult;
+import edu.hm.bugproducer.persistenceLayer.HibernateUtil;
 import javafx.util.Pair;
 import org.apache.commons.validator.routines.checkdigit.EAN13CheckDigit;
+import org.hibernate.Session;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +40,6 @@ public class MediaServiceImpl implements MediaService {
     public StatusMgnt addBook(Book book) {
         StatusMgnt status = new StatusMgnt(MSR_INTERNAL_SERVER_ERROR, "An internal error has occurred");
 
-
         if (book == null) {
             status = new StatusMgnt(MSR_NO_CONTENT, "The book was empty");
         } else if (book.getAuthor().isEmpty() || book.getTitle().isEmpty() || book.getIsbn().isEmpty()) {
@@ -46,10 +47,30 @@ public class MediaServiceImpl implements MediaService {
         } else if (!Isbn.isValid(book.getIsbn())) {
             status = new StatusMgnt(MSR_BAD_REQUEST, "ISBN was not valid");
         } else {
+
+
+            Session sessionCheck = startDBSession();
+
+            org.hibernate.query.Query query = sessionCheck.createQuery("from TBook");
+            List list = query.list();
+
+
+            Book bookDB = sessionCheck.get(Book.class, book.getIsbn());
+            sessionCheck.getTransaction().commit();
+            if (bookDB == null) {
+                System.err.println("check");
+            }
+
             if (books.isEmpty()) {
+
+                Session session = startDBSession();
+                session.save(book);
+                session.getTransaction().commit();
+
                 status = new StatusMgnt(MSR_OK, "ok");
                 books.add(book);
             } else {
+
 
                 boolean duplicate = false;
 
@@ -65,12 +86,26 @@ public class MediaServiceImpl implements MediaService {
                 }
 
                 if (!duplicate) {
+
+                    Session session = startDBSession();
+                    session.save(book);
+                    session.getTransaction().commit();
+
                     books.add(book);
                 }
             }
         }
 
         return status;
+    }
+
+    private Session startDBSession() {
+        //Get Session
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        //start transaction
+        session.beginTransaction();
+
+        return session;
     }
 
 
@@ -86,6 +121,10 @@ public class MediaServiceImpl implements MediaService {
             status = new StatusMgnt(MSR_BAD_REQUEST, "Barcode was not valid");
         } else {
             if (discs.isEmpty()) {
+                Session session = startDBSession();
+                session.save(disc);
+                session.getTransaction().commit();
+
                 status = new StatusMgnt(MSR_OK, "ok");
                 discs.add(disc);
             } else {
@@ -104,6 +143,10 @@ public class MediaServiceImpl implements MediaService {
                 }
 
                 if (!duplicate) {
+                    Session session = startDBSession();
+                    session.save(disc);
+                    session.getTransaction().commit();
+
                     discs.add(disc);
                 }
             }
@@ -209,7 +252,7 @@ public class MediaServiceImpl implements MediaService {
                 }
                 status = new StatusMgnt(MSR_OK, "ok");
             }
-            if (newDisc.getDirector().isEmpty() && newDisc.getTitle().isEmpty() && newDisc.getFsk()==-1)
+            if (newDisc.getDirector().isEmpty() && newDisc.getTitle().isEmpty() && newDisc.getFsk() == -1)
                 status = new StatusMgnt(MSR_BAD_REQUEST, "Director, Title and FSK are empty!");
         } else {
             status = new StatusMgnt(MSR_BAD_REQUEST, "The disc you want to update is not in the system!");
