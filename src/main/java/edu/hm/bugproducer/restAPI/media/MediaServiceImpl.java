@@ -169,17 +169,21 @@ public class MediaServiceImpl implements MediaService {
 
 
         if (oneBook != null) {
-            if (newBook.getTitle().isEmpty() || newBook.getAuthor().isEmpty()) {
-                //TOdo change this! There are more details
+            if (newBook.getTitle().isEmpty() && newBook.getAuthor().isEmpty()) {
                 status = new StatusMgnt(MSR_BAD_REQUEST, "Author and title are empty!");
-            } else {
-
-                Session session2 = HibernateUtil.getSessionFactory().getCurrentSession();
-                session2.beginTransaction();
-                session2.update(newBook);
-                session2.getTransaction().commit();
-                status = new StatusMgnt(MSR_OK, "ok");
-
+            }
+            else{
+            if(!newBook.getTitle().isEmpty()){
+                oneBook.setTitle(newBook.getTitle());
+            }
+            if(!newBook.getAuthor().isEmpty()){
+                oneBook.setAuthor(newBook.getAuthor());
+            }
+                    Session session2 = HibernateUtil.getSessionFactory().getCurrentSession();
+                    session2.beginTransaction();
+                    session2.update(oneBook);
+                    session2.getTransaction().commit();
+                    status = new StatusMgnt(MSR_OK, "ok");
             }
         } else {
             status = new StatusMgnt(MSR_BAD_REQUEST, "The book you want to update is not in the system!");
@@ -202,9 +206,19 @@ public class MediaServiceImpl implements MediaService {
             if (newDisc.getDirector().isEmpty() && newDisc.getTitle().isEmpty() && newDisc.getFsk() == -1) {
                 status = new StatusMgnt(MSR_BAD_REQUEST, "Director, Title and FSK are empty!");
             } else {
+                if(newDisc.getFsk()>-1){
+                    oneDisc.setFsk(newDisc.getFsk());
+                }
+                if(!newDisc.getTitle().isEmpty()){
+                    oneDisc.setTitle(newDisc.getTitle());
+                }
+                if(!newDisc.getDirector().isEmpty()){
+                    oneDisc.setDirector(newDisc.getDirector());
+                }
+
                 Session session2 = HibernateUtil.getSessionFactory().getCurrentSession();
                 session2.beginTransaction();
-                session2.update(newDisc);
+                session2.update(oneDisc);
                 session2.getTransaction().commit();
                 status = new StatusMgnt(MSR_OK, "ok");
             }
