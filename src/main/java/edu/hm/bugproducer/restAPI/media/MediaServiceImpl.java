@@ -16,6 +16,7 @@ import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.query.Query;
 
 import static edu.hm.bugproducer.Status.MediaServiceResult.*;
 
@@ -231,8 +232,27 @@ public class MediaServiceImpl implements MediaService {
 
     @Override
     public MediaServiceResult deleteAll() {
-        books.clear();
-        discs.clear();
+
+
+        String deleteDisc = "DELETE FROM Disc";
+        String deleteBook = "DELETE FROM Book";
+
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        session.beginTransaction();
+        Query query = session.createQuery(deleteDisc);
+        query.executeUpdate();
+        session.getTransaction().commit();
+
+
+        session = HibernateUtil.getSessionFactory().getCurrentSession();
+        session.beginTransaction();
+        Query query1 = session.createQuery(deleteBook);
+        query1.executeUpdate();
+        session.getTransaction().commit();
+
+
+
+
         return MSR_OK;
     }
 

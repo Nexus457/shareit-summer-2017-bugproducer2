@@ -10,6 +10,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
+import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
@@ -20,6 +21,8 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -51,6 +54,7 @@ public class RestTestBook {
     public void openConnection() throws Exception {
         jettyStarter = new JettyStarter();
         jettyStarter.startJetty();
+        deleteAllLists();
     }
 
     @After
@@ -441,5 +445,21 @@ public class RestTestBook {
         String want = "{\"result\":\"MSR_BAD_REQUEST\",\"msg\":\"Author and title are empty!\",\"code\":400}";
         assertEquals(MSR_BAD_REQUEST.getCode(), shareItResponse.getStatusLine().getStatusCode());
         assertEquals(want, EntityUtils.toString(shareItResponse.getEntity()));
+    }
+
+    public static void deleteAllLists() throws IOException {
+        HttpClient client = HttpClientBuilder.create().build();
+        URIBuilder builder = new URIBuilder();
+        builder.setScheme("http").setHost("localhost")
+                .setPort(8080)
+                .setPath("/shareit/media/reset");
+
+        URI uri = null;
+        try {
+            uri = builder.build();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+        client.execute(new HttpGet(uri));
     }
 }
