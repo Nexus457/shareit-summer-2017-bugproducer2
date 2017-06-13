@@ -383,11 +383,39 @@ public class RestTestBook {
     }
 
     @Test
-    public void testUpdateBookWrongAuthor() throws IOException {
+    public void testUpdateBookWrongAuthorAndTitle() throws IOException {
         HttpClient client = HttpClientBuilder.create().build();
 
+        JSONObject book1 = new JSONObject();
+        book1.put("title", TITLE);
+        book1.put("author", NAME);
+        book1.put("isbn", ISBN);
+
+        Map<String, Object> headerClaims1 = new HashMap();
+        headerClaims1.put("type", Header.JWT_TYPE);
+        String compactJws1 = null;
+
+        try {
+            compactJws1 = Jwts.builder()
+                    .claim("book", book1.toString())
+                    .setHeader(headerClaims1)
+                    .signWith(SignatureAlgorithm.HS256, "secret".getBytes("UTF-8"))
+                    .compact();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        HttpPost addBook = new HttpPost(URL_BOOKS);
+
+        addBook.setEntity(new StringEntity(compactJws1));
+        addBook.addHeader("content-Type", "application/json");
+        client.execute(addBook);
+
+        // ----------------------------------------------
+
+
         JSONObject book = new JSONObject();
-        book.put("title", TITLE);
+        book.put("title", "");
         book.put("author", "");
         book.put("isbn", ISBN);
 
