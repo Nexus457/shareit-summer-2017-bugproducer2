@@ -8,11 +8,14 @@ import edu.hm.bugproducer.models.Disc;
 import edu.hm.bugproducer.persistenceLayer.HibernateUtil;
 import javafx.util.Pair;
 import org.apache.commons.validator.routines.checkdigit.EAN13CheckDigit;
+import org.apache.logging.log4j.LogManager;
 import org.hibernate.Session;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import static edu.hm.bugproducer.Status.MediaServiceResult.*;
 
@@ -34,11 +37,14 @@ public class MediaServiceImpl implements MediaService {
      */
     public static List<Disc> discs = new ArrayList<>();
 
-    private Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+    /**
+     * Object variable for the Logger
+     */
+    private static final Logger logger = LogManager.getLogger();
 
     @Override
     public StatusMgnt addBook(Book book) {
-        StatusMgnt status = new StatusMgnt(MSR_INTERNAL_SERVER_ERROR, "An internal error has occurred");
+        StatusMgnt status;
 
         if (book == null) {
             status = new StatusMgnt(MSR_NO_CONTENT, "The book was empty");
@@ -74,7 +80,7 @@ public class MediaServiceImpl implements MediaService {
 
     @Override
     public StatusMgnt addDisc(Disc disc) {
-        StatusMgnt status = new StatusMgnt(MSR_INTERNAL_SERVER_ERROR, "An internal error has occurred");
+        StatusMgnt status;
 
         if (disc == null) {
             status = new StatusMgnt(MSR_NO_CONTENT, "The disc was empty");
@@ -154,7 +160,7 @@ public class MediaServiceImpl implements MediaService {
 
     @Override
     public StatusMgnt updateBook(String isbn, Book newBook) {
-        StatusMgnt status = new StatusMgnt(MSR_INTERNAL_SERVER_ERROR, "An internal error has occurred");
+        StatusMgnt status;
 
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         session.beginTransaction();
@@ -184,7 +190,7 @@ public class MediaServiceImpl implements MediaService {
 
     @Override
     public StatusMgnt updateDisc(String barcode, Disc newDisc) {
-        StatusMgnt status = new StatusMgnt(MSR_INTERNAL_SERVER_ERROR, "An internal error has occurred");
+        StatusMgnt status;
 
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         session.beginTransaction();
