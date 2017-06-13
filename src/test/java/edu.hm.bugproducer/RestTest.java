@@ -27,7 +27,7 @@ import static org.apache.http.HttpHeaders.USER_AGENT;
 import static org.junit.Assert.assertEquals;
 
 @SuppressWarnings("Duplicates")
-public class RestTest {
+public class  RestTest {
 
     private static final String USER_NAME = "Joh";
     private static final String NAME = "TestName1";
