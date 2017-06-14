@@ -5,7 +5,6 @@ import edu.hm.bugproducer.Status.StatusMgnt;
 import edu.hm.bugproducer.Utils.Isbn;
 import edu.hm.bugproducer.models.Book;
 import edu.hm.bugproducer.models.Disc;
-import edu.hm.bugproducer.persistenceLayer.HibernateUtil;
 import javafx.util.Pair;
 import org.apache.commons.validator.routines.checkdigit.EAN13CheckDigit;
 import org.apache.logging.log4j.LogManager;
@@ -15,7 +14,6 @@ import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
 import java.util.List;
 
 import static edu.hm.bugproducer.Status.MediaServiceResult.*;
@@ -34,17 +32,14 @@ public class MediaServiceImpl implements MediaService {
      * Object variable for the Logger
      */
     private static final Logger LOGGER = LogManager.getLogger(MediaServiceImpl.class.getName());
-    /**
-     * ArrayList that contains the books.
-     */
-    public static List<Book> books = new ArrayList<>();
-    /**
-     * ArrayList that contains the discs.
-     */
-    public static List<Disc> discs = new ArrayList<>();
 
     private SessionFactory sessionFactory;
 
+    /**
+     * Custom constructor to inject the SessionFactory.
+     *
+     * @param sessionFactory session factory
+     */
     @Inject
     public MediaServiceImpl(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
@@ -101,13 +96,13 @@ public class MediaServiceImpl implements MediaService {
             status = new StatusMgnt(MSR_BAD_REQUEST, "Barcode was not valid");
             LOGGER.warn("Barcode was not valid");
         } else {
-            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            Session session = sessionFactory.getCurrentSession();
             session.beginTransaction();
             Disc discDB = session.get(Disc.class, disc.getBarcode());
             session.getTransaction().commit();
 
             if (discDB == null) {
-                Session session2 = HibernateUtil.getSessionFactory().getCurrentSession();
+                Session session2 = sessionFactory.getCurrentSession();
                 session2.beginTransaction();
                 session2.save(disc);
                 session2.getTransaction().commit();
@@ -126,7 +121,7 @@ public class MediaServiceImpl implements MediaService {
 
     @Override
     public List<Book> getBooks() {
-        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        Session session = sessionFactory.getCurrentSession();
         session.beginTransaction();
         List<Book> resultBooks = session.createCriteria(Book.class).list();
 
@@ -139,36 +134,38 @@ public class MediaServiceImpl implements MediaService {
     public Pair<StatusMgnt, Book> getBook(String isbn) {
         Pair<StatusMgnt, Book> myResult = new Pair<>(new StatusMgnt(MSR_NOT_FOUND, "The book you have searched for is not in the system!"), null);
 
-        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        Session session = sessionFactory.getCurrentSession();
         session.beginTransaction();
         Book bookDB = session.get(Book.class, isbn);
         session.getTransaction().commit();
         if (bookDB != null) {
             LOGGER.info("Get book " + isbn);
             return new Pair<>(new StatusMgnt(MSR_OK, "ok"), bookDB);
-        } else
+        } else {
             LOGGER.warn("The book you have searched for is not in the system");
+        }
         return myResult;
     }
 
     @Override
     public Pair<StatusMgnt, Disc> getDisc(String barcode) {
         Pair<StatusMgnt, Disc> myResult = new Pair<>(new StatusMgnt(MSR_NOT_FOUND, "The disc you have searched for is not in the system!"), null);
-        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        Session session = sessionFactory.getCurrentSession();
         session.beginTransaction();
         Disc discDB = session.get(Disc.class, barcode);
         session.getTransaction().commit();
         if (discDB != null) {
             LOGGER.info("Get book " + barcode);
             return new Pair<>(new StatusMgnt(MSR_OK, "ok"), discDB);
-        } else
+        } else {
             LOGGER.warn("The disc you have searched for is not in the system!");
+        }
         return myResult;
     }
 
     @Override
     public List<Disc> getDiscs() {
-        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        Session session = sessionFactory.getCurrentSession();
         session.beginTransaction();
         List<Disc> resultDiscs = session.createCriteria(Disc.class).list();
 
@@ -181,7 +178,7 @@ public class MediaServiceImpl implements MediaService {
     public StatusMgnt updateBook(String isbn, Book newBook) {
         StatusMgnt status;
 
-        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        Session session = sessionFactory.getCurrentSession();
         session.beginTransaction();
         Book oneBook = session.get(Book.class, isbn);
         session.getTransaction().commit();
@@ -198,7 +195,7 @@ public class MediaServiceImpl implements MediaService {
                 if (!newBook.getAuthor().isEmpty()) {
                     oneBook.setAuthor(newBook.getAuthor());
                 }
-                Session session2 = HibernateUtil.getSessionFactory().getCurrentSession();
+                Session session2 = sessionFactory.getCurrentSession();
                 session2.beginTransaction();
                 session2.update(oneBook);
                 session2.getTransaction().commit();
@@ -216,7 +213,7 @@ public class MediaServiceImpl implements MediaService {
     public StatusMgnt updateDisc(String barcode, Disc newDisc) {
         StatusMgnt status;
 
-        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        Session session = sessionFactory.getCurrentSession();
         session.beginTransaction();
         Disc oneDisc = session.get(Disc.class, barcode);
         session.getTransaction().commit();
@@ -237,7 +234,7 @@ public class MediaServiceImpl implements MediaService {
                     oneDisc.setDirector(newDisc.getDirector());
                 }
 
-                Session session2 = HibernateUtil.getSessionFactory().getCurrentSession();
+                Session session2 = sessionFactory.getCurrentSession();
                 session2.beginTransaction();
                 session2.update(oneDisc);
                 session2.getTransaction().commit();
@@ -260,14 +257,14 @@ public class MediaServiceImpl implements MediaService {
         String deleteDisc = "DELETE FROM Disc";
         String deleteBook = "DELETE FROM Book";
 
-        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        Session session = sessionFactory.getCurrentSession();
         session.beginTransaction();
         Query query = session.createQuery(deleteDisc);
         query.executeUpdate();
         session.getTransaction().commit();
 
 
-        session = HibernateUtil.getSessionFactory().getCurrentSession();
+        session = sessionFactory.getCurrentSession();
         session.beginTransaction();
         Query query1 = session.createQuery(deleteBook);
         query1.executeUpdate();
