@@ -64,12 +64,14 @@ public class MediaServiceImpl implements MediaService {
             session.beginTransaction();
             Book bookDB = session.get(Book.class, book.getIsbn());
             session.getTransaction().commit();
+            session.close();
 
             if (bookDB == null) {
                 Session session2 = sessionFactory.getCurrentSession();
                 session2.beginTransaction();
                 session2.save(book);
                 session2.getTransaction().commit();
+                session2.close();
 
                 status = new StatusMgnt(MSR_OK, "ok");
                 LOGGER.info("Book created");
@@ -100,12 +102,14 @@ public class MediaServiceImpl implements MediaService {
             session.beginTransaction();
             Disc discDB = session.get(Disc.class, disc.getBarcode());
             session.getTransaction().commit();
+            session.close();
 
             if (discDB == null) {
                 Session session2 = sessionFactory.getCurrentSession();
                 session2.beginTransaction();
                 session2.save(disc);
                 session2.getTransaction().commit();
+                session2.close();
 
                 status = new StatusMgnt(MSR_OK, "ok");
 
@@ -124,6 +128,7 @@ public class MediaServiceImpl implements MediaService {
         Session session = sessionFactory.getCurrentSession();
         session.beginTransaction();
         List<Book> resultBooks = session.createCriteria(Book.class).list();
+        session.close();
 
         LOGGER.info("Get all books");
 
@@ -138,6 +143,7 @@ public class MediaServiceImpl implements MediaService {
         session.beginTransaction();
         Book bookDB = session.get(Book.class, isbn);
         session.getTransaction().commit();
+        session.close();
         if (bookDB != null) {
             LOGGER.info("Get book " + isbn);
             return new Pair<>(new StatusMgnt(MSR_OK, "ok"), bookDB);
@@ -154,6 +160,7 @@ public class MediaServiceImpl implements MediaService {
         session.beginTransaction();
         Disc discDB = session.get(Disc.class, barcode);
         session.getTransaction().commit();
+        session.close();
         if (discDB != null) {
             LOGGER.info("Get book " + barcode);
             return new Pair<>(new StatusMgnt(MSR_OK, "ok"), discDB);
@@ -168,6 +175,7 @@ public class MediaServiceImpl implements MediaService {
         Session session = sessionFactory.getCurrentSession();
         session.beginTransaction();
         List<Disc> resultDiscs = session.createCriteria(Disc.class).list();
+        session.close();
 
         LOGGER.info("Get all discs");
 
@@ -182,7 +190,7 @@ public class MediaServiceImpl implements MediaService {
         session.beginTransaction();
         Book oneBook = session.get(Book.class, isbn);
         session.getTransaction().commit();
-
+        session.close();
 
         if (oneBook != null) {
             if (newBook.getTitle().isEmpty() && newBook.getAuthor().isEmpty()) {
@@ -199,6 +207,7 @@ public class MediaServiceImpl implements MediaService {
                 session2.beginTransaction();
                 session2.update(oneBook);
                 session2.getTransaction().commit();
+                session2.close();
                 status = new StatusMgnt(MSR_OK, "ok");
                 LOGGER.info("Book " + isbn + " updated");
             }
@@ -217,7 +226,7 @@ public class MediaServiceImpl implements MediaService {
         session.beginTransaction();
         Disc oneDisc = session.get(Disc.class, barcode);
         session.getTransaction().commit();
-
+        session.close();
 
         if (oneDisc != null) {
             if (newDisc.getDirector().isEmpty() && newDisc.getTitle().isEmpty() && newDisc.getFsk() == -1) {
@@ -238,6 +247,7 @@ public class MediaServiceImpl implements MediaService {
                 session2.beginTransaction();
                 session2.update(oneDisc);
                 session2.getTransaction().commit();
+                session2.close();
                 status = new StatusMgnt(MSR_OK, "ok");
 
                 LOGGER.info("Disc " + barcode + " updated");
@@ -269,7 +279,7 @@ public class MediaServiceImpl implements MediaService {
         Query query1 = session.createQuery(deleteBook);
         query1.executeUpdate();
         session.getTransaction().commit();
-
+        session.close();
         LOGGER.info("Delete tables");
 
         return MSR_OK;
