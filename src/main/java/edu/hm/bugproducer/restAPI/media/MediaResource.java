@@ -1,12 +1,14 @@
 
 package edu.hm.bugproducer.restAPI.media;
 
+import edu.hm.bugproducer.Status.MediaServiceResult;
 import edu.hm.bugproducer.Status.StatusMgnt;
 import edu.hm.bugproducer.models.Book;
 import edu.hm.bugproducer.models.Disc;
-import edu.hm.bugproducer.Status.MediaServiceResult;
 import io.jsonwebtoken.Jwts;
 import javafx.util.Pair;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
 
 import javax.inject.Inject;
@@ -14,7 +16,6 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.List;
 
 import static edu.hm.bugproducer.Status.MediaServiceResult.MSR_INTERNAL_SERVER_ERROR;
@@ -30,15 +31,17 @@ import static edu.hm.bugproducer.Status.MediaServiceResult.MSR_OK;
  */
 @Path("/media")
 public class MediaResource {
+
+    /**
+     * Object variable for the Logger
+     */
+    private static final Logger LOGGER = LogManager.getLogger(MediaResource.class.getName());
+
     /**
      * response code for OK
      */
     private static final int RESPONSECODE = 200;
-    // static, weil bei jedem Methodenaufruf ein neues Objekt erstellt wird.
-    /**
-     * ArrayList which contains books
-     */
-    private static List<Book> books = new ArrayList<>();
+
     /**
      * mediaService variable for the media service implementation
      */
@@ -46,6 +49,7 @@ public class MediaResource {
 
     /**
      * MediaResource Constructor.
+     *
      * @param mediaService aktueller service
      */
     @Inject
@@ -61,7 +65,7 @@ public class MediaResource {
     @GET
     @Path("/reset")
     public Response deleteAll() {
-        System.out.println("deleteAll");
+        LOGGER.info("Delete all tables");
         MediaServiceResult result = mediaService.deleteAll();
         return Response
                 .status(result.getCode())
@@ -84,24 +88,21 @@ public class MediaResource {
         try {
             Disc disc = createDiscOutOfJwt(jwtString);
             result = mediaService.addDisc(disc);
-            System.out.println(mediaService.getDiscs());
+            LOGGER.info("Disc created");
 
         } catch (UnsupportedEncodingException e) {
+            LOGGER.error("Something went wrong", e);
             e.printStackTrace();
         }
-
 
         return Response
                 .status(result.getCode())
                 .entity(result)
                 .build();
-
-
     }
 
-
     /**
-     * createBooks method.
+     * createBook method.
      * create books by using the HTTP verb POST
      *
      * @param jwtString unique string
@@ -110,15 +111,16 @@ public class MediaResource {
     @POST
     @Path("/books/")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createBooks(String jwtString) {
+    public Response createBook(String jwtString) {
         StatusMgnt result = new StatusMgnt(MSR_INTERNAL_SERVER_ERROR, "An internal error has occurred");
 
         try {
             Book book = createBookOutOfJwt(jwtString);
             result = mediaService.addBook(book);
-            System.out.println(mediaService.getBooks());
+            LOGGER.info("Book created");
 
         } catch (UnsupportedEncodingException e) {
+            LOGGER.error("Something went wrong", e);
             e.printStackTrace();
         }
 
@@ -126,8 +128,6 @@ public class MediaResource {
                 .status(result.getCode())
                 .entity(result)
                 .build();
-
-
     }
 
     /**
@@ -140,7 +140,7 @@ public class MediaResource {
     @Path("/books/")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getBooks() {
-        System.out.println("getBooks");
+        LOGGER.info("Get all books");
         List<Book> bookList = mediaService.getBooks();
         return Response
                 .status(RESPONSECODE)
@@ -158,7 +158,7 @@ public class MediaResource {
     @Path("/discs/")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getDiscs() {
-        System.out.println("getDiscs");
+        LOGGER.info("Get all discs");
         List<Disc> discList = mediaService.getDiscs();
         return Response
                 .status(RESPONSECODE)
@@ -177,20 +177,20 @@ public class MediaResource {
     @Path("/books/{isbn}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getBook(@PathParam("isbn") String isbn) {
-        System.out.println("getBook");
         Pair<StatusMgnt, Book> myResult = mediaService.getBook(isbn.replaceAll("-", ""));
         System.out.println(isbn);
         if (myResult.getKey().getCode() == MSR_OK.getCode()) {
+            LOGGER.info("Get book " + isbn);
             return Response
                     .status(myResult.getKey().getCode())
                     .entity(myResult.getValue())
                     .build();
         } else {
+            LOGGER.warn("Get book " + isbn + " went wrong");
             return Response
                     .status(myResult.getKey().getCode())
                     .entity(myResult.getKey())
                     .build();
-
         }
     }
 
@@ -209,11 +209,13 @@ public class MediaResource {
         Pair<StatusMgnt, Disc> myResult = mediaService.getDisc(barcode);
         System.out.println(barcode);
         if (myResult.getKey().getCode() == MSR_OK.getCode()) {
+            LOGGER.info("Get disc " + barcode);
             return Response
                     .status(myResult.getKey().getCode())
                     .entity(myResult.getValue())
                     .build();
         } else {
+            LOGGER.warn("Get disc " + barcode + " went wrong");
             return Response
                     .status(myResult.getKey().getCode())
                     .entity(myResult.getKey())
@@ -235,16 +237,15 @@ public class MediaResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response updateBook(@PathParam("isbn") String isbn, String jwtString) {
-
         StatusMgnt result = new StatusMgnt(MSR_INTERNAL_SERVER_ERROR, "An internal error has occurred");
 
-        System.out.print("Hallo ich bins der update!!!!");
         try {
             Book book = createBookOutOfJwt(jwtString);
             result = mediaService.updateBook(isbn.replaceAll("-", ""), book);
-            System.out.println(mediaService.getBooks());
+            LOGGER.info("Book " + isbn + " updated");
 
         } catch (UnsupportedEncodingException e) {
+            LOGGER.error("Update book went wrong", e);
             e.printStackTrace();
         }
 
@@ -268,16 +269,15 @@ public class MediaResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response updateDisc(@PathParam("barcode") String barcode, String jwtString) {
-
-
         StatusMgnt result = new StatusMgnt(MSR_INTERNAL_SERVER_ERROR, "An internal error has occurred");
 
-        System.out.print("Hallo ich bins der update!!!!");
         try {
             Disc disc = createDiscOutOfJwt(jwtString);
             result = mediaService.updateDisc(barcode, disc);
+            LOGGER.info("Disc " + barcode + " updated");
 
         } catch (UnsupportedEncodingException e) {
+            LOGGER.error("Update book went wrong", e);
             e.printStackTrace();
         }
 
@@ -285,10 +285,7 @@ public class MediaResource {
                 .status(result.getCode())
                 .entity(result)
                 .build();
-
     }
-
-
 
 
     /**
@@ -300,6 +297,7 @@ public class MediaResource {
      * @throws UnsupportedEncodingException by wrong encoding
      */
     private Disc createDiscOutOfJwt(String jwtString) throws UnsupportedEncodingException {
+        LOGGER.trace("Create Disc out of JWT");
         Jwts.parser()
                 .setSigningKey("secret".getBytes("UTF-8"))
                 .parseClaimsJws(jwtString);
@@ -328,6 +326,7 @@ public class MediaResource {
      * @throws UnsupportedEncodingException by wrong encoding
      */
     private Book createBookOutOfJwt(String jwtString) throws UnsupportedEncodingException {
+        LOGGER.trace("Create Book out of JWT");
         Jwts.parser()
                 .setSigningKey("secret".getBytes("UTF-8"))
                 .parseClaimsJws(jwtString);
