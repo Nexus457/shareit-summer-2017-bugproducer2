@@ -30,7 +30,7 @@ public class MediaServiceImpl implements MediaService {
     /**
      * Object variable for the Logger
      */
-    private static final Logger logger = LogManager.getLogger();
+    private static final Logger logger = LogManager.getLogger(MediaServiceImpl.class.getName());
     /**
      * ArrayList that contains the books.
      */
@@ -42,6 +42,7 @@ public class MediaServiceImpl implements MediaService {
 
     @Override
     public StatusMgnt addBook(Book book) {
+        logger.trace("Entering application.");
         StatusMgnt status;
 
         if (book == null) {
@@ -131,7 +132,7 @@ public class MediaServiceImpl implements MediaService {
 
     @Override
     public Pair<StatusMgnt, Book> getBook(String isbn) {
-        Pair<StatusMgnt, Book> myResult = new Pair<>(new StatusMgnt(MSR_NOT_FOUND, "The book you have searched for is not in the system"), null);
+        Pair<StatusMgnt, Book> myResult = new Pair<>(new StatusMgnt(MSR_NOT_FOUND, "The book you have searched for is not in the system!"), null);
 
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         session.beginTransaction();
@@ -142,12 +143,12 @@ public class MediaServiceImpl implements MediaService {
             return new Pair<>(new StatusMgnt(MSR_OK, "ok"), bookDB);
         } else
             logger.warn("The book you have searched for is not in the system");
-            return myResult;
+        return myResult;
     }
 
     @Override
     public Pair<StatusMgnt, Disc> getDisc(String barcode) {
-        Pair<StatusMgnt, Disc> myResult = new Pair<>(new StatusMgnt(MSR_NOT_FOUND, "The disc you have searched for is not in the system"), null);
+        Pair<StatusMgnt, Disc> myResult = new Pair<>(new StatusMgnt(MSR_NOT_FOUND, "The disc you have searched for is not in the system!"), null);
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         session.beginTransaction();
         Disc discDB = session.get(Disc.class, barcode);
@@ -156,8 +157,8 @@ public class MediaServiceImpl implements MediaService {
             logger.info("Get book " + barcode);
             return new Pair<>(new StatusMgnt(MSR_OK, "ok"), discDB);
         } else
-            logger.warn("The disc you have searched for is not in the system");
-            return myResult;
+            logger.warn("The disc you have searched for is not in the system!");
+        return myResult;
     }
 
 
@@ -172,7 +173,6 @@ public class MediaServiceImpl implements MediaService {
         return resultDiscs;
     }
 
-
     @Override
     public StatusMgnt updateBook(String isbn, Book newBook) {
         StatusMgnt status;
@@ -185,7 +185,7 @@ public class MediaServiceImpl implements MediaService {
 
         if (oneBook != null) {
             if (newBook.getTitle().isEmpty() && newBook.getAuthor().isEmpty()) {
-                status = new StatusMgnt(MSR_BAD_REQUEST, "Author and title are empty");
+                status = new StatusMgnt(MSR_BAD_REQUEST, "Author and title are empty!");
                 logger.warn("Author and title are empty");
             } else {
                 if (!newBook.getTitle().isEmpty()) {
@@ -202,12 +202,11 @@ public class MediaServiceImpl implements MediaService {
                 logger.info("Book " + isbn + " updated");
             }
         } else {
-            status = new StatusMgnt(MSR_BAD_REQUEST, "The book you want to update is not in the system");
+            status = new StatusMgnt(MSR_BAD_REQUEST, "The book you want to update is not in the system!");
             logger.warn("The book you want to update is not in the system");
         }
         return status;
     }
-
 
     @Override
     public StatusMgnt updateDisc(String barcode, Disc newDisc) {
@@ -221,7 +220,7 @@ public class MediaServiceImpl implements MediaService {
 
         if (oneDisc != null) {
             if (newDisc.getDirector().isEmpty() && newDisc.getTitle().isEmpty() && newDisc.getFsk() == -1) {
-                status = new StatusMgnt(MSR_BAD_REQUEST, "Director, Title and FSK are empty");
+                status = new StatusMgnt(MSR_BAD_REQUEST, "Director, Title and FSK are empty!");
                 logger.warn("Director, Title and FSK are empty");
             } else {
                 if (newDisc.getFsk() > -1) {
@@ -243,7 +242,7 @@ public class MediaServiceImpl implements MediaService {
                 logger.info("Disc " + barcode + " updated");
             }
         } else {
-            status = new StatusMgnt(MSR_BAD_REQUEST, "The disc you want to update is not in the system");
+            status = new StatusMgnt(MSR_BAD_REQUEST, "The disc you want to update is not in the system!");
             logger.warn("The disc you want to update is not in the system");
         }
 

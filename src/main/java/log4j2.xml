@@ -1,13 +1,22 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<Configuration>
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
     <Appenders>
-        <File name="html" fileName="bugproducerShareit.html" append="false">
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </Console>
+        <!--<File name="html" fileName="LoggerOutput.html" append="false">
             <HTMLLayout title=" BAR"/>
-        </File>
+        </File>-->
     </Appenders>
     <Loggers>
-        <Logger name="edu.hm" level="ALL" additivity="false ">
-            <AppenderRef ref="html"/>
+        <!--<Logger name="edu.hm" level="ALL" additivity="false ">
+                <AppenderRef ref="html"/>
+        </Logger>-->
+        <Logger name="edu.hm" level="trace">
+            <AppenderRef ref="Console"/>
         </Logger>
+        <Root level="ERROR">
+            <AppenderRef ref="Console"/>
+        </Root>
     </Loggers>
 </Configuration>
