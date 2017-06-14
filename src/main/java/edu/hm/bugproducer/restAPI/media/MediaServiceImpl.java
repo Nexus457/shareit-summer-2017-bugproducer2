@@ -11,8 +11,10 @@ import org.apache.commons.validator.routines.checkdigit.EAN13CheckDigit;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +43,13 @@ public class MediaServiceImpl implements MediaService {
      */
     public static List<Disc> discs = new ArrayList<>();
 
+    private SessionFactory sessionFactory;
+
+    @Inject
+    public MediaServiceImpl(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
+
     @Override
     public StatusMgnt addBook(Book book) {
         StatusMgnt status;
@@ -56,13 +65,13 @@ public class MediaServiceImpl implements MediaService {
             LOGGER.warn("ISBN was not valid");
         } else {
 
-            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            Session session = sessionFactory.getCurrentSession();
             session.beginTransaction();
             Book bookDB = session.get(Book.class, book.getIsbn());
             session.getTransaction().commit();
 
             if (bookDB == null) {
-                Session session2 = HibernateUtil.getSessionFactory().getCurrentSession();
+                Session session2 = sessionFactory.getCurrentSession();
                 session2.beginTransaction();
                 session2.save(book);
                 session2.getTransaction().commit();
