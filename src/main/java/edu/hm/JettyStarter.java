@@ -8,7 +8,7 @@ import org.eclipse.jetty.webapp.WebAppContext;
  *
  * @author <a mailto:axel.boettcher@hm.edu>Axel B&ouml;ttcher</a>
  */
-public class JettyStarter{
+public class JettyStarter {
 
     public static final String APP_URL = "/";
     public static final int PORT = 8080;

@@ -9,7 +9,13 @@ import javafx.util.Pair;
 import java.util.List;
 
 
-
+/**
+ * MediaService Interface. *
+ * @author Mark Tripolt
+ * @author Johannes Arzt
+ * @author Tom Maier
+ * @author Patrick Kuntz
+ */
 public interface MediaService {
 
     /**
@@ -17,7 +23,7 @@ public interface MediaService {
      * checks if a book contains essential information and if the isbn is valid to add it to the list books
      *
      * @param book book object
-     * @return mediaServiceResult
+     * @return status
      */
     StatusMgnt addBook(Book book);
 
@@ -26,7 +32,7 @@ public interface MediaService {
      * checks if a disc contains essential information and if the barcode is valid to add it to the list discs
      *
      * @param disc disc object
-     * @return mediaServiceResult
+     * @return status
      */
     StatusMgnt addDisc(Disc disc);
     /**
@@ -67,7 +73,7 @@ public interface MediaService {
      *
      * @param isbn    unique number of a book
      * @param book newBook object
-     * @return statusCode
+     * @return status
      */
     StatusMgnt updateBook(String isbn, Book book);
 
@@ -77,14 +83,14 @@ public interface MediaService {
      *
      * @param barcode unique number of a disc
      * @param disc newDisc object
-     * @return statusCode
+     * @return status
      */
     StatusMgnt updateDisc(String barcode, Disc disc);
 
     /**
      * deleteAll method.
      * deletes books and discs list
-     * @return mediaServiceResult
+     * @return statusCode
      */
     MediaServiceResult deleteAll();
 
