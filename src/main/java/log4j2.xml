@@ -2,7 +2,7 @@
 <Configuration status="WARN">
     <Appenders>
         <Console name="Console" target="SYSTEM_OUT">
-            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+            <PatternLayout pattern="%d{HH:mm:ss} %-5level %logger{36} - %msg%n"/>
         </Console>
         <!--<File name="html" fileName="LoggerOutput.html" append="false">
             <HTMLLayout title=" BAR"/>
@@ -12,7 +12,7 @@
         <!--<Logger name="edu.hm" level="ALL" additivity="false ">
                 <AppenderRef ref="html"/>
         </Logger>-->
-        <Logger name="edu.hm" level="trace">
+        <Logger name="edu.hm" level="trace" additivity="false">
             <AppenderRef ref="Console"/>
         </Logger>
         <Root level="ERROR">

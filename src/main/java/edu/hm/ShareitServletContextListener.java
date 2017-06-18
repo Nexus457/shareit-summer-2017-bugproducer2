@@ -20,6 +20,7 @@ public class ShareitServletContextListener
         @Override
         protected void configureServlets() {
             bind(MediaService.class).to(MediaServiceImpl.class);
+            bind(SessionFactory.class).toInstance(new Configuration().configure().buildSessionFactory());
         }
     });
 
