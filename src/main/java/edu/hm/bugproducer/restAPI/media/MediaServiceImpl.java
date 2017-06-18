@@ -32,7 +32,9 @@ public class MediaServiceImpl implements MediaService {
      * Object variable for the Logger
      */
     private static final Logger LOGGER = LogManager.getLogger(MediaServiceImpl.class.getName());
-
+    /**
+     * sessionFactory variable
+     */
     private SessionFactory sessionFactory;
 
     /**

@@ -89,24 +89,42 @@ public class Book extends Medium implements Serializable {
         this.isbn = isbn.replaceAll("-", "");
     }
 
+    /**
+     * getTitle method.
+     * use super to get the title
+     * @return title of a book
+     */
     public String getTitle() {
         return super.getTitle();
     }
 
+    /**
+     * setTitle method.
+     * use super to set the title
+     * @param title name of it
+     */
     public void setTitle(String title) {
         super.setTitle(title);
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Book)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Book)) {
+            return false;
+        }
 
-        if (!super.equals(o)) return false;
+        if (!super.equals(o)) {
+            return false;
+        }
 
         Book book = (Book) o;
 
-        if (!getAuthor().equals(book.getAuthor())) return false;
+        if (!getAuthor().equals(book.getAuthor())) {
+            return false;
+        }
         return getIsbn().equals(book.getIsbn());
     }
 
@@ -119,9 +137,9 @@ public class Book extends Medium implements Serializable {
 
     @Override
     public String toString() {
-        return "Book{" +
-                "author='" + author + '\'' +
-                ", isbn='" + isbn + '\'' +
-                '}';
+        return "Book{"
+                + "author='" + author + '\''
+                + ", isbn='" + isbn + '\''
+                + '}';
     }
 }

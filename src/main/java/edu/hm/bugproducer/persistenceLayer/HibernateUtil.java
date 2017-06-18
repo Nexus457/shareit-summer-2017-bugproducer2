@@ -8,17 +8,29 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 
+/**
+ * HibernateUtil Class.
+ * @author Mark Tripolt
+ * @author Johannes Arzt
+ * @author Tom Maier
+ * @author Patrick Kuntz
+ */
 public class HibernateUtil {
 
-    //XML based configuration
+    /**XML based configuration*/
     private static SessionFactory sessionFactory;
 
-    //Annotation based configuration
+    /**Annotation based configuration*/
     private static SessionFactory sessionAnnotationFactory;
 
-    //Property based configuration
+    /**Property based configuration*/
     private static SessionFactory sessionJavaConfigFactory;
 
+    /**
+     * buildSessionFactory method.
+     * it builds the Session Factory
+     * @return a session factory
+     */
     private static SessionFactory buildSessionFactory() {
         try {
             // Create the SessionFactory from hibernate.cfg.xml
@@ -42,8 +54,15 @@ public class HibernateUtil {
         }
     }
 
+    /**
+     * getSessionFactory method.
+     * gets the session factory
+     * @return session factory
+     */
     public static SessionFactory getSessionFactory() {
-        if (sessionFactory == null) sessionFactory = buildSessionFactory();
+        if (sessionFactory == null) {
+            sessionFactory = buildSessionFactory();
+        }
         return sessionFactory;
     }
 

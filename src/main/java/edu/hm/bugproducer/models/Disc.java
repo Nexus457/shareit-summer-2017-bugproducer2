@@ -15,7 +15,7 @@ import java.io.Serializable;
  */
 @Entity
 @Table(name = "TDisc")
-public class Disc extends Medium implements Serializable{
+public class Disc extends Medium implements Serializable {
     /** unique number of a disc */
     @Id
     private String barcode;
@@ -103,24 +103,44 @@ public class Disc extends Medium implements Serializable{
         this.fsk = fsk;
     }
 
-    public String getTitle(){
+    /**
+     * getTitle method.
+     * use super to get the title
+     * @return title
+     */
+    public String getTitle() {
         return super.getTitle();
     }
 
+    /**
+     * setTitle method.
+     * use super to set the title
+     * @param title name of it
+     */
     public void setTitle(String title) {
         super.setTitle(title);
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Disc)) return false;
-        if (!super.equals(o)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Disc)) {
+            return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
 
         Disc disc = (Disc) o;
 
-        if (getFsk() != disc.getFsk()) return false;
-        if (!getBarcode().equals(disc.getBarcode())) return false;
+        if (getFsk() != disc.getFsk()) {
+            return false;
+        }
+        if (!getBarcode().equals(disc.getBarcode())) {
+            return false;
+        }
         return getDirector().equals(disc.getDirector());
     }
 
