@@ -11,6 +11,10 @@ import javax.inject.Inject;
  */
 public class ShareItApplication extends ResourceConfig {
 
+     /**
+      * method used for the Injection.
+      * @param serviceLocator location of the service
+      */
     @Inject
     public ShareItApplication(ServiceLocator serviceLocator) {
         GuiceBridge.getGuiceBridge().initializeGuiceBridge(serviceLocator);
@@ -18,6 +22,5 @@ public class ShareItApplication extends ResourceConfig {
                 = serviceLocator.getService(GuiceIntoHK2Bridge.class);
         guiceBridge.bridgeGuiceInjector(
                 ShareitServletContextListener.getInjectorInstance());
-        //changed its shit
     }
 }
