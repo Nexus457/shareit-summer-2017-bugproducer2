@@ -1,33 +1,8 @@
-# Starter Code für 2. Pratkikumsaufgabe Software-Architektur Sommer 2017
 
 
-### Kopien allgemein
-
-| URI-Template | Methode | Ergebnis/Fehler |
-|--------------|---------|-----------------|
-|/copy|GET|Alle Kopien von Medien|
-
-
-### Bücher
-
-| URI-Template | Methode | Ergebnis/Fehler |
-|--------------|---------|-----------------|
-|/copy/books|POST|Anlegen einer Kopie eines Buches|
-|/copy/books/{code}/{lfnr}|GET|Eine bestimmte Kopie eines Buches|
-|/copy/books/{code}/{lfnr})|PUT|Aktuallsieren einer besimmten Kopie eines Buches|
-
-
-
-### Discs
-
-| URI-Template | Methode | Ergebnis/Fehler |
-|--------------|---------|-----------------|
-|/copy/Discs|POST|Anlegen einer Kopie einer Disc|
-|/copy/discs/{code}/{lfnr}|GET|Eine bestimmte Kopie einer Disc|
-|/copy/discs/{code}/{lfnr}|PUT|Aktuallsieren einer bestimmten Kopie einer Disc|
-
-
-
+Auth-Server: https://github.com/abcshmedu/a4-auth-server-bugproducer2
+Media-Server: https://github.com/abcshmedu/shareit-summer-2017-bugproducer2
+API: https://github.com/abcshmedu/a4-reverse-proxy-server-bugproducer2
 
 Heroku:
 https://shareitbugproducer.herokuapp.com
